@@ -1,8 +1,9 @@
+import SignInPage from "./SignInPage"
 
 
 function HomePage() {
   return (
-    <div>HomePage</div>
+    <SignInPage/>
   )
 }
 
