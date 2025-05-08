@@ -1,9 +1,10 @@
-import SignInPage from "./SignInPage"
+import { Navbar } from "@/components/Navbar"
+
 
 
 function HomePage() {
   return (
-    <SignInPage/>
+    <Navbar/>
   )
 }
 
