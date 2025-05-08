@@ -1,6 +1,7 @@
-import { login } from "@/http/api"
+import { login,self } from "@/http/api"
+import { useAuthStore } from "@/store/store";
 import { GoogleLogin } from "@react-oauth/google";
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -10,8 +11,20 @@ const loginUser = async (token: string) => {
   return data;
 }
 
+const  getSelf = async () => {
+  const { data } = await self();
+  return data;
+}
+
 const SignInPage = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuthStore();
+
+  const { refetch } = useQuery({
+    queryKey: ["self"],
+    queryFn: getSelf,
+    enabled: false
+  })
 
   const handleLoginSuccess = (credentialResponse: any) => {
     console.log("Google credential response", credentialResponse);
@@ -21,10 +34,13 @@ const SignInPage = () => {
     }
     AuthLogin(googleToken); 
   }
+
   const { mutate: AuthLogin } = useMutation({
     mutationKey: ["login"],
     mutationFn: loginUser,
     onSuccess: async () => {
+      const selfDataPromise = await refetch();
+      setUser(selfDataPromise.data);
       navigate("/landingPage");
     }
   })
