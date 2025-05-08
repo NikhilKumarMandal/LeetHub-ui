@@ -1,4 +1,4 @@
 import { api } from "./client";
 
 // Auth Service
-export const oauth = (data: string) => api.post('/oauth', data);
+export const login = (token: string) => api.post('/auth/oauth2', { token });
