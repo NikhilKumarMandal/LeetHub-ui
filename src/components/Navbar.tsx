@@ -33,7 +33,7 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2 font-bold text-xl">
             <Code className="h-6 w-6 text-yellow-500" />
-            <span className="hidden sm:inline">LeetCode</span>
+            <span className="hidden sm:inline">LeetHub</span>
           </Link>
 
           <nav className="hidden md:flex">
