@@ -20,12 +20,11 @@ export function BoxRevealDemo() {
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
         <div className="mt-8 text-lg leading-relaxed">
           <p>
-            -&gt; 20+ free and open-source animated components built with{" "}
-            <span className="font-semibold text-primary">React</span>,{" "}
-            <span className="font-semibold text-primary">Typescript</span>,{" "}
-            <span className="font-semibold text-primary">Tailwind CSS</span>, and{" "}
-            <span className="font-semibold text-primary">Motion</span>.<br />
-            -&gt; 100% open-source, and customizable.
+            -&gt; Don't focus on Pornhub; focus on LeetHub — that will help you land a job at companies like{" "}
+            <span className="font-semibold text-primary">FAANG</span>,{" "}
+            <span className="font-semibold text-primary">MAANG</span>, or{" "}
+            <span className="font-semibold text-primary">TAANG</span>.<br />
+            -&gt; 1000 plus DSA problem we have
           </p>
         </div>
       </BoxReveal>

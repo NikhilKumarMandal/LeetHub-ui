@@ -3,7 +3,7 @@ import PricingCard from '@/components/PricingCard'
 
 function PricingSection() {
   return (
-    <section id="pricing" className="w-full py-12 md:py-24 lg:py-32 bg-muted/50 relative overflow-hidden">
+    <section id="pricing" className="w-full py-12 md:py-24 lg:py-32  relative overflow-hidden">
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-[40%] -right-[60%] h-[600px] w-[600px] rounded-full bg-primary/5 blur-3xl"></div>
       </div>
