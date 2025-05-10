@@ -36,7 +36,7 @@ export function Navbar() {
           <img
   src="/logo.png"
   alt="logo"
-  className="h-50 md:h-35 lg:h-55 w-auto object-contain"
+  className="h-50 md:h-40 lg:h-55 w-auto object-contain"
 />
           </Link>
 
@@ -73,17 +73,11 @@ export function Navbar() {
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-2 cursor-pointer">
                 <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-sm">U</div>
-                <div className="hidden sm:block px-3 py-1 bg-gradient-to-r from-yellow-600 to-yellow-500 rounded text-xs font-medium">
-                  Premium
-                </div>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 bg-[#2d2d2d] border-gray-700 text-white">
               <div className="flex items-center justify-between px-3 py-2">
                 <span className="font-medium">Username</span>
-                <span className="px-2 py-0.5 bg-gradient-to-r from-yellow-600 to-yellow-500 rounded text-xs font-medium">
-                  Premium
-                </span>
               </div>
               <DropdownMenuSeparator className="bg-gray-700" />
               <DropdownMenuItem className="focus:bg-[#3a3a3a] focus:text-white cursor-pointer">
