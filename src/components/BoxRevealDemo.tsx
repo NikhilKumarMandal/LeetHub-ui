@@ -12,8 +12,8 @@ export function BoxRevealDemo() {
 
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
         <h2 className="mt-2 text-[1.75rem]">
-          UI library for{" "}
-          <span className="text-primary font-semibold">Design Engineers</span>
+        Practice platform for{" "}
+          <span className="text-primary font-semibold">Aspiring Developers</span>
         </h2>
       </BoxReveal>
 
