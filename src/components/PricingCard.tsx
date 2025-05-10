@@ -1,7 +1,6 @@
-import { Button } from './ui/button'
-import { Link } from 'react-router-dom'
+import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
-
+import { Link } from "react-router-dom"
 
 interface PricingCardProps {
   title: string
@@ -14,7 +13,7 @@ interface PricingCardProps {
   popular?: boolean
 }
 
-function PricingCard({
+export default function PricingCard({
   title,
   description,
   price,
@@ -25,7 +24,7 @@ function PricingCard({
   popular = false,
 }: PricingCardProps) {
   return (
-    <div className="flex flex-col rounded-lg border bg-background p-6 shadow-sm transition-all hover:shadow-md relative">
+    <div className="flex flex-col rounded-lg border bg-background p-6 shadow-sm transition-all hover:shadow-md relative h-full">
       {popular && (
         <div className="absolute -top-4 left-0 right-0 mx-auto w-fit rounded-full bg-gradient-to-r from-primary to-primary/80 px-3 py-1 text-xs font-medium text-primary-foreground">
           Most Popular
@@ -57,5 +56,3 @@ function PricingCard({
     </div>
   )
 }
-
-export default PricingCard
