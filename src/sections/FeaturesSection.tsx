@@ -13,20 +13,21 @@ export default function FeaturesSection() {
         <div className="absolute top-[40%] -right-[60%] h-[600px] w-[600px] rounded-full bg-primary/5 blur-3xl"></div>
       </div>
 
-      <div className="container px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80">
             Features
           </div>
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Everything You Need to Excel</h2>
-            <p className="max-w-[900px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed text-primary">
+            <p className="max-w-[900px] mx-auto text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
               Our platform provides all the tools and resources you need to become a better programmer and ace technical
               interviews.
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+        <div className="flex justify-center w-full">
+        <div className="grid max-w-5xl w-full gap-6 py-12 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
                   {/* <PointerDemo1 /> */}
                   <Card className="col-span-1 row-span-1 overflow-hidden border bg-gradient-to-br from-slate-50 to-slate-100 transition-all dark:from-slate-900 dark:to-slate-800 shadow-none">
         <CardHeader className="relative pb-2">
@@ -119,7 +120,8 @@ export default function FeaturesSection() {
           <div className="text-2xl">👆</div>
         </Pointer>
       </Card>            
-        </div>
+          </div>
+          </div>
       </div>
     </section>
   )
