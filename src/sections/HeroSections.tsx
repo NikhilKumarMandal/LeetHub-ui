@@ -12,10 +12,10 @@ function HeroSections() {
         </div>
 
         {/* Responsive Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] xl:grid-cols-[1fr_600px] gap-6 sm:gap-8 lg:gap-12 items-center">
+        <div className="grid justify-items-center lg:justify-items-start grid-cols-1 lg:grid-cols-[1fr_400px] xl:grid-cols-[1fr_600px] gap-6 sm:gap-8 lg:gap-12 items-center">
           {/* Left Content */}
-          <div className="flex flex-col justify-center space-y-6 text-center sm:text-left mx-auto sm:mx-0">
-            <div className="inline-flex items-center rounded-full border px-4 py-2 text-xs sm:text-sm md:text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80 w-fit mx-auto sm:mx-0">
+          <div className="flex flex-col justify-center space-y-6 text-center lg:text-left">
+            <div className="inline-flex items-center rounded-full border px-4 py-2 text-xs sm:text-sm md:text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary text-primary-foreground hover:bg-primary/80 w-fit mx-auto lg:mx-0">
               Launch Promo: 20% Off Pro Plan
             </div>
             <BoxRevealDemo />
@@ -32,3 +32,4 @@ function HeroSections() {
 }
 
 export default HeroSections;
+
