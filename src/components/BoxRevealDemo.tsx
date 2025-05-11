@@ -5,7 +5,7 @@ export function BoxRevealDemo() {
   return (
     <div className="w-full max-w-4xl items-center justify-center overflow-hidden pt-12 px-4">
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
-        <p className="text-[5rem] font-bold leading-tight">
+        <p className="sm:text-6xl text-[5rem] font-bold leading-tight">
           LEETHUB<span className="text-primary">.</span>
         </p>
       </BoxReveal>

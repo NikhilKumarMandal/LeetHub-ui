@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Bell,
-  Menu,
-  Search,
-  Settings,
-  User,
-  LogOut,
-  X,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+// import {
+//   Bell,
+//   Menu,
+//   Search,
+//   Settings,
+//   // User,
+//   // LogOut,
+//   X,
+// } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,7 +53,7 @@ export function Navbar() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-2 md:gap-4">
+        {/* <div className="flex items-center gap-2 md:gap-4">
           <Button variant="ghost" size="icon" className="md:hidden text-gray-400">
             <Search className="h-5 w-5" />
           </Button>
@@ -67,9 +67,9 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-1 text-gray-400">
             <Settings className="h-5 w-5 cursor-pointer hover:text-primary" />
             <span>0</span>
-          </div>
+          </div> */}
 
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-2 cursor-pointer">
                 <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-sm">U</div>
@@ -94,8 +94,8 @@ export function Navbar() {
                 Log out
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+          </DropdownMenu> */}
+        {/* </div> */}
       </div>
 
       {isMenuOpen && (
