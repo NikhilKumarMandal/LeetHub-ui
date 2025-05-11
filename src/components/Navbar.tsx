@@ -44,7 +44,7 @@ export function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.name}
-                to={link.to}
+                to={""}
                 className="px-3 py-2 text-sm font-medium text-gray-400 hover:text-primary transition-colors"
               >
                 {link.name}
