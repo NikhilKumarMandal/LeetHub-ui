@@ -16,7 +16,7 @@ const  getSelf = async () => {
   return data;
 }
 
-const SignInPage = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
 
@@ -114,4 +114,4 @@ const SignInPage = () => {
   )
 }
 
-export default SignInPage
+export default LoginPage
