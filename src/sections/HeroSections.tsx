@@ -1,5 +1,5 @@
-import { BoxRevealDemo } from "@/components/BoxRevealDemo"
-import { TerminalDemo } from "@/components/TerminalDemo"
+import { BoxRevealDemo } from "@/components/BoxRevealDemo";
+import { TerminalDemo } from "@/components/TerminalDemo";
 
 export default function HeroSection() {
   return (
@@ -30,5 +30,5 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

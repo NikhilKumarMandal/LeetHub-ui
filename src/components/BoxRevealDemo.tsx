@@ -12,16 +12,18 @@ export function BoxRevealDemo() {
 
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
         <h2 className="mt-2 text-[1.75rem]">
-        Practice platform for{" "}
-          <span className="text-primary font-semibold">Aspiring Developers</span>
+          Practice platform for{" "}
+          <span className="text-primary font-semibold">
+            Aspiring Developers
+          </span>
         </h2>
       </BoxReveal>
 
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
         <div className="mt-8 text-lg leading-relaxed">
           <p>
-            -&gt;focus on LeetHub — that will help you land a job at companies like{" "}
-            <span className="font-semibold text-primary">FAANG</span>,{" "}
+            -&gt;focus on LeetHub — that will help you land a job at companies
+            like <span className="font-semibold text-primary">FAANG</span>,{" "}
             <span className="font-semibold text-primary">MAANG</span>, or{" "}
             <span className="font-semibold text-primary">TAANG</span>.<br />
             -&gt; 1000 plus DSA problem we have
@@ -35,5 +37,3 @@ export function BoxRevealDemo() {
     </div>
   );
 }
-
-

@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 //   Menu,
 //   Search,
 //   Settings,
-  // User,
-  // LogOut,
+// User,
+// LogOut,
 //   X,
 // } from "lucide-react";
 // import { Button } from "@/components/ui/button";
@@ -33,11 +33,11 @@ export function Navbar() {
       <div className="container flex h-14 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-          <img
-  src="/logo.png"
-  alt="logo"
-  className="h-50 md:h-40 lg:h-55 w-auto object-contain"
-/>
+            <img
+              src="/logo.png"
+              alt="logo"
+              className="h-50 md:h-40 lg:h-55 w-auto object-contain"
+            />
           </Link>
 
           <nav className="hidden md:flex space-x-4">
@@ -69,7 +69,7 @@ export function Navbar() {
             <span>0</span>
           </div> */}
 
-          {/* <DropdownMenu>
+        {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center gap-2 cursor-pointer">
                 <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-sm">U</div>
@@ -114,4 +114,3 @@ export function Navbar() {
     </header>
   );
 }
-

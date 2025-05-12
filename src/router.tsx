@@ -7,34 +7,34 @@ import LoginPage from "./Pages/LoginPage";
 import Dhashboard from "./Layouts/Dhashboard";
 
 export const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Root />,
-        children: [
-    {
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
         path: "",
         element: <NonAuth />,
         children: [
-        {
-            path: "", 
-            element: <HomePage/>,
-        },
-        {
-            path: "login", 
-            element: <LoginPage/>,
-        }
-        ]
-    },
-    {
+          {
+            path: "",
+            element: <HomePage />,
+          },
+          {
+            path: "login",
+            element: <LoginPage />,
+          },
+        ],
+      },
+      {
         path: "/auth",
         element: <Dhashboard />,
         children: [
-        {
-        path: "homepage",
-        element: <LandingPage/>
-        }
-    ]
-    },
-    ]
-    },
-])
+          {
+            path: "homepage",
+            element: <LandingPage />,
+          },
+        ],
+      },
+    ],
+  },
+]);

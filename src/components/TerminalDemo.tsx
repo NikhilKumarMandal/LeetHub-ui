@@ -48,12 +48,11 @@
 //   );
 // }
 
-
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 export function TerminalDemo() {
-  const [currentStep, setCurrentStep] = useState(0)
-  const [isComplete, setIsComplete] = useState(false)
+  const [currentStep, setCurrentStep] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
 
   const steps = [
     { text: "Starting Two Sum Problem...", delay: 500 },
@@ -66,18 +65,18 @@ export function TerminalDemo() {
     { text: "✓ Indices: [0, 1]", delay: 600 },
     { text: "Output: [0, 1]", delay: 500 },
     { text: "Problem solved successfully!", delay: 800 },
-  ]
+  ];
 
   useEffect(() => {
     if (currentStep < steps.length) {
       const timer = setTimeout(() => {
-        setCurrentStep(currentStep + 1)
-      }, steps[currentStep].delay)
-      return () => clearTimeout(timer)
+        setCurrentStep(currentStep + 1);
+      }, steps[currentStep].delay);
+      return () => clearTimeout(timer);
     } else if (!isComplete) {
-      setIsComplete(true)
+      setIsComplete(true);
     }
-  }, [currentStep, steps, isComplete])
+  }, [currentStep, steps, isComplete]);
 
   return (
     <div className="w-full h-full bg-black rounded-lg border border-gray-800 shadow-2xl overflow-hidden transform transition-all duration-500 hover:shadow-primary/10">
@@ -87,7 +86,9 @@ export function TerminalDemo() {
           <div className="h-3 w-3 rounded-full bg-yellow-500" />
           <div className="h-3 w-3 rounded-full bg-green-500" />
         </div>
-        <div className="mx-auto text-sm font-mono text-gray-400">Two Sum Problem</div>
+        <div className="mx-auto text-sm font-mono text-gray-400">
+          Two Sum Problem
+        </div>
       </div>
       <div className="p-4 font-mono text-sm text-green-400 h-[350px] overflow-y-auto bg-[#0D1117]">
         {steps.slice(0, currentStep).map((step, index) => (
@@ -99,5 +100,5 @@ export function TerminalDemo() {
         {!isComplete && <span className="animate-pulse">▋</span>}
       </div>
     </div>
-  )
+  );
 }

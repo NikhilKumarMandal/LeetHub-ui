@@ -1,8 +1,11 @@
-import PricingCard from "@/components/PricingCard"
+import PricingCard from "@/components/PricingCard";
 
 export default function PricingSection() {
   return (
-    <section id="pricing" className="w-full py-12 md:py-24 lg:py-32 relative overflow-hidden">
+    <section
+      id="pricing"
+      className="w-full py-12 md:py-24 lg:py-32 relative overflow-hidden"
+    >
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-[40%] -right-[60%] h-[600px] w-[600px] rounded-full bg-primary/5 blur-3xl"></div>
       </div>
@@ -13,9 +16,12 @@ export default function PricingSection() {
             Pricing
           </div>
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Choose Your Plan</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              Choose Your Plan
+            </h2>
             <p className="max-w-[900px] mx-auto text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              We offer flexible plans to meet your needs, whether you're a beginner or a seasoned professional.
+              We offer flexible plans to meet your needs, whether you're a
+              beginner or a seasoned professional.
             </p>
           </div>
         </div>
@@ -26,7 +32,12 @@ export default function PricingSection() {
               title="Free"
               description="Perfect for beginners and casual learners."
               price="$0"
-              features={["100+ Easy Problems", "Basic IDE Features", "Community Access", "Basic Progress Tracking"]}
+              features={[
+                "100+ Easy Problems",
+                "Basic IDE Features",
+                "Community Access",
+                "Basic Progress Tracking",
+              ]}
               buttonText="Get Started"
               buttonLink="/signup"
               buttonVariant="outline"
@@ -66,5 +77,5 @@ export default function PricingSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

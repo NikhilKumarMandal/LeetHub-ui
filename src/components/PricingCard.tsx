@@ -1,16 +1,16 @@
-import { Button } from "@/components/ui/button"
-import { CheckCircle } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import { CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface PricingCardProps {
-  title: string
-  description: string
-  price: string
-  features: string[]
-  buttonText: string
-  buttonLink: string
-  buttonVariant: "default" | "outline"
-  popular?: boolean
+  title: string;
+  description: string;
+  price: string;
+  features: string[];
+  buttonText: string;
+  buttonLink: string;
+  buttonVariant: "default" | "outline";
+  popular?: boolean;
 }
 
 export default function PricingCard({
@@ -54,5 +54,5 @@ export default function PricingCard({
         <Link to={buttonLink}>{buttonText}</Link>
       </Button>
     </div>
-  )
+  );
 }
