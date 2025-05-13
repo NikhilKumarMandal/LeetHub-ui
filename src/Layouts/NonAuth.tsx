@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
 import { useAuthStore } from "@/store/store";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -8,7 +10,12 @@ function NonAuth() {
       new URLSearchParams(location.search).get("returnTo") || "/";
     return <Navigate to={returnTo} replace={true} />;
   }
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+    </>
+
+  )
 }
 
 export default NonAuth;
