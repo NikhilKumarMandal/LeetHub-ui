@@ -15,7 +15,7 @@ const getSelf = async () => {
 function Root() {
   const { setUser } = useAuthStore();
   const queryClient = useQueryClient();
-  const fetchCount = useRef(0); // Track how many times we fetched
+  const fetchCount = useRef(0);
 
   const { data } = useQuery({
     queryKey: ["self"],
