@@ -24,7 +24,7 @@ function Root() {
         fetchCount.current += 1;
         return getSelf();
       } else {
-        return queryClient.getQueryData(["self"]); 
+        return queryClient.getQueryData(["self"]);
       }
     },
     retry: (failureCount: number, error) => {
@@ -48,10 +48,9 @@ function Root() {
     <>
       <Navbar />
       <Outlet />
-      <Footer/>
+      <Footer />
     </>
   );
 }
 
 export default Root;
-

@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
 import { useAuthStore } from "@/store/store";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -14,8 +12,7 @@ function NonAuth() {
     <>
       <Outlet />
     </>
-
-  )
+  );
 }
 
 export default NonAuth;
