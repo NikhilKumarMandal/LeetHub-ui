@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { BoxReveal } from "@/components/magicui/box-reveal";
+import { Link } from "react-router-dom";
 
 export function BoxRevealDemo() {
   return (
@@ -32,7 +33,9 @@ export function BoxRevealDemo() {
       </BoxReveal>
 
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
-        <Button className="mt-8 text-lg px-8 py-4 text-primary">Explore</Button>
+        <Link to="/auth/homepage">
+          <Button className="mt-8 text-lg px-8 py-4 text-primary">Explore</Button>
+        </Link>
       </BoxReveal>
     </div>
   );
