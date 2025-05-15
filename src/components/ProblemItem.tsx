@@ -1,7 +1,8 @@
+// components/ProblemItem.tsx
 import type { ReactNode } from "react"
 import { Check } from "lucide-react"
 
-interface ProblemItemProps {
+export interface ProblemItemProps {
   id: string
   title: string
   difficulty: "Easy" | "Medium" | "Hard"
@@ -70,3 +71,4 @@ export function ProblemItem({
     </div>
   )
 }
+
