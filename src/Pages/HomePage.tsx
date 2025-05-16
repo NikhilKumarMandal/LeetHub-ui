@@ -13,12 +13,12 @@ import { Button } from "@/components/ui/button";
 
 
 import type { ReactNode } from "react";
-import FeaturedCard from "@/components/FeaturedCard";
 import CategoryList from "@/components/CategoryList";
 import { Input } from "@/components/ui/input";
 import { TopicFilters } from "@/components/TopicFilters";
 import { ProblemItem, type ProblemItemProps } from "@/components/ProblemItem";
-import { Calendar } from "@/components/ui/calendar";
+import SubmissionHeatmap from "@/components/SubmissionHeatmap";
+import { Calendar } from "@/components/calendar";
 
 
 
@@ -48,8 +48,6 @@ interface Problem {
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedTopicFilter, setSelectedTopicFilter] = useState<string>("all");
-  const [date, setDate] = useState<Date | undefined>(new Date());
   const categories: Category[] = [
     { name: "Array", count: 1902 },
     { name: "String", count: 787 },
@@ -224,7 +222,8 @@ export default function HomePage() {
       <main className="container py-4 md:py-6 px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+              <SubmissionHeatmap/>
               <FeaturedCard
                 title="LeetCode's Interview Crash Course:"
                 description="System Design for Interviews and Beyond"
@@ -244,8 +243,8 @@ export default function HomePage() {
                 buttonText="Claim Now"
                 badge="Vol. 1"
               />
-            </div>
-
+            </div> */}
+            <SubmissionHeatmap/>
             <div>
               {selectedCategory && (
                 <div className="mb-2 text-sm text-gray-400">
@@ -294,12 +293,7 @@ export default function HomePage() {
 
           {/* Right Sidebar Widgets */}
 
-          <Calendar
-    mode="single"
-    selected={date}
-    onSelect={setDate}
-
-  />
+            <Calendar/>
         </div>
       </main>
     </div>
