@@ -1,26 +1,13 @@
 // Home.tsx
 import { useState } from "react";
-import {
-  ArrowUpDown,
-  Code,
-  Database,
-  Filter,
-  Search,
-  Settings,
-  Terminal,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-
+import { Code, Database, Settings, Terminal } from "lucide-react";
 
 import type { ReactNode } from "react";
 import CategoryList from "@/components/CategoryList";
-import { Input } from "@/components/ui/input";
 import { TopicFilters } from "@/components/TopicFilters";
-import { ProblemItem, type ProblemItemProps } from "@/components/ProblemItem";
 import SubmissionHeatmap from "@/components/SubmissionHeatmap";
-import { Calendar } from "@/components/calendar";
-
-
+import { Calendar } from "@/components/Calendar";
+import { ProblemsTable, type Problem } from "@/components/ProblemTable";
 
 // Type definitions
 interface Category {
@@ -34,16 +21,6 @@ interface TopicFilter {
   name: string;
   icon: ReactNode;
   color: string;
-}
-
-interface Problem {
-  id: string;
-  title: string;
-  difficulty: string;
-  isSolved?: boolean;
-  progress: number;
-  categories: string[];
-  icon?: ReactNode;
 }
 
 export default function HomePage() {
@@ -110,23 +87,19 @@ export default function HomePage() {
   ];
 
   const expandedTopicFilters: TopicFilter[] = [
-    { id: "javascript", name: "JavaScript", icon: null, color: "text-yellow-300" },
+    {
+      id: "javascript",
+      name: "JavaScript",
+      icon: null,
+      color: "text-yellow-300",
+    },
     { id: "python", name: "Python", icon: null, color: "text-blue-300" },
     { id: "cpp", name: "C++", icon: null, color: "text-purple-300" },
     { id: "golang", name: "Go", icon: null, color: "text-blue-400" },
     { id: "rust", name: "Rust", icon: null, color: "text-orange-400" },
   ];
-  
 
   const allProblems: Problem[] = [
-    {
-      id: "838",
-      title: "838. Push Dominoes",
-      difficulty: "Medium",
-      progress: 60,
-      categories: ["Array", "Two Pointers", "String", "Dynamic Programming"],
-      icon: <Database className="h-2 w-2 md:h-3 md:w-3 text-blue-400" />,
-    },
     {
       id: "1",
       title: "1. Two Sum",
@@ -180,11 +153,30 @@ export default function HomePage() {
       categories: ["String", "Stack"],
     },
     {
+      id: "21",
+      title: "21. Merge Two Sorted Lists",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 85,
+      categories: ["Linked List", "Recursion"],
+    },
+    {
       id: "23",
       title: "23. Merge k Sorted Lists",
       difficulty: "Hard",
       progress: 35,
-      categories: ["Linked List", "Divide and Conquer", "Heap (Priority Queue)"],
+      categories: [
+        "Linked List",
+        "Divide and Conquer",
+        "Heap (Priority Queue)",
+      ],
+    },
+    {
+      id: "33",
+      title: "33. Search in Rotated Sorted Array",
+      difficulty: "Medium",
+      progress: 70,
+      categories: ["Array", "Binary Search"],
     },
     {
       id: "42",
@@ -192,6 +184,229 @@ export default function HomePage() {
       difficulty: "Hard",
       progress: 30,
       categories: ["Array", "Two Pointers", "Dynamic Programming", "Stack"],
+    },
+    {
+      id: "49",
+      title: "49. Group Anagrams",
+      difficulty: "Medium",
+      progress: 75,
+      categories: ["Hash Table", "String", "Sorting"],
+    },
+    {
+      id: "53",
+      title: "53. Maximum Subarray",
+      difficulty: "Medium",
+      isSolved: true,
+      progress: 80,
+      categories: ["Array", "Divide and Conquer", "Dynamic Programming"],
+    },
+    {
+      id: "70",
+      title: "70. Climbing Stairs",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 95,
+      categories: ["Math", "Dynamic Programming", "Memoization"],
+    },
+    {
+      id: "76",
+      title: "76. Minimum Window Substring",
+      difficulty: "Hard",
+      progress: 25,
+      categories: ["Hash Table", "String", "Sliding Window"],
+    },
+    {
+      id: "98",
+      title: "98. Validate Binary Search Tree",
+      difficulty: "Medium",
+      progress: 60,
+      categories: [
+        "Tree",
+        "Depth-First Search",
+        "Binary Search Tree",
+        "Binary Tree",
+      ],
+    },
+    {
+      id: "101",
+      title: "101. Symmetric Tree",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 90,
+      categories: [
+        "Tree",
+        "Depth-First Search",
+        "Breadth-First Search",
+        "Binary Tree",
+      ],
+    },
+    {
+      id: "121",
+      title: "121. Best Time to Buy and Sell Stock",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 85,
+      categories: ["Array", "Dynamic Programming"],
+    },
+    {
+      id: "141",
+      title: "141. Linked List Cycle",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 80,
+      categories: ["Hash Table", "Linked List", "Two Pointers"],
+    },
+    {
+      id: "146",
+      title: "146. LRU Cache",
+      difficulty: "Medium",
+      progress: 50,
+      categories: ["Hash Table", "Linked List", "Design"],
+    },
+    {
+      id: "200",
+      title: "200. Number of Islands",
+      difficulty: "Medium",
+      progress: 70,
+      categories: [
+        "Array",
+        "Depth-First Search",
+        "Breadth-First Search",
+        "Union Find",
+        "Matrix",
+      ],
+    },
+    {
+      id: "206",
+      title: "206. Reverse Linked List",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 95,
+      categories: ["Linked List", "Recursion"],
+    },
+    {
+      id: "217",
+      title: "217. Contains Duplicate",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 100,
+      categories: ["Array", "Hash Table", "Sorting"],
+    },
+    {
+      id: "238",
+      title: "238. Product of Array Except Self",
+      difficulty: "Medium",
+      progress: 65,
+      categories: ["Array", "Prefix Sum"],
+    },
+    {
+      id: "242",
+      title: "242. Valid Anagram",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 90,
+      categories: ["Hash Table", "String", "Sorting"],
+    },
+    {
+      id: "297",
+      title: "297. Serialize and Deserialize Binary Tree",
+      difficulty: "Hard",
+      progress: 40,
+      categories: [
+        "String",
+        "Tree",
+        "Depth-First Search",
+        "Breadth-First Search",
+        "Design",
+        "Binary Tree",
+      ],
+    },
+    {
+      id: "300",
+      title: "300. Longest Increasing Subsequence",
+      difficulty: "Medium",
+      progress: 55,
+      categories: ["Array", "Binary Search", "Dynamic Programming"],
+    },
+    {
+      id: "322",
+      title: "322. Coin Change",
+      difficulty: "Medium",
+      progress: 60,
+      categories: ["Array", "Dynamic Programming", "Breadth-First Search"],
+    },
+    {
+      id: "347",
+      title: "347. Top K Frequent Elements",
+      difficulty: "Medium",
+      progress: 75,
+      categories: [
+        "Array",
+        "Hash Table",
+        "Divide and Conquer",
+        "Sorting",
+        "Heap (Priority Queue)",
+        "Bucket Sort",
+        "Counting",
+        "Quickselect",
+      ],
+    },
+    {
+      id: "424",
+      title: "424. Longest Repeating Character Replacement",
+      difficulty: "Medium",
+      progress: 50,
+      categories: ["Hash Table", "String", "Sliding Window"],
+    },
+    {
+      id: "572",
+      title: "572. Subtree of Another Tree",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 85,
+      categories: [
+        "Tree",
+        "Depth-First Search",
+        "String Matching",
+        "Binary Tree",
+        "Hash Function",
+      ],
+    },
+    {
+      id: "704",
+      title: "704. Binary Search",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 100,
+      categories: ["Array", "Binary Search"],
+    },
+    {
+      id: "733",
+      title: "733. Flood Fill",
+      difficulty: "Easy",
+      isSolved: true,
+      progress: 90,
+      categories: [
+        "Array",
+        "Depth-First Search",
+        "Breadth-First Search",
+        "Matrix",
+      ],
+    },
+    {
+      id: "838",
+      title: "838. Push Dominoes",
+      difficulty: "Medium",
+      progress: 60,
+      categories: ["Array", "Two Pointers", "String", "Dynamic Programming"],
+      icon: <Database className="h-2 w-2 md:h-3 md:w-3 text-blue-400" />,
+    },
+    {
+      id: "981",
+      title: "981. Time Based Key-Value Store",
+      difficulty: "Medium",
+      progress: 55,
+      categories: ["Hash Table", "String", "Binary Search", "Design"],
     },
   ];
 
@@ -202,20 +417,18 @@ export default function HomePage() {
       setSelectedCategory(categoryName);
     }
   };
-  
 
-  const filteredProblems: ProblemItemProps[] = allProblems.map((problem) => ({
-    id: problem.id,
-    title: problem.title,
-    difficulty:
-      problem.difficulty === "Easy" || problem.difficulty === "Medium" || problem.difficulty === "Hard"
-        ? problem.difficulty
-        : "Easy",
-    isSolved: !!problem.isSolved,
-    progress: typeof problem.progress === "number" ? problem.progress : 0,
-    icon: problem.icon,
-  }))
-  
+  // const filteredProblems: ProblemsTableProps = allProblems.map((problem) => ({
+  //   id: problem.id,
+  //   title: problem.title,
+  //   difficulty:
+  //     problem.difficulty === "Easy" || problem.difficulty === "Medium" || problem.difficulty === "Hard"
+  //       ? problem.difficulty
+  //       : "Easy",
+  //   isSolved: !!problem.isSolved,
+  //   progress: typeof problem.progress === "number" ? problem.progress : 0,
+  //   icon: problem.icon,
+  // }))
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-white">
@@ -244,12 +457,14 @@ export default function HomePage() {
                 badge="Vol. 1"
               />
             </div> */}
-            <SubmissionHeatmap/>
+            <SubmissionHeatmap />
             <div>
               {selectedCategory && (
                 <div className="mb-2 text-sm text-gray-400">
                   Showing problems for category:{" "}
-                  <span className="text-white font-medium">{selectedCategory}</span>
+                  <span className="text-white font-medium">
+                    {selectedCategory}
+                  </span>
                   <button
                     className="ml-2 text-blue-400 hover:text-blue-300"
                     onClick={() => setSelectedCategory(null)}
@@ -266,37 +481,25 @@ export default function HomePage() {
               />
             </div>
 
-            <TopicFilters filters={topicFilters} expandedFilters={expandedTopicFilters} />
-
-            <div className="flex gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-                <Input
-                  placeholder="Search questions"
-                  className="pl-9 bg-[#2d2d2d] border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-gray-500 text-sm"
-                />
-              </div>
-              <Button variant="outline" size="icon" className="bg-[#2d2d2d] border-gray-700 text-gray-400 hover:bg-[#3a3a3a] h-9 w-9 md:h-10 md:w-10">
-                <ArrowUpDown className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon" className="bg-[#2d2d2d] border-gray-700 text-gray-400 hover:bg-[#3a3a3a] h-9 w-9 md:h-10 md:w-10">
-                <Filter className="h-4 w-4" />
-              </Button>
-            </div>
+            <TopicFilters
+              filters={topicFilters}
+              expandedFilters={expandedTopicFilters}
+            />
 
             <div className="space-y-1">
-              {filteredProblems.map((problem) => (
-                <ProblemItem key={problem.id} {...problem} />
-              ))}
+              <ProblemsTable
+                problems={allProblems}
+                selectedCategory={selectedCategory}
+                onCategorySelect={handleCategorySelect}
+              />
             </div>
           </div>
 
           {/* Right Sidebar Widgets */}
 
-            <Calendar/>
+          <Calendar />
         </div>
       </main>
     </div>
   );
 }
-

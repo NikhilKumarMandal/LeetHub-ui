@@ -1,42 +1,57 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function Calendar() {
-  const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Get current date for highlighting today
-  const today = new Date()
-  const currentDay = today.getDate()
+  const today = new Date();
+  const currentDay = today.getDate();
 
   // Calculate days in month and first day of month
-  const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate()
-  const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay()
+  const daysInMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth() + 1,
+    0
+  ).getDate();
+  const firstDayOfMonth = new Date(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    1
+  ).getDay();
 
   // Create calendar days array with empty slots for days before the 1st
-  const calendarDays = [...Array(firstDayOfMonth).fill(null), ...Array(daysInMonth).keys()].map((day) =>
-    day === null ? null : day + 1,
-  )
+  const calendarDays = [
+    ...Array(firstDayOfMonth).fill(null),
+    ...Array(daysInMonth).keys(),
+  ].map((day) => (day === null ? null : day + 1));
 
   // Navigation functions
   const prevMonth = () => {
-    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))
-  }
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+    );
+  };
 
   const nextMonth = () => {
-    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))
-  }
+    setCurrentMonth(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+    );
+  };
 
   // Format month name
-  const monthName = currentMonth.toLocaleString("default", { month: "long" })
+  const monthName = currentMonth.toLocaleString("default", { month: "long" });
 
   return (
     <Card className="bg-[#1a1a1a]">
       <CardHeader className="pb-2 p-3 md:p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CardTitle className="text-sm md:text-base">Day {currentDay}</CardTitle>
+            <CardTitle className="text-sm md:text-base">
+              Day {currentDay}
+            </CardTitle>
             <span className="text-xs text-gray-400">(45:15:9 left)</span>
           </div>
           <div className="flex gap-1 items-center">
@@ -73,14 +88,15 @@ export function Calendar() {
         <div className="grid grid-cols-7 gap-1 text-center">
           {calendarDays.map((day, i) => {
             if (day === null) {
-              return <div key={`empty-${i}`} className="h-6 w-6 md:h-8 md:w-8" />
+              return (
+                <div key={`empty-${i}`} className="h-6 w-6 md:h-8 md:w-8" />
+              );
             }
 
             const isToday =
               day === currentDay &&
               currentMonth.getMonth() === today.getMonth() &&
-              currentMonth.getFullYear() === today.getFullYear()
-
+              currentMonth.getFullYear() === today.getFullYear();
 
             if (isToday) {
               return (
@@ -90,7 +106,7 @@ export function Calendar() {
                 >
                   {day}
                 </div>
-              )
+              );
             }
 
             return (
@@ -100,7 +116,7 @@ export function Calendar() {
               >
                 {day}
               </div>
-            )
+            );
           })}
         </div>
       </CardContent>
@@ -110,8 +126,10 @@ export function Calendar() {
           <span className="text-[10px] md:text-xs text-gray-400">0</span>
           <span className="text-[10px] md:text-xs text-gray-400">Redeem</span>
         </div>
-        <span className="text-[10px] md:text-xs text-gray-400 cursor-pointer hover:text-white">Rules</span>
+        <span className="text-[10px] md:text-xs text-gray-400 cursor-pointer hover:text-white">
+          Rules
+        </span>
       </div>
     </Card>
-  )
+  );
 }

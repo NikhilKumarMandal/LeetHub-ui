@@ -1,47 +1,49 @@
-import { useState } from "react"
-import type { ReactNode } from "react"
-import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp } from "lucide-react"
+import { useState } from "react";
+import type { ReactNode } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface TopicFilter {
-  id: string
-  name: string
-  icon?: ReactNode
-  color: string
+  id: string;
+  name: string;
+  icon?: ReactNode;
+  color: string;
 }
 
 interface TopicFiltersProps {
-  filters: TopicFilter[]
-  expandedFilters: TopicFilter[]
+  filters: TopicFilter[];
+  expandedFilters: TopicFilter[];
 }
 
 export function TopicFilters({ filters, expandedFilters }: TopicFiltersProps) {
-  const [activeFilter, setActiveFilter] = useState<string>(filters[0]?.id || "")
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [activeFilter, setActiveFilter] = useState<string>(
+    filters[0]?.id || ""
+  );
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const handleFilterClick = (filterId: string) => {
     if (filterId === "all" || filterId === "more") {
-      setIsExpanded(!isExpanded)
+      setIsExpanded(!isExpanded);
     }
-    setActiveFilter(filterId)
-  }
+    setActiveFilter(filterId);
+  };
 
   const displayFilters = isExpanded
     ? [...filters.filter((f) => f.id !== "more"), ...expandedFilters]
-    : filters.filter((f) => f.id !== "more" || !isExpanded)
+    : filters.filter((f) => f.id !== "more" || !isExpanded);
 
   return (
     <div className="flex overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap md:gap-2">
       {displayFilters.map((filter) => {
-        const isActive = activeFilter === filter.id
-        const isAllTopics = filter.id === "all"
-        const isMoreButton = filter.id === "more"
+        const isActive = activeFilter === filter.id;
+        const isAllTopics = filter.id === "all";
+        const isMoreButton = filter.id === "more";
 
         const bgColor = isActive
           ? "bg-white/5"
           : filter.color.includes("bg-")
             ? filter.color
-            : `bg-[#2d2d2d] ${filter.color}`
+            : `bg-[#2d2d2d] ${filter.color}`;
 
         return (
           <Button
@@ -54,11 +56,15 @@ export function TopicFilters({ filters, expandedFilters }: TopicFiltersProps) {
             {filter.name}
             {isAllTopics && (
               <span className="ml-1">
-                {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                {isExpanded ? (
+                  <ChevronUp className="h-3 w-3" />
+                ) : (
+                  <ChevronDown className="h-3 w-3" />
+                )}
               </span>
             )}
           </Button>
-        )
+        );
       })}
 
       {isExpanded && (
@@ -71,5 +77,5 @@ export function TopicFilters({ filters, expandedFilters }: TopicFiltersProps) {
         </Button>
       )}
     </div>
-  )
+  );
 }

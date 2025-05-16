@@ -34,7 +34,9 @@ export function BoxRevealDemo() {
 
       <BoxReveal boxColor={"#2BAF55"} duration={0.5}>
         <Link to="/auth/homepage">
-          <Button className="mt-8 text-lg px-8 py-4 text-primary">Explore</Button>
+          <Button className="mt-8 text-lg px-8 py-4 text-primary">
+            Explore
+          </Button>
         </Link>
       </BoxReveal>
     </div>

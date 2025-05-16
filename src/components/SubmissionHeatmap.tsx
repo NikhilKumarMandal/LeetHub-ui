@@ -44,7 +44,7 @@ const SubmissionHeatmap: React.FC = () => {
         tooltipDataAttrs={(value) =>
           ({
             "data-tip": `${value?.date || "Unknown"} - ${value?.count || 0} submission(s)`,
-          } as any)
+          }) as any
         }
         showWeekdayLabels
       />
@@ -55,4 +55,3 @@ const SubmissionHeatmap: React.FC = () => {
 };
 
 export default SubmissionHeatmap;
-

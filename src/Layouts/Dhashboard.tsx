@@ -6,10 +6,7 @@ function Dhashboard() {
 
   if (user === null) {
     return (
-      <Navigate
-        to={`/login?returnTo=${location.pathname}`}
-        replace={true}
-      />
+      <Navigate to={`/login?returnTo=${location.pathname}`} replace={true} />
     );
   }
   return (

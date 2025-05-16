@@ -48,8 +48,13 @@ const CategoryList: React.FC<CategoryListProps> = ({
                   }`}
                   onClick={() => handleCategoryClick(category.name)}
                 >
-                  <span className="text-white text-sm md:text-base">{category.name}</span>
-                  <Badge variant="outline" className="text-gray-400 border-gray-700 text-xs">
+                  <span className="text-white text-sm md:text-base">
+                    {category.name}
+                  </span>
+                  <Badge
+                    variant="outline"
+                    className="text-gray-400 border-gray-700 text-xs"
+                  >
                     {category.count}
                   </Badge>
                 </button>
@@ -65,8 +70,13 @@ const CategoryList: React.FC<CategoryListProps> = ({
                 }`}
                 onClick={() => handleCategoryClick(category.name)}
               >
-                <span className="text-white text-sm md:text-base">{category.name}</span>
-                <Badge variant="outline" className="text-gray-400 border-gray-700 text-xs">
+                <span className="text-white text-sm md:text-base">
+                  {category.name}
+                </span>
+                <Badge
+                  variant="outline"
+                  className="text-gray-400 border-gray-700 text-xs"
+                >
                   {category.count}
                 </Badge>
               </button>
@@ -96,7 +106,9 @@ const CategoryList: React.FC<CategoryListProps> = ({
                     : handleCategoryClick(category.name)
                 }
               >
-                <span className="text-white text-sm md:text-base">{category.name}</span>
+                <span className="text-white text-sm md:text-base">
+                  {category.name}
+                </span>
                 {category.isExpandable ? (
                   <div className="flex items-center text-gray-400">
                     <Badge
@@ -108,7 +120,10 @@ const CategoryList: React.FC<CategoryListProps> = ({
                     <ChevronDown className="h-4 w-4" />
                   </div>
                 ) : (
-                  <Badge variant="outline" className="text-gray-400 border-gray-700 text-xs">
+                  <Badge
+                    variant="outline"
+                    className="text-gray-400 border-gray-700 text-xs"
+                  >
                     {category.count}
                   </Badge>
                 )}
@@ -118,7 +133,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
         )}
       </div>
 
-      {(categories.length + (isExpanded ? expandedCategories.length : 0)) > 6 && (
+      {categories.length + (isExpanded ? expandedCategories.length : 0) > 6 && (
         <button
           onClick={toggleExpand}
           className="md:hidden mt-2 text-xs text-gray-400 hover:text-white flex items-center justify-center"
