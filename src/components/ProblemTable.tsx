@@ -22,15 +22,20 @@ import { allProblems } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
 import type { Problem } from "@/Types";
+import { useSearchParams } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 export function ProblemsTable() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [queryParams, setQueryParams] = useState({
     limit: LIMIT,
     page: 1,
   });
 
+  const q = searchParams.get("q") || "";
+
   const { data } = useQuery({
-    queryKey: ["problems", queryParams],
+    queryKey: ["problems", queryParams, q],
     queryFn: () => {
       const filteredParams = Object.fromEntries(
         Object.entries(queryParams).filter((item) => !!item[1])
@@ -39,7 +44,7 @@ export function ProblemsTable() {
       const queryString = new URLSearchParams(
         filteredParams as unknown as Record<string, string>
       ).toString();
-      return allProblems(queryString).then((res) => res.data);
+      return allProblems(queryString, q).then((res) => res.data);
     },
     placeholderData: keepPreviousData,
   });
@@ -53,6 +58,16 @@ export function ProblemsTable() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
             placeholder="Search problems..."
+            onChange={debounce((e) => {
+              setSearchParams((prev) => {
+                prev.set("q", e.target.value);
+                return prev;
+              });
+              setQueryParams((prev) => ({
+                ...prev,
+                page: 1,
+              }));
+            }, 1000)}
             className="pl-9 bg-[#2d2d2d] border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-gray-500 text-sm"
           />
         </div>
