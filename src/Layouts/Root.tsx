@@ -48,7 +48,6 @@ function Root() {
     <>
       <Navbar />
       <Outlet />
-      <Footer />
     </>
   );
 }

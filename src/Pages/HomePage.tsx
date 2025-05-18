@@ -7,7 +7,7 @@ import CategoryList from "@/components/CategoryList";
 import { TopicFilters } from "@/components/TopicFilters";
 import SubmissionHeatmap from "@/components/SubmissionHeatmap";
 import { Calendar } from "@/components/Calendar";
-import { ProblemsTable, type Problem } from "@/components/ProblemTable";
+import { ProblemsTable } from "@/components/ProblemTable";
 
 // Type definitions
 interface Category {
@@ -99,7 +99,7 @@ export default function HomePage() {
     { id: "rust", name: "Rust", icon: null, color: "text-orange-400" },
   ];
 
-  const allProblems: Problem[] = [
+  const allProblems = [
     {
       id: "1",
       title: "1. Two Sum",
@@ -410,11 +410,11 @@ export default function HomePage() {
     },
   ];
 
-  const handleCategorySelect = (categoryName: string) => {
-    if (selectedCategory === categoryName) {
+  const handleCategorySelect = (category: string | null) => {
+    if (selectedCategory === category) {
       setSelectedCategory(null);
     } else {
-      setSelectedCategory(categoryName);
+      setSelectedCategory(category);
     }
   };
 
@@ -487,11 +487,7 @@ export default function HomePage() {
             />
 
             <div className="space-y-1">
-              <ProblemsTable
-                problems={allProblems}
-                selectedCategory={selectedCategory}
-                onCategorySelect={handleCategorySelect}
-              />
+              <ProblemsTable />
             </div>
           </div>
 
