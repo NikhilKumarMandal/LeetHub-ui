@@ -16,7 +16,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Check, ChevronLeft, ChevronRight, Filter, Search } from "lucide-react";
+import {
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Search,
+  X,
+} from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { allProblems } from "@/http/api";
 import { useState } from "react";
@@ -33,9 +40,11 @@ export function ProblemsTable() {
   });
 
   const q = searchParams.get("q") || "";
+  const difficulty = searchParams.get("difficulty") || "";
+  const status = searchParams.get("status") || "";
 
   const { data } = useQuery({
-    queryKey: ["problems", queryParams, q],
+    queryKey: ["problems", queryParams, q, difficulty, status],
     queryFn: () => {
       const filteredParams = Object.fromEntries(
         Object.entries(queryParams).filter((item) => !!item[1])
@@ -44,7 +53,9 @@ export function ProblemsTable() {
       const queryString = new URLSearchParams(
         filteredParams as unknown as Record<string, string>
       ).toString();
-      return allProblems(queryString, q).then((res) => res.data);
+      return allProblems(queryString, q, difficulty, status).then(
+        (res) => res.data
+      );
     },
     placeholderData: keepPreviousData,
   });
@@ -73,7 +84,15 @@ export function ProblemsTable() {
         </div>
 
         <div className="flex gap-2 flex-wrap">
-          <Select>
+          <Select
+            onValueChange={(value) => {
+              setSearchParams((prev) => {
+                prev.set("difficulty", value);
+                return prev;
+              });
+              setQueryParams((prev) => ({ ...prev, page: 1 }));
+            }}
+          >
             <SelectTrigger className="w-[130px] bg-[#2d2d2d] border-gray-700 text-white focus:ring-gray-500">
               <SelectValue placeholder="Difficulty" />
             </SelectTrigger>
@@ -85,7 +104,15 @@ export function ProblemsTable() {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select
+            onValueChange={(value) => {
+              setSearchParams((prev) => {
+                prev.set("status", value);
+                return prev;
+              });
+              setQueryParams((prev) => ({ ...prev, page: 1 }));
+            }}
+          >
             <SelectTrigger className="w-[130px] bg-[#2d2d2d] border-gray-700 text-white focus:ring-gray-500">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
@@ -132,7 +159,11 @@ export function ProblemsTable() {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Check className="h-4 w-4 text-green-500" />
+                  {problem?.isSolved ? (
+                    <Check className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <X className="h-4 w-4 text-red-500" />
+                  )}
                 </TableCell>
                 <TableCell className="text-gray-300">{problem.topic}</TableCell>
               </TableRow>
