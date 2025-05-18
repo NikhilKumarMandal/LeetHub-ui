@@ -1,3 +1,4 @@
+import type { FilterData } from "@/Types";
 import { api } from "./client";
 
 // Auth Service
@@ -9,12 +10,7 @@ export const self = () => api.get("/auth/self");
 export const submissionActivity = () => api.get("/submission/activity");
 
 // Problem Service
-export const allProblems = (
-  queryString: string,
-  q: string,
-  difficulty: string,
-  status: string
-) =>
+export const allProblems = (filters: FilterData) =>
   api.get(
-    `/problem/get-problem?${queryString}&q=${q}&difficulty=${difficulty}&status:${status}`
+    `/problem/get-problem?${filters.queryParams}&q=${filters.q}&difficulty=${filters.difficulty}&status:${filters.status}`
   );

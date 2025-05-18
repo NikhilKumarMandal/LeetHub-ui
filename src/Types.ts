@@ -23,3 +23,11 @@ export interface Problem {
   updatedAt: string;
   isSolved: boolean;
 }
+
+export interface FilterData {
+  queryParams?: string;
+  q?: string;
+  difficulty?: string;
+  status?: string;
+  topic?: string;
+}

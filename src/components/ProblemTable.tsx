@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Check,
   ChevronLeft,
@@ -28,7 +27,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { allProblems } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
-import type { Problem } from "@/Types";
+import type { FilterData, Problem } from "@/Types";
 import { useSearchParams } from "react-router-dom";
 import debounce from "lodash.debounce";
 
@@ -53,9 +52,14 @@ export function ProblemsTable() {
       const queryString = new URLSearchParams(
         filteredParams as unknown as Record<string, string>
       ).toString();
-      return allProblems(queryString, q, difficulty, status).then(
-        (res) => res.data
-      );
+      const filters: FilterData = {
+        queryParams: queryString,
+        q,
+        difficulty,
+        status,
+      };
+
+      return allProblems(filters).then((res) => res.data);
     },
     placeholderData: keepPreviousData,
   });
@@ -154,9 +158,17 @@ export function ProblemsTable() {
                 </TableCell>
                 <TableCell className="text-gray-300">{problem.title}</TableCell>
                 <TableCell>
-                  <Badge className="bg-green-500 text-white">
+                  <span
+                    className={
+                      problem.difficulty === "EASY"
+                        ? "text-green-500 font-medium"
+                        : problem.difficulty === "MEDIUM"
+                          ? "text-yellow-500 font-medium"
+                          : "text-red-500 font-medium"
+                    }
+                  >
                     {problem.difficulty}
-                  </Badge>
+                  </span>
                 </TableCell>
                 <TableCell>
                   {problem?.isSolved ? (
