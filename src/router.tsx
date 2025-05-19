@@ -5,6 +5,7 @@ import NonAuth from "./Layouts/NonAuth";
 import LoginPage from "./Pages/LoginPage";
 import Dhashboard from "./Layouts/Dhashboard";
 import HomePage from "./Pages/HomePage";
+import ListProblems from "./Pages/ListProblems";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
           {
             path: "homepage",
             element: <HomePage />,
+          },
+          {
+            path: "list-problems/:topic",
+            element: <ListProblems />,
           },
         ],
       },

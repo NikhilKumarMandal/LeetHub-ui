@@ -8,14 +8,6 @@ import { TopicFilters } from "@/components/TopicFilters";
 import SubmissionHeatmap from "@/components/SubmissionHeatmap";
 import { Calendar } from "@/components/Calendar";
 import { ProblemsTable } from "@/components/ProblemTable";
-
-// Type definitions
-interface Category {
-  name: string;
-  count: number | string;
-  isExpandable?: boolean;
-}
-
 interface TopicFilter {
   id: string;
   name: string;
@@ -25,27 +17,6 @@ interface TopicFilter {
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const categories: Category[] = [
-    { name: "Array", count: 1902 },
-    { name: "String", count: 787 },
-    { name: "Hash Table", count: 691 },
-    { name: "Dynamic Programming", count: 582 },
-    { name: "Math", count: 575 },
-    { name: "Sorting", count: 448 },
-    { name: "Greedy", count: "Expand", isExpandable: true },
-  ];
-
-  const expandedCategories: Category[] = [
-    { name: "Binary Search", count: 389 },
-    { name: "Tree", count: 372 },
-    { name: "Depth-First Search", count: 341 },
-    { name: "Breadth-First Search", count: 237 },
-    { name: "Graph", count: 212 },
-    { name: "Stack", count: 187 },
-    { name: "Backtracking", count: 165 },
-    { name: "Design", count: 154 },
-    { name: "Bit Manipulation", count: 147 },
-  ];
 
   const topicFilters: TopicFilter[] = [
     {
@@ -98,14 +69,6 @@ export default function HomePage() {
     { id: "golang", name: "Go", icon: null, color: "text-blue-400" },
     { id: "rust", name: "Rust", icon: null, color: "text-orange-400" },
   ];
-
-  const handleCategorySelect = (category: string | null) => {
-    if (selectedCategory === category) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(category);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-white">

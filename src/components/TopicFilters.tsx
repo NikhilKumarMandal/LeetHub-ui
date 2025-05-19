@@ -37,7 +37,7 @@ export function TopicFilters({ filters, expandedFilters }: TopicFiltersProps) {
       {displayFilters.map((filter) => {
         const isActive = activeFilter === filter.id;
         const isAllTopics = filter.id === "all";
-        const isMoreButton = filter.id === "more";
+        // const isMoreButton = filter.id === "more";
 
         const bgColor = isActive
           ? "bg-white/5"

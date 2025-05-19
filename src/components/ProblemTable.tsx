@@ -1,12 +1,4 @@
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -16,19 +8,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Check,
+  CheckCircle,
   ChevronLeft,
   ChevronRight,
   Filter,
   Search,
-  X,
+  Star,
 } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { allProblems } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
 import type { FilterData, Problem } from "@/Types";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import debounce from "lodash.debounce";
 
 export function ProblemsTable() {
@@ -52,6 +44,7 @@ export function ProblemsTable() {
       const queryString = new URLSearchParams(
         filteredParams as unknown as Record<string, string>
       ).toString();
+
       const filters: FilterData = {
         queryParams: queryString,
         q,
@@ -63,7 +56,9 @@ export function ProblemsTable() {
     },
     placeholderData: keepPreviousData,
   });
+
   const totalPages = data?.data?.pagination.totalPages || 1;
+  const problems: Problem[] = data?.data?.problems || [];
 
   return (
     <div className="space-y-4">
@@ -137,51 +132,53 @@ export function ProblemsTable() {
         </div>
       </div>
 
-      {/* Problems Table */}
-      <div className="border border-gray-700 rounded-md overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[80px] text-white">#</TableHead>
-              <TableHead className="text-white">Title</TableHead>
-              <TableHead className="text-white">Difficulty</TableHead>
-              <TableHead className="text-white">Status</TableHead>
-              <TableHead className="text-white">Category</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {/* Example static row */}
-            {data?.data?.problems.map((problem: Problem) => (
-              <TableRow>
-                <TableCell className="text-gray-300">
-                  {problem.problemNumber}
-                </TableCell>
-                <TableCell className="text-gray-300">{problem.title}</TableCell>
-                <TableCell>
+      {/* New Card-Style Problem List */}
+      <div className="flex-1 overflow-auto">
+        <div className="grid gap-2 p-3 sm:p-4">
+          {problems.map((problem) => (
+            <Link
+              key={problem.id}
+              to={`/problems/${problem.id}`}
+              className="block"
+            >
+              <div className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
+                {problem.isSolved && (
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="font-medium text-xs sm:text-sm">
+                      {problem.problemNumber}.
+                    </span>
+                    <span className="font-medium text-xs sm:text-sm truncate">
+                      {problem.title}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 sm:gap-4">
                   <span
-                    className={
+                    className={`${
                       problem.difficulty === "EASY"
-                        ? "text-green-500 font-medium"
+                        ? "text-teal-500"
                         : problem.difficulty === "MEDIUM"
-                          ? "text-yellow-500 font-medium"
-                          : "text-red-500 font-medium"
-                    }
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                    } font-medium text-xs sm:text-sm`}
                   >
                     {problem.difficulty}
                   </span>
-                </TableCell>
-                <TableCell>
-                  {problem?.isSolved ? (
-                    <Check className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <X className="h-4 w-4 text-red-500" />
-                  )}
-                </TableCell>
-                <TableCell className="text-gray-300">{problem.topic}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                  >
+                    <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </Button>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Pagination Controls */}

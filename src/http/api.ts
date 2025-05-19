@@ -10,9 +10,22 @@ export const self = () => api.get("/auth/self");
 export const submissionActivity = () => api.get("/submission/activity");
 
 // Problem Service
-export const allProblems = (filters: FilterData) =>
-  api.get(
-    `/problem/get-problem?${filters.queryParams}&q=${filters.q}&difficulty=${filters.difficulty}&status:${filters.status}`
-  );
+export const allProblems = (filters: FilterData) => {
+  const params = new URLSearchParams();
+
+  if (filters.queryParams) {
+    const qp = new URLSearchParams(filters.queryParams);
+    qp.forEach((value, key) => {
+      if (value) params.append(key, value);
+    });
+  }
+
+  if (filters.q) params.append("q", filters.q);
+  if (filters.difficulty) params.append("difficulty", filters.difficulty);
+  if (filters.status) params.append("status", filters.status);
+  if (filters.topic) params.append("topic", filters.topic);
+
+  return api.get(`/problem/get-problem?${params.toString()}`);
+};
 
 export const getAllTopicAndCompanyName = () => api.get("/problem/all-topics");

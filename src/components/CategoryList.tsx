@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllTopicAndCompanyName } from "@/http/api";
 
 const CategoryList: React.FC = () => {
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -23,25 +25,29 @@ const CategoryList: React.FC = () => {
   const visibleCategories = isExpanded ? categories : categories.slice(0, 6);
 
   const toggleExpand = () => setIsExpanded((prev) => !prev);
-  const handleCategoryClick = (name: string) => setSelectedCategory(name);
+
+  const handleCategoryClick = (topic: string) => {
+    setSelectedCategory(topic);
+    navigate(`/auth/list-problems/${topic}`);
+  };
 
   return (
     <div className="flex flex-col">
       <div className="flex overflow-x-auto scrollbar-hide py-2 -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap md:gap-4">
-        {visibleCategories.map((name: string, index: number) => (
+        {visibleCategories.map((topic: string, index: number) => (
           <button
             key={index}
             className={`flex items-center gap-2 whitespace-nowrap mr-4 md:mr-0 px-2 py-1 rounded-md transition-colors ${
-              selectedCategory === name ? "bg-[#3a3a3a]" : "hover:bg-[#2d2d2d]"
+              selectedCategory === topic ? "bg-[#3a3a3a]" : "hover:bg-[#2d2d2d]"
             }`}
-            onClick={() => handleCategoryClick(name)}
+            onClick={() => handleCategoryClick(topic)}
           >
-            <span className="text-white text-sm md:text-base">{name}</span>
+            <span className="text-white text-sm md:text-base">{topic}</span>
             <Badge
               variant="outline"
               className="text-gray-400 border-gray-700 text-xs"
             >
-              {topicCounts[name]}
+              {topicCounts[topic]}
             </Badge>
           </button>
         ))}
