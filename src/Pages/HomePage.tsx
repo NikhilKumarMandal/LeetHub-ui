@@ -107,45 +107,11 @@ export default function HomePage() {
     }
   };
 
-  // const filteredProblems: ProblemsTableProps = allProblems.map((problem) => ({
-  //   id: problem.id,
-  //   title: problem.title,
-  //   difficulty:
-  //     problem.difficulty === "Easy" || problem.difficulty === "Medium" || problem.difficulty === "Hard"
-  //       ? problem.difficulty
-  //       : "Easy",
-  //   isSolved: !!problem.isSolved,
-  //   progress: typeof problem.progress === "number" ? problem.progress : 0,
-  //   icon: problem.icon,
-  // }))
-
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-white">
       <main className="container py-4 md:py-6 px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           <div className="lg:col-span-2 space-y-4 md:space-y-6">
-            {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-              <SubmissionHeatmap/>
-              <FeaturedCard
-                title="LeetCode's Interview Crash Course:"
-                description="System Design for Interviews and Beyond"
-                color="green"
-                buttonText="Start Learning"
-              />
-              <FeaturedCard
-                title="LeetCode's Interview Crash Course:"
-                description="Data Structures and Algorithms"
-                color="purple"
-                buttonText="Start Learning"
-              />
-              <FeaturedCard
-                title="New & Trending Company Qs"
-                description="Latest Qs From Big Tech"
-                color="yellow"
-                buttonText="Claim Now"
-                badge="Vol. 1"
-              />
-            </div> */}
             <SubmissionHeatmap />
             <div>
               {selectedCategory && (
@@ -162,26 +128,16 @@ export default function HomePage() {
                   </button>
                 </div>
               )}
-              <CategoryList
-                categories={categories}
-                expandedCategories={expandedCategories}
-                onCategorySelect={handleCategorySelect}
-                selectedCategory={selectedCategory}
-              />
+              <CategoryList />
             </div>
-
             <TopicFilters
               filters={topicFilters}
               expandedFilters={expandedTopicFilters}
             />
-
             <div className="space-y-1">
               <ProblemsTable />
             </div>
           </div>
-
-          {/* Right Sidebar Widgets */}
-
           <Calendar />
         </div>
       </main>

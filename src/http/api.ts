@@ -14,3 +14,5 @@ export const allProblems = (filters: FilterData) =>
   api.get(
     `/problem/get-problem?${filters.queryParams}&q=${filters.q}&difficulty=${filters.difficulty}&status:${filters.status}`
   );
+
+export const getAllTopicAndCompanyName = () => api.get("/problem/all-topics");
