@@ -26,6 +26,7 @@ export function Navbar() {
     { name: "Explore", to: "/explore" },
     { name: "Problems", to: "/problems" },
     { name: "Contest", to: "/contest" },
+    { name: "createProblem", to: "/auth/create-problem" },
   ];
 
   return (

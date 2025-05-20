@@ -6,6 +6,7 @@ import LoginPage from "./Pages/LoginPage";
 import Dhashboard from "./Layouts/Dhashboard";
 import HomePage from "./Pages/HomePage";
 import ListProblems from "./Pages/ListProblems";
+import CreateProblemPage from "./Pages/CreateProblemPage";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
           {
             path: "list-problems/:topic",
             element: <ListProblems />,
+          },
+          {
+            path: "create-problem",
+            element: <CreateProblemPage />,
           },
         ],
       },
