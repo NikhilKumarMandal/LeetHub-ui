@@ -5,6 +5,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,18 +24,30 @@ import {
   Star,
   Edit2,
   Trash2,
+  PlusCircle,
 } from "lucide-react";
 import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
-import { allProblems, deleteProblem } from "@/http/api";
+import {
+  addProblemInPlaylist,
+  allProblems,
+  deleteProblem,
+  getALLPlaylistDetails,
+} from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
 import type { FilterData, Problem } from "@/Types";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import { usePermission } from "@/hooks/userPermission";
+import { toast } from "sonner";
 
-export const problemdelete = async (id: string) => {
+const problemdelete = async (id: string) => {
   return await deleteProblem(id);
+};
+
+const addProblem = async (id: string, problemId: string) => {
+  const { data } = await addProblemInPlaylist(id, problemId);
+  return data;
 };
 
 export function ProblemsTable() {
@@ -39,6 +59,10 @@ export function ProblemsTable() {
     page: 1,
   });
 
+  const [open, setOpen] = useState(false);
+  const [selectedProblemId, setSelectedProblemId] = useState<string | null>(
+    null
+  );
   const q = searchParams.get("q") || "";
   const difficulty = searchParams.get("difficulty") || "";
   const status = searchParams.get("status") || "";
@@ -66,6 +90,25 @@ export function ProblemsTable() {
     placeholderData: keepPreviousData,
   });
 
+  const { data: playlist } = useQuery({
+    queryKey: ["playlist"],
+    queryFn: () => {
+      return getALLPlaylistDetails().then((res) => res.data);
+    },
+  });
+
+  console.log("playlist", playlist);
+
+  const { mutate } = useMutation({
+    mutationKey: ["playlist"],
+    mutationFn: ({ id, problemId }: { id: string; problemId: string }) =>
+      addProblem(id, problemId),
+    onSuccess: () => {
+      toast.success("Problem added to playlist");
+      setOpen(false);
+    },
+  });
+
   const deleteProblemMutation = useMutation({
     mutationKey: ["problems"],
     mutationFn: (id: string) => problemdelete(id),
@@ -74,9 +117,41 @@ export function ProblemsTable() {
   const totalPages = data?.data?.pagination.totalPages || 1;
   const problems: Problem[] = data?.data?.problems || [];
 
+  const handleAddToPlaylist = (problemId: string) => {
+    setSelectedProblemId(problemId);
+    setOpen(true);
+  };
+
   return (
     <div className="space-y-4">
       {/* Filters and Search */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-[#1f1f1f] border border-gray-700 text-white">
+          <DialogHeader>
+            <DialogTitle>Select Playlist</DialogTitle>
+            <DialogDescription>
+              Select a playlist to add this problem.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid gap-2">
+            {playlist?.data.map((pl: any) => (
+              <Button
+                key={pl.id}
+                variant="outline"
+                className="bg-[#2d2d2d] hover:bg-[#3a3a3a] border border-gray-600 text-white"
+                onClick={() => {
+                  if (selectedProblemId) {
+                    mutate({ id: pl.id, problemId: selectedProblemId });
+                  }
+                }}
+              >
+                {pl.name}
+              </Button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
       <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
@@ -192,6 +267,21 @@ export function ProblemsTable() {
               >
                 <Star className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
+
+              {isAllowed && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Add to Playlist"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAddToPlaylist(problem.id);
+                  }}
+                  className="text-purple-400 hover:text-purple-600 h-7 w-7 sm:h-8 sm:w-8"
+                >
+                  <PlusCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                </Button>
+              )}
 
               {isAllowed && (
                 <>

@@ -44,3 +44,10 @@ export const getAllTopicAndCompanyName = () => api.get("/problem/all-topics");
 // Playlist
 export const createPlaylist = (data: PlaylistData) =>
   api.post("/playlist/", data);
+
+export const getALLPlaylistDetails = () => api.get("/playlist/");
+
+export const addProblemInPlaylist = (id: string, problemId: string) =>
+  api.post(`/playlist/${id}/add-problem`, { problemId });
+
+export const getAllPlaylist = (id: string) => api.get(`/playlist/${id}`);
