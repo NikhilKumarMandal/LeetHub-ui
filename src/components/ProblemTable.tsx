@@ -14,16 +14,25 @@ import {
   Filter,
   Search,
   Star,
+  Edit2,
+  Trash2,
 } from "lucide-react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { allProblems } from "@/http/api";
+import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { allProblems, deleteProblem } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
 import type { FilterData, Problem } from "@/Types";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
+import { usePermission } from "@/hooks/userPermission";
+
+export const problemdelete = async (id: string) => {
+  return await deleteProblem(id);
+};
 
 export function ProblemsTable() {
+  const { isAllowed } = usePermission();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryParams, setQueryParams] = useState({
     limit: LIMIT,
@@ -55,6 +64,11 @@ export function ProblemsTable() {
       return allProblems(filters).then((res) => res.data);
     },
     placeholderData: keepPreviousData,
+  });
+
+  const deleteProblemMutation = useMutation({
+    mutationKey: ["problems"],
+    mutationFn: (id: string) => problemdelete(id),
   });
 
   const totalPages = data?.data?.pagination.totalPages || 1;
@@ -132,51 +146,83 @@ export function ProblemsTable() {
         </div>
       </div>
 
-      {/* New Card-Style Problem List */}
+      {/* Problem list */}
       <div className="flex-1 overflow-auto">
         <div className="grid gap-2 p-3 sm:p-4">
           {problems.map((problem) => (
-            <Link
+            <div
               key={problem.id}
-              to={`/problems/${problem.id}`}
-              className="block"
+              className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
             >
-              <div className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
-                {problem.isSolved && (
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <span className="font-medium text-xs sm:text-sm">
-                      {problem.problemNumber}.
-                    </span>
-                    <span className="font-medium text-xs sm:text-sm truncate">
-                      {problem.title}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 sm:gap-4">
-                  <span
-                    className={`${
-                      problem.difficulty === "EASY"
-                        ? "text-teal-500"
-                        : problem.difficulty === "MEDIUM"
-                          ? "text-yellow-500"
-                          : "text-red-500"
-                    } font-medium text-xs sm:text-sm`}
-                  >
-                    {problem.difficulty}
+              {problem.isSolved && (
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
+              )}
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <span className="font-medium text-xs sm:text-sm">
+                    {problem.problemNumber}.
                   </span>
+                  <Link
+                    to={`/problems/${problem.id}`}
+                    className="font-medium text-xs sm:text-sm truncate text-primary hover:underline"
+                  >
+                    {problem.title}
+                  </Link>
+                </div>
+              </div>
+
+              <span
+                className={`${
+                  problem.difficulty === "EASY"
+                    ? "text-teal-500"
+                    : problem.difficulty === "MEDIUM"
+                      ? "text-yellow-500"
+                      : "text-red-500"
+                } font-medium text-xs sm:text-sm`}
+              >
+                {problem.difficulty}
+              </span>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                aria-label="Star problem"
+              >
+                <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+              </Button>
+
+              {isAllowed && (
+                <>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                    aria-label="Update problem"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/auth/problems/update/${problem.id}`);
+                    }}
+                    className="text-blue-400 hover:text-blue-600 h-7 w-7 sm:h-8 sm:w-8"
                   >
-                    <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </Button>
-                </div>
-              </div>
-            </Link>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Delete problem"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      deleteProblemMutation.mutate(problem.id);
+                    }}
+                    className="text-red-500 hover:text-red-700 h-7 w-7 sm:h-8 sm:w-8"
+                  >
+                    <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </Button>
+                </>
+              )}
+            </div>
           ))}
         </div>
       </div>

@@ -13,6 +13,14 @@ export const submissionActivity = () => api.get("/submission/activity");
 export const createProblem = (problemData: ProblemData) =>
   api.post("/problem/create-problem", problemData);
 
+export const deleteProblem = (id: string) => api.delete(`/problem/${id}`);
+
+export const updateProblem = (id: string, problemData: ProblemData) =>
+  api.put(`/problem/update-problem/${id}`, problemData);
+
+export const problemById = (id: string) =>
+  api.get(`/problem/get-problem/${id}`);
+
 export const allProblems = (filters: FilterData) => {
   const params = new URLSearchParams();
 

@@ -2,11 +2,19 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 export interface User {
-  id: string;
   name: string;
-  email: string;
+  id: string;
   role: string;
+  email: string;
   avatar: string;
+}
+
+// API response wrapping User
+export interface ApiResponse<T> {
+  statusCode: number;
+  data: T;
+  message: string;
+  success: boolean;
 }
 
 interface AuthState {

@@ -4,6 +4,13 @@ interface ProblemExample {
   explanation: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string;
+}
 export interface Problem {
   id: string;
   title: string;

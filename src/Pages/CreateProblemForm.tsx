@@ -17,10 +17,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { createProblem } from "@/http/api"; // Your API call
+import { createProblem } from "@/http/api";
 import type { ProblemData } from "@/Types";
 
-// Validation schema with Zod
 const formSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
@@ -38,7 +37,6 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-// Updated mutation function expects wrapped data
 const problem = async (payload: ProblemData) => {
   const { data } = await createProblem(payload);
   return data;
@@ -123,7 +121,6 @@ const CreateProblemForm = () => {
     },
   });
 
-  // State to hold JSON input errors for each JSON field
   const [jsonErrors, setJsonErrors] = useState<Record<string, string | null>>(
     {}
   );
@@ -141,35 +138,6 @@ const CreateProblemForm = () => {
     },
   });
 
-  // Submit handler with JSON error check and data transformation
-  //   const onSubmit = (data: FormValues) => {
-  //     const hasJsonErrors = Object.values(jsonErrors).some((error) => error !== null);
-  //     if (hasJsonErrors) {
-  //       toast.error("Please fix JSON errors before submitting.");
-  //       return;
-  //     }
-
-  //     // Transform and clean data before sending
-  //     const problemData: ProblemData = {
-  //       title: data.title,
-  //       description: data.description,
-  //       difficulty: data.difficulty,
-  //       topic: data.topic,
-  //       companyName: data.companyName?.filter(Boolean) || [],
-  //       examples: data.examples || {},
-  //       constraints: data.constraints,
-  //       hints: data.hints || "",
-  //       editorial: data.editorial || "",
-  //       testcases: data.testcases || [],
-  //       codeSnippets: data.codeSnippets || {},
-  //       referenceSolutions: data.referenceSolutions || {},
-  //     };
-
-  //     mutate({ problemData });
-
-  //     console.log("Submitting problem data:", problemData);
-  //   };
-
   const onSubmit = (data: FormValues) => {
     const hasJsonErrors = Object.values(jsonErrors).some(
       (error) => error !== null
@@ -178,21 +146,6 @@ const CreateProblemForm = () => {
       toast.error("Please fix JSON errors before submitting.");
       return;
     }
-    // your data transformation here
-    const problemData: ProblemData = {
-      title: data.title,
-      description: data.description,
-      difficulty: data.difficulty,
-      topic: data.topic,
-      companyName: data.companyName?.filter(Boolean) || [],
-      examples: data.examples || {},
-      constraints: data.constraints,
-      hints: data.hints || "",
-      editorial: data.editorial || "",
-      testcases: data.testcases || [],
-      codeSnippets: data.codeSnippets || {},
-      referenceSolutions: data.referenceSolutions || {},
-    };
 
     mutate(data);
   };

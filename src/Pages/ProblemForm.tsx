@@ -169,7 +169,6 @@ type ProblemFormValues = z.infer<typeof problemSchema>;
 export function ProblemForm() {
   const [jsonErrors, setJsonErrors] = useState<Record<string, string>>({});
   const [topicInput, setTopicInput] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   // Initialize form with empty values

@@ -8,6 +8,7 @@ import HomePage from "./Pages/HomePage";
 import ListProblems from "./Pages/ListProblems";
 
 import CreateProblemForm from "./Pages/CreateProblemForm";
+import UpdateProblemForm from "./Pages/UpdateProblemForm";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
           {
             path: "create-problem",
             element: <CreateProblemForm />,
+          },
+          {
+            path: "problems/update/:problemId",
+            element: <UpdateProblemForm />,
           },
         ],
       },
