@@ -53,3 +53,8 @@ export interface ProblemData {
   referenceSolutions?: string;
   companyName?: string[];
 }
+
+export interface PlaylistData {
+  name: string;
+  description: string;
+}

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { CreatePlaylistButton } from "./CreatePlaylistButton";
+import { usePermission } from "@/hooks/userPermission";
 // import {
 //   Bell,
 //   Menu,
@@ -21,6 +23,8 @@ import { Link } from "react-router-dom";
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const { isAllowed } = usePermission();
+  console.log("ISALLOWED", isAllowed);
 
   const navLinks = [
     { name: "Explore", to: "/explore" },
@@ -97,6 +101,7 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu> */}
         {/* </div> */}
+        <CreatePlaylistButton isAdmin={isAllowed} />
       </div>
 
       {isMenuOpen && (

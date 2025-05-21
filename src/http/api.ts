@@ -1,4 +1,4 @@
-import type { FilterData, ProblemData } from "@/Types";
+import type { FilterData, PlaylistData, ProblemData } from "@/Types";
 import { api } from "./client";
 
 // Auth Service
@@ -40,3 +40,7 @@ export const allProblems = (filters: FilterData) => {
 };
 
 export const getAllTopicAndCompanyName = () => api.get("/problem/all-topics");
+
+// Playlist
+export const createPlaylist = (data: PlaylistData) =>
+  api.post("/playlist/", data);
