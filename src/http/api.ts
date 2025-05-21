@@ -1,4 +1,4 @@
-import type { FilterData } from "@/Types";
+import type { FilterData, ProblemData } from "@/Types";
 import { api } from "./client";
 
 // Auth Service
@@ -10,6 +10,9 @@ export const self = () => api.get("/auth/self");
 export const submissionActivity = () => api.get("/submission/activity");
 
 // Problem Service
+export const createProblem = (problemData: ProblemData) =>
+  api.post("/problem/create-problem", problemData);
+
 export const allProblems = (filters: FilterData) => {
   const params = new URLSearchParams();
 

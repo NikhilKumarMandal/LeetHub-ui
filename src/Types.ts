@@ -31,3 +31,18 @@ export interface FilterData {
   status?: string;
   topic?: string;
 }
+
+export interface ProblemData {
+  title: string;
+  description: string;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
+  topic?: string[];
+  examples?: string;
+  constraints?: string;
+  hints?: string;
+  editorial?: string;
+  testcases?: string;
+  codeSnippets?: string;
+  referenceSolutions?: string;
+  companyName?: string[];
+}
