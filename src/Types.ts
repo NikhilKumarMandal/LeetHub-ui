@@ -29,6 +29,7 @@ export interface Problem {
   createdAt: string;
   updatedAt: string;
   isSolved: boolean;
+  isFavorite: boolean;
 }
 
 export interface FilterData {

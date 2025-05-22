@@ -31,6 +31,7 @@ import {
   allProblems,
   deleteProblem,
   getALLPlaylistDetails,
+  toggleFavorite,
 } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
@@ -39,6 +40,7 @@ import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
 import { usePermission } from "@/hooks/userPermission";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const problemdelete = async (id: string) => {
   return await deleteProblem(id);
@@ -57,7 +59,7 @@ export function ProblemsTable() {
     limit: LIMIT,
     page: 1,
   });
-
+  const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState<string | null>(
     null
@@ -94,9 +96,23 @@ export function ProblemsTable() {
     queryFn: () => {
       return getALLPlaylistDetails().then((res) => res.data);
     },
+    staleTime: 5 * 60 * 1000,
   });
 
-  console.log("playlist", playlist);
+  const { mutate: toggleFavoriteMutate } = useMutation({
+    mutationKey: ["favroite"],
+    mutationFn: async (problemId: string) => {
+      const res = await toggleFavorite(problemId);
+      return res;
+    },
+    onSuccess: (res) => {
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries({
+        queryKey: ["problems", queryParams, q, difficulty, status],
+      });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+    },
+  });
 
   const { mutate } = useMutation({
     mutationKey: ["playlist"],
@@ -111,6 +127,10 @@ export function ProblemsTable() {
   const deleteProblemMutation = useMutation({
     mutationKey: ["problems"],
     mutationFn: (id: string) => problemdelete(id),
+    onSuccess: () => {
+      toast.success("Problem deleted");
+      queryClient.invalidateQueries({ queryKey: ["problems"] });
+    },
   });
 
   const totalPages = data?.data?.pagination.totalPages || 1;
@@ -263,8 +283,16 @@ export function ProblemsTable() {
                 size="icon"
                 className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
                 aria-label="Star problem"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFavoriteMutate(problem.id);
+                }}
               >
-                <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+                {problem.isFavorite ? (
+                  <Star fill="yellow" className="text-yellow-400 w-4 h-4" />
+                ) : (
+                  <Star className="w-4 h-4" />
+                )}
               </Button>
 
               {isAllowed && (

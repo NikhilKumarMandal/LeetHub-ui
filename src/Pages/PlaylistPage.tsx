@@ -26,6 +26,8 @@ export default function PlaylistPage() {
     enabled: !!playlistId,
   });
 
+  console.log(data);
+
   const deleteProblemMutation = useMutation({
     mutationKey: ["problems"],
     mutationFn: (id: string) => problemdelete(id),
@@ -89,7 +91,7 @@ export default function PlaylistPage() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
-              {data.data.categories.map((category: any, index: any) => (
+              {data?.data?.categories.map((category: any, index: any) => (
                 <Card key={index} className="bg-gray-900/60 border-gray-800">
                   <CardHeader className="pb-3 border-b border-gray-800">
                     <CardTitle className="text-white">
@@ -98,32 +100,32 @@ export default function PlaylistPage() {
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="divide-y divide-gray-800">
-                      {category.problems.map((problem: any) => (
+                      {category?.problems.map((problem: any) => (
                         <div
                           key={problem.id}
                           className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
                         >
-                          {problem.isSolved && (
+                          {problem?.isSolved && (
                             <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
                           )}
 
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1 sm:gap-2">
                               <span className="font-medium text-xs sm:text-sm">
-                                {problem.problemNumber}.
+                                {problem?.problemNumber}.
                               </span>
                               <Link
-                                to={`/problems/${problem.id}`}
+                                to={`/problems/${problem?.id}`}
                                 className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
                               >
-                                {problem.title}
+                                {problem?.title}
                               </Link>
                             </div>
                           </div>
 
                           <span
                             className={`${
-                              problem.difficulty === "EASY"
+                              problem?.difficulty === "EASY"
                                 ? "text-teal-500"
                                 : problem.difficulty === "MEDIUM"
                                   ? "text-yellow-500"

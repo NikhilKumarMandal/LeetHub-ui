@@ -6,6 +6,9 @@ export const login = (token: string) => api.post("/auth/oauth2", { token });
 
 export const self = () => api.get("/auth/self");
 
+export const toggleFavorite = (problemId: string) =>
+  api.post(`/auth/${problemId}/favorite`);
+
 // Submission Service
 export const submissionActivity = () => api.get("/submission/activity");
 
