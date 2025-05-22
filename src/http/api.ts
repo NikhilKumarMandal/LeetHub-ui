@@ -9,6 +9,8 @@ export const self = () => api.get("/auth/self");
 export const toggleFavorite = (problemId: string) =>
   api.post(`/auth/${problemId}/favorite`);
 
+export const favoriteProblems = () => api.get("/auth/favorite-problems");
+
 // Submission Service
 export const submissionActivity = () => api.get("/submission/activity");
 

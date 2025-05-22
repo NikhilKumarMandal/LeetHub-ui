@@ -11,6 +11,7 @@ import CreateProblemForm from "./Pages/CreateProblemForm";
 import UpdateProblemForm from "./Pages/UpdateProblemForm";
 import HomePage1 from "./Pages/HomePage1";
 import PlaylistPage from "./Pages/PlaylistPage";
+import FavoritesPage from "./Pages/FavoritesPage";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
           {
             path: "hello",
             element: <HomePage1 />,
+          },
+          {
+            path: "favorite",
+            element: <FavoritesPage />,
           },
         ],
       },
