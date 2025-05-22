@@ -9,6 +9,8 @@ import ListProblems from "./Pages/ListProblems";
 
 import CreateProblemForm from "./Pages/CreateProblemForm";
 import UpdateProblemForm from "./Pages/UpdateProblemForm";
+import HomePage1 from "./Pages/HomePage1";
+import PlaylistPage from "./Pages/PlaylistPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,10 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        path: "/playlist/:playlistId",
+        element: <PlaylistPage />,
+      },
+      {
         path: "/auth",
         element: <Dhashboard />,
         children: [
@@ -48,6 +54,10 @@ export const router = createBrowserRouter([
           {
             path: "problems/update/:problemId",
             element: <UpdateProblemForm />,
+          },
+          {
+            path: "hello",
+            element: <HomePage1 />,
           },
         ],
       },

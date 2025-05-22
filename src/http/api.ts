@@ -47,6 +47,10 @@ export const createPlaylist = (data: PlaylistData) =>
 
 export const getALLPlaylistDetails = () => api.get("/playlist/");
 
+export const fetchAllPlaylist = () => api.get("/playlist/get-all-playlist");
+
+export const getPlaylistById = (id: string) => api.get(`/playlist/${id}`);
+
 export const addProblemInPlaylist = (id: string, problemId: string) =>
   api.post(`/playlist/${id}/add-problem`, { problemId });
 

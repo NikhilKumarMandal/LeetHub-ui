@@ -1,60 +1,17 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Code, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Code,
+  Sparkles,
+} from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllPlaylist } from "@/http/api";
+import { useNavigate } from "react-router-dom";
 
-const playlistData = [
-  {
-    id: 1,
-    title: "Array Manipulation Techniques",
-    description:
-      "Master essential array manipulation techniques used in technical interviews. Learn in-place algorithms, two-pointer approaches, sliding window, and more advanced patterns that appear frequently in coding challenges.",
-  },
-  {
-    id: 2,
-    title: "Dynamic Programming Fundamentals",
-    description:
-      "Build a strong foundation in dynamic programming from basic to advanced concepts. This playlist covers memoization, tabulation, and common DP patterns with step-by-step explanations.",
-  },
-  {
-    id: 3,
-    title: "Graph Algorithms & Traversals",
-    description:
-      "Comprehensive guide to graph algorithms including DFS, BFS, Dijkstra's, and more complex network flow problems. Perfect for interview preparation and competitive programming.",
-  },
-  {
-    id: 4,
-    title: "Binary Tree & BST Problems",
-    description:
-      "Tackle the most common binary tree and binary search tree problems. Learn traversal techniques, construction algorithms, and validation approaches used in technical interviews.",
-  },
-  {
-    id: 5,
-    title: "String Manipulation Challenges",
-    description:
-      "Master string algorithms including pattern matching, substring problems, and text processing techniques. Essential for technical interviews at top tech companies.",
-  },
-  {
-    id: 6,
-    title: "System Design Interview Prep",
-    description:
-      "Prepare for system design interviews with real-world architecture problems. Learn how to design scalable systems, handle trade-offs, and communicate your thought process effectively.",
-  },
-  {
-    id: 7,
-    title: "Greedy Algorithms",
-    description:
-      "Explore the world of greedy algorithms and learn when and how to apply this powerful technique to solve optimization problems efficiently.",
-  },
-  {
-    id: 8,
-    title: "Backtracking Masterclass",
-    description:
-      "Deep dive into backtracking algorithms for solving complex combinatorial problems. Learn how to efficiently explore solution spaces and prune search trees.",
-  },
-];
-
-// Color schemes for cards - more vibrant and professional
 const colorSchemes = [
   {
     gradient: "from-purple-500 to-indigo-600",
@@ -113,68 +70,122 @@ const colorSchemes = [
 
 export default function PlaylistCards() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  // Function to truncate description
+  const { data } = useQuery({
+    queryKey: ["playlistData"],
+    queryFn: () => {
+      return fetchAllPlaylist().then((res) => res.data);
+    },
+  });
+
   const truncateDescription = (text: string, maxLength = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength).trim() + "...";
   };
 
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth =
+        scrollContainerRef.current.querySelector("div")?.offsetWidth || 300;
+      scrollContainerRef.current.scrollBy({
+        left: -cardWidth - 24,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      const cardWidth =
+        scrollContainerRef.current.querySelector("div")?.offsetWidth || 300;
+      scrollContainerRef.current.scrollBy({
+        left: cardWidth + 24,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {playlistData.map((playlist, index) => {
-        const colorIndex = index % colorSchemes.length;
-        const colors = colorSchemes[colorIndex];
-        const isHovered = hoveredCard === playlist.id;
+    <div className="relative">
+      <div
+        ref={scrollContainerRef}
+        className="flex overflow-x-auto gap-6 pb-4 no-scrollbar scroll-smooth"
+      >
+        {data?.data?.map((playlist: any, index: any) => {
+          const colorIndex = index % colorSchemes.length;
+          const colors = colorSchemes[colorIndex];
 
-        return (
-          <Card
-            key={playlist.id}
-            className={`relative overflow-hidden border-2 ${colors.border} shadow-lg transition-all duration-300 ${
-              isHovered ? "shadow-xl translate-y-[-4px]" : ""
-            }`}
-            onMouseEnter={() => setHoveredCard(playlist.id)}
-            onMouseLeave={() => setHoveredCard(null)}
-          >
-            <div
-              className={`absolute inset-0 ${colors.pattern} ${colors.gradient} opacity-90`}
-            />
-
-            {/* Card content */}
-            <div className="relative p-6 h-full flex flex-col">
-              <div className="flex justify-between items-start mb-4">
-                <div className={`text-2xl ${colors.icon}`}>
-                  {index % 2 === 0 ? (
-                    <Code size={28} />
-                  ) : (
-                    <Sparkles size={28} />
-                  )}
-                </div>
-                <div className="bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-white">
-                  Playlist {playlist.id}
-                </div>
-              </div>
-
-              <h3 className={`text-xl font-bold mb-3 ${colors.text}`}>
-                {playlist.title}
-              </h3>
-
-              <p
-                className={`${colors.text} text-opacity-90 text-sm mb-6 flex-grow`}
+          return (
+            <div key={playlist.id} className="w-[300px] flex-shrink-0">
+              <Card
+                className={`h-[320px] relative overflow-hidden border-2 ${colors.border} shadow-lg transition-all duration-300`}
+                onMouseEnter={() => setHoveredCard(playlist.id)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
-                {truncateDescription(playlist.description, 100)}
-              </p>
+                <div
+                  className={`absolute inset-0 ${colors.pattern} ${colors.gradient} opacity-90`}
+                />
 
-              <Button
-                className={`w-full mt-auto ${colors.button} group font-medium transition-all duration-300 flex items-center justify-center`}
-              >
-                Start Learning
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
+                <div className="relative p-6 h-full flex flex-col">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className={`text-2xl ${colors.icon}`}>
+                      {index % 2 === 0 ? (
+                        <Code size={28} />
+                      ) : (
+                        <Sparkles size={28} />
+                      )}
+                    </div>
+                    <div className="bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-primary">
+                      Playlist {index}
+                    </div>
+                  </div>
+
+                  <h3 className={`text-xl font-bold mb-3 ${colors.text}`}>
+                    {playlist.name}
+                  </h3>
+
+                  <p
+                    className={`${colors.text} text-opacity-90 text-sm mb-6 flex-grow`}
+                  >
+                    {truncateDescription(playlist.description, 100)}
+                  </p>
+
+                  <Button
+                    onClick={() => navigate(`/playlist/${playlist.id}`)}
+                    className={`w-full mt-auto text-black group font-medium transition-all duration-300 flex items-center justify-center`}
+                  >
+                    Start Learning
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </div>
+              </Card>
             </div>
-          </Card>
-        );
-      })}
+          );
+        })}
+      </div>
+
+      <div className="absolute top-1/2 -left-4 transform -translate-y-1/2 hidden sm:block">
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full bg-gray-800/50 border-gray-700 hover:bg-gray-700"
+          onClick={scrollLeft}
+        >
+          <ChevronLeft className="h-5 w-5 text-gray-300" />
+        </Button>
+      </div>
+      <div className="absolute top-1/2 -right-4 transform -translate-y-1/2 hidden sm:block">
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full bg-gray-800/50 border-gray-700 hover:bg-gray-700"
+          onClick={scrollRight}
+        >
+          <ChevronRight className="h-5 w-5 text-gray-300" />
+        </Button>
+      </div>
     </div>
   );
 }

@@ -70,7 +70,7 @@ export function CreatePlaylistButton({ isAdmin }: CreatePlaylistButtonProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="gap-2">
+        <Button variant="default" className="gap-2 ">
           <PlusCircle className="h-4 w-4" />
           Create Playlist
         </Button>

@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/select";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -152,7 +151,7 @@ export function ProblemsTable() {
           </div>
         </DialogContent>
       </Dialog>
-      <div className="flex flex-col md:flex-row gap-3 items-start md:items-center">
+      <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
@@ -240,7 +239,7 @@ export function ProblemsTable() {
                   </span>
                   <Link
                     to={`/problems/${problem.id}`}
-                    className="font-medium text-xs sm:text-sm truncate text-primary hover:underline"
+                    className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
                   >
                     {problem.title}
                   </Link>
