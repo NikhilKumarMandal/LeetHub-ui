@@ -1,7 +1,4 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-
 import { ArrowLeft, CheckCircle, Edit2, Heart, Star } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { favoriteProblems, toggleFavorite } from "@/http/api";
@@ -9,20 +6,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { usePermission } from "@/hooks/userPermission";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-// Sample favorite problems data
 
 export default function FavoritesPage() {
   const { isAllowed } = usePermission();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [isLoading, setIsLoading] = useState(true);
 
-  const { data, isLoading: queryLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["favorite"],
     queryFn: () => favoriteProblems().then((res) => res.data),
   });
-
-  console.log("FavoriuteData", data);
 
   const { mutate: toggleFavoriteMutate } = useMutation({
     mutationKey: ["favroite"],
@@ -32,30 +25,18 @@ export default function FavoritesPage() {
     },
     onSuccess: (res) => {
       toast.success(res?.data?.message);
-      queryClient.invalidateQueries({
-        queryKey: ["problems"],
-      });
-      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+      queryClient.invalidateQueries({ queryKey: ["favorite"] });
+      queryClient.invalidateQueries({ queryKey: ["problems"] });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["favorite"] });
     },
   });
-
-  // Filter and sort favorites (if you want to filter and sort the fetched favorites)
-
-  const emptyStateMessages = [
-    "Your favorites list is as empty as my coffee cup on Monday morning!",
-    "No favorites yet? That's like having a playlist with no songs!",
-    "Your favorites list is currently on vacation. Time to add some problems!",
-    "This page is feeling lonely without any favorite problems.",
-    "Houston, we have a problem... actually, we don't have any problems!",
-  ];
-  const randomMessage =
-    emptyStateMessages[Math.floor(Math.random() * emptyStateMessages.length)];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black">
       <div className="container mx-auto px-4">
         <div className="py-8">
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div className="flex items-center gap-3">
               <Button
