@@ -41,6 +41,7 @@ import debounce from "lodash.debounce";
 import { usePermission } from "@/hooks/userPermission";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { YoutubeDialog } from "./YoutubeDialog";
 
 const problemdelete = async (id: string) => {
   return await deleteProblem(id);
@@ -52,6 +53,7 @@ const addProblem = async (id: string, problemId: string) => {
 };
 
 export function ProblemsTable() {
+  const queryClient = useQueryClient();
   const { isAllowed } = usePermission();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -59,7 +61,7 @@ export function ProblemsTable() {
     limit: LIMIT,
     page: 1,
   });
-  const queryClient = useQueryClient();
+
   const [open, setOpen] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState<string | null>(
     null
@@ -90,6 +92,8 @@ export function ProblemsTable() {
     },
     placeholderData: keepPreviousData,
   });
+
+  console.log("Data", data);
 
   const { data: playlist } = useQuery({
     queryKey: ["playlist"],
@@ -265,6 +269,7 @@ export function ProblemsTable() {
                   </Link>
                 </div>
               </div>
+              {problem.ytLink && <YoutubeDialog videoUrl={problem.ytLink} />}
 
               <span
                 className={`${

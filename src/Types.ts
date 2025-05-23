@@ -30,6 +30,7 @@ export interface Problem {
   updatedAt: string;
   isSolved: boolean;
   isFavorite: boolean;
+  ytLink?: string;
 }
 
 export interface FilterData {
