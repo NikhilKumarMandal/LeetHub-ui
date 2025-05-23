@@ -60,3 +60,10 @@ export interface PlaylistData {
   name: string;
   description: string;
 }
+
+export interface Execute {
+  source_code: string;
+  language_id: number;
+  problemId: string;
+  mode: "submit" | "run";
+}

@@ -1,4 +1,4 @@
-import type { FilterData, PlaylistData, ProblemData } from "@/Types";
+import type { Execute, FilterData, PlaylistData, ProblemData } from "@/Types";
 import { api } from "./client";
 
 // Auth Service
@@ -60,3 +60,8 @@ export const addProblemInPlaylist = (id: string, problemId: string) =>
   api.post(`/playlist/${id}/add-problem`, { problemId });
 
 export const getAllPlaylist = (id: string) => api.get(`/playlist/${id}`);
+
+// Execute Code Service
+
+export const executeCode = (executeData: Execute) =>
+  api.post("/execute-code/execute", executeData);

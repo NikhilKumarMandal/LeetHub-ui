@@ -262,7 +262,7 @@ export function ProblemsTable() {
                     {problem.problemNumber}.
                   </span>
                   <Link
-                    to={`/problems/${problem.id}`}
+                    to={`/auth/problems/${problem.id}`}
                     className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
                   >
                     {problem.title}

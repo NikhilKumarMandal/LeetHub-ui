@@ -12,6 +12,7 @@ import UpdateProblemForm from "./Pages/UpdateProblemForm";
 import HomePage1 from "./Pages/HomePage1";
 import PlaylistPage from "./Pages/PlaylistPage";
 import FavoritesPage from "./Pages/FavoritesPage";
+import Workspace from "./components/Workspace/Workspace";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
           {
             path: "favorite",
             element: <FavoritesPage />,
+          },
+          {
+            path: "problems/:problemId",
+            element: <Workspace />,
           },
         ],
       },
