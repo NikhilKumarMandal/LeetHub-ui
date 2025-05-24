@@ -23,7 +23,7 @@ const Workspace = () => {
   console.log(problem?.data);
 
   return (
-    <Split className="split ">
+    <Split className="split">
       <ProblemDescription problem={problem?.data} />
       <Playground problem={problem?.data} />
     </Split>

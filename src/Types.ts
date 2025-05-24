@@ -67,3 +67,28 @@ export interface Execute {
   problemId: string;
   mode: "submit" | "run";
 }
+
+export interface TestCase {
+  id: string;
+  submissionId: string;
+  testCase: string;
+  expected: string;
+  stdout: string;
+  passed: boolean;
+  time: string;
+  memory: string;
+  status: string;
+}
+
+export interface SubmissionData {
+  id: string;
+  userId: string;
+  problemId: string;
+  sourceCode: string;
+  language: string;
+  status: string;
+  memory: string[];
+  time: string[];
+  testcase: TestCase[];
+  createdAt: string;
+}
