@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Edit2, Play, Star, Target, Trash2 } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { deleteProblem, getPlaylistById } from "@/http/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { usePermission } from "@/hooks/userPermission";
@@ -19,6 +19,11 @@ export default function PlaylistPage() {
   const { playlistId } = useParams();
   const { isAllowed } = usePermission();
   const navigate = useNavigate();
+  const location = useLocation();
+  const url = location.pathname;
+
+  const match = url.match(/\/playlist\/([a-f0-9\-]+)/i);
+  const playlistId1 = match?.[1];
 
   const { data } = useQuery({
     queryKey: ["playlist", playlistId],
@@ -115,7 +120,8 @@ export default function PlaylistPage() {
                                 {problem?.problemNumber}.
                               </span>
                               <Link
-                                to={`/problems/${problem?.id}`}
+                                to={`/auth/problems/${problem.id}?playlistId=${playlistId}`}
+                                state={{ playlistId1 }}
                                 className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
                               >
                                 {problem?.title}

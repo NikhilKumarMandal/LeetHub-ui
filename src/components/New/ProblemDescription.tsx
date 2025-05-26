@@ -43,9 +43,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
       queryClient.invalidateQueries({
         queryKey: ["toggleVote"],
       });
-      queryClient.invalidateQueries({
-        queryKey: ["submission"],
-      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["toggleVote"] });
@@ -65,8 +62,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     queryFn: () => {
       return getSubmissionOfProblem(problemId).then((res) => res.data);
     },
-    refetchOnWindowFocus: true,
-    refetchInterval: 1000,
   });
 
   console.log(submissiondata, "submissiondata");

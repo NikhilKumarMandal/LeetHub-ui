@@ -13,9 +13,10 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import { getLanguageId } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { executeCode } from "@/http/api";
 import { Maximize, Minimize } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const languageExtensions: Record<string, any> = {
   JAVASCRIPT: javascript(),
@@ -54,10 +55,13 @@ function Playground({ problem }: ProblemDescriptionProps) {
     problem?.codeSnippets?.[defaultLanguage] || ""
   );
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const playlistId =
+    location?.state?.playlistId1 || searchParams.get("playlistId");
+
   const languageId = getLanguageId(selectedLanguage);
   const extension = languageExtensions[selectedLanguage] || javascript();
-
-  console.log(executionResults);
 
   useEffect(() => {
     if (problem?.codeSnippets?.[selectedLanguage]) {
@@ -87,8 +91,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
     onError: (err) => console.error("Run error:", err),
   });
 
-  console.log("submissionData", submissionData);
-
+  const queryClient = useQueryClient();
   const { mutate: submitCode, isPending: isSubmitting } = useMutation({
     mutationKey: ["execute", "submit"],
     mutationFn: execute,
@@ -120,6 +123,9 @@ function Playground({ problem }: ProblemDescriptionProps) {
       });
       setActiveTab("result");
       setShowResults(true);
+      queryClient.invalidateQueries({
+        queryKey: ["submission"],
+      });
     },
     onError: (err) => console.error("Submit error:", err),
   });
@@ -144,6 +150,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
       language_id: languageId!,
       problemId: problem.id,
       mode: "submit",
+      playlistId: playlistId!,
     });
   }, [code, languageId, problem, submitCode]);
 

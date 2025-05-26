@@ -66,6 +66,7 @@ export interface Execute {
   language_id: number;
   problemId: string;
   mode: "submit" | "run";
+  playlistId?: string;
 }
 
 export interface TestCase {
