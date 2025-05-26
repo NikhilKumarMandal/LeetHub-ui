@@ -125,6 +125,7 @@ export interface ProblemDataHandle {
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
   testcases: TestCaseShow[];
+  vote?: string;
 }
 
 interface TestCaseShow {

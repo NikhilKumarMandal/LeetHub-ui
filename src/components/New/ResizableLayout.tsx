@@ -23,6 +23,9 @@ const ResizableLayout = () => {
       return getProblem(problemId!);
     },
     enabled: !!problemId,
+    staleTime: 0,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
   console.log("Problem fetched:", problem);
   const problemData: ProblemDataHandle = problem?.data;

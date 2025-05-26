@@ -1,3 +1,4 @@
+import Topbar from "@/components/Topbar";
 import { useAuthStore } from "@/store/store";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -10,6 +11,7 @@ function NonAuth() {
   }
   return (
     <>
+      <Topbar />
       <Outlet />
     </>
   );

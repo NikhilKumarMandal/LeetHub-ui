@@ -44,6 +44,9 @@ export const allProblems = (filters: FilterData) => {
   return api.get(`/problem/get-problem?${params.toString()}`);
 };
 
+export const allProblemAvaiableInTheDatabase = () =>
+  api.get("/problem/get-problem");
+
 export const getAllTopicAndCompanyName = () => api.get("/problem/all-topics");
 
 // Playlist
@@ -65,3 +68,11 @@ export const getAllPlaylist = (id: string) => api.get(`/playlist/${id}`);
 
 export const executeCode = (executeData: Execute) =>
   api.post("/execute-code/execute", executeData);
+
+// Vote Service
+
+export const voteOnProblem = (id: string, type: "UPVOTE" | "DOWNVOTE") =>
+  api.post(`/vote/vote-problem/${id}`, { type });
+
+export const getAllVote = (problemId: string) =>
+  api.get(`/vote/get-voted-problem/${problemId}`);

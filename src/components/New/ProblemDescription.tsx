@@ -2,11 +2,58 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, ArrowBigUp, ArrowBigDown } from "lucide-react";
 import type { ProblemDescriptionProps } from "@/Types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getAllVote, voteOnProblem } from "@/http/api";
+import { toast } from "sonner";
+
+const vote = async ({
+  problemId,
+  type,
+}: {
+  problemId: string;
+  type: "UPVOTE" | "DOWNVOTE";
+}) => {
+  const { data } = await voteOnProblem(problemId, type);
+  return data;
+};
+
+const getAllVoteOfProblems = async (problemId: string) => {
+  const { data } = await getAllVote(problemId);
+  return data;
+};
 
 const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
   const [showHints, setShowHints] = useState(false);
+  const queryClient = useQueryClient();
+  const { mutate: toggleVoteMutate } = useMutation({
+    mutationKey: ["toggleVote"],
+    mutationFn: vote,
+    onSuccess: (res) => {
+      toast.success(res?.message);
+      queryClient.invalidateQueries({
+        queryKey: ["problem"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["toggleVote"],
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["toggleVote"] });
+    },
+  });
+
+  const problemId = problem?.id;
+
+  const { data: voteData } = useQuery({
+    queryKey: ["toggleVote", problemId],
+    queryFn: () => {
+      return getAllVoteOfProblems(problemId);
+    },
+  });
+
+  console.log(voteData, "voteData");
 
   return (
     <div className="h-full flex flex-col bg-gray-800">
@@ -42,6 +89,51 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                 <Badge className="bg-green-600 hover:bg-green-700 text-white">
                   {problem?.difficulty}
                 </Badge>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                  aria-label="Upvote problem"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleVoteMutate({
+                      problemId: problem?.id,
+                      type: "UPVOTE",
+                    });
+                  }}
+                >
+                  <ArrowBigUp
+                    className={`w-6 h-6 size-4 ${
+                      problem?.vote === "UPVOTE"
+                        ? "text-green-500 fill-current"
+                        : ""
+                    }`}
+                  />
+                </Button>
+
+                <span>{voteData?.data.upvote}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                  aria-label="Downvote problem"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleVoteMutate({
+                      problemId: problem?.id,
+                      type: "DOWNVOTE",
+                    });
+                  }}
+                >
+                  <ArrowBigDown
+                    className={`w-6 h-6 size-4 ${
+                      problem?.vote === "DOWNVOTE"
+                        ? "text-red-500 fill-current"
+                        : ""
+                    }`}
+                  />
+                </Button>
+                <span>{voteData?.data.downvote}</span>
                 <Button
                   variant="outline"
                   size="sm"

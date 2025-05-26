@@ -15,6 +15,7 @@ import {
 import { getLanguageId } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { executeCode } from "@/http/api";
+import { Maximize, Minimize } from "lucide-react";
 
 const languageExtensions: Record<string, any> = {
   JAVASCRIPT: javascript(),
@@ -38,7 +39,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [executionResults, setExecutionResults] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [submissionData, setSubmissionData] = useState<any>(null);
-
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const testCases = problem?.testcases.filter((tc) => tc.isPublic);
   const selectedTestCase = testCases?.find(
     (tc) => tc.id === selectedTestCaseId
@@ -152,6 +153,16 @@ function Playground({ problem }: ProblemDescriptionProps) {
     }
   }, [testCases, selectedTestCaseId]);
 
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      setIsFullScreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullScreen(false);
+    }
+  };
+
   return (
     <ResizablePanelGroup
       direction="vertical"
@@ -161,7 +172,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
       <ResizablePanel defaultSize={50} minSize={30}>
         <div className="flex flex-col h-full bg-gray-900 overflow-hidden">
           {/* Language Selector */}
-          <div className="p-2 bg-gray-800 text-white">
+          <div className="p-2 bg-gray-800 text-white flex items-center gap-3">
             <select
               id="language"
               value={selectedLanguage}
@@ -174,6 +185,14 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 </option>
               ))}
             </select>
+
+            {/* Fullscreen toggle button */}
+            <button
+              onClick={toggleFullScreen}
+              className="p-1 hover:bg-gray-700 rounded"
+            >
+              {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
+            </button>
           </div>
 
           {/* CodeMirror Editor */}

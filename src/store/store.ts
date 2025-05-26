@@ -1,3 +1,4 @@
+import type { Problem } from "@/Types";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
@@ -28,5 +29,17 @@ export const useAuthStore = create<AuthState>()(
     user: null,
     setUser: (user) => set({ user }),
     logout: () => set({ user: null }),
+  }))
+);
+
+interface ProblemState {
+  problem: Problem | null;
+  setProblem: (problem: Problem) => void;
+}
+
+export const useProblemStore = create<ProblemState>()(
+  devtools((set) => ({
+    problem: null,
+    setProblem: (problem) => set({ problem }),
   }))
 );
