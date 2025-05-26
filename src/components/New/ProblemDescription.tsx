@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Lightbulb, ArrowBigUp, ArrowBigDown } from "lucide-react";
 import type { ProblemDescriptionProps } from "@/Types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllVote, voteOnProblem } from "@/http/api";
+import { getAllVote, getsubmissionDetails, voteOnProblem } from "@/http/api";
 import { toast } from "sonner";
 
 const vote = async ({
@@ -24,6 +24,11 @@ const getAllVoteOfProblems = async (problemId: string) => {
   return data;
 };
 
+const getSubmissionOfProblem = async (problemId: string) => {
+  const { data } = await getsubmissionDetails(problemId);
+  return data;
+};
+
 const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
   const [showHints, setShowHints] = useState(false);
   const queryClient = useQueryClient();
@@ -38,6 +43,9 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
       queryClient.invalidateQueries({
         queryKey: ["toggleVote"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["submission"],
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["toggleVote"] });
@@ -45,7 +53,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
   });
 
   const problemId = problem?.id;
-
   const { data: voteData } = useQuery({
     queryKey: ["toggleVote", problemId],
     queryFn: () => {
@@ -53,7 +60,16 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     },
   });
 
-  console.log(voteData, "voteData");
+  const { data: submissiondata } = useQuery({
+    queryKey: ["submission", problemId],
+    queryFn: () => {
+      return getSubmissionOfProblem(problemId).then((res) => res.data);
+    },
+    refetchOnWindowFocus: true,
+    refetchInterval: 1000,
+  });
+
+  console.log(submissiondata, "submissiondata");
 
   return (
     <div className="h-full flex flex-col bg-gray-800">
@@ -75,7 +91,7 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
             value="solution"
             className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
           >
-            Solution
+            Editorial
           </TabsTrigger>
         </TabsList>
 
@@ -255,19 +271,92 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
         </TabsContent>
 
         <TabsContent value="submissions" className="flex-1 m-0 overflow-auto">
-          <div className="h-full flex items-center justify-center p-8">
-            <div className="text-center">
-              <div className="bg-gray-900 rounded-lg p-8 border border-gray-700">
-                <p className="text-gray-400 text-lg">No submissions yet</p>
-                <p className="text-gray-500 text-sm mt-2">
-                  Submit your solution to see your submission history
-                </p>
+          <div className="p-4 space-y-4">
+            {submissiondata?.length === 0 ? (
+              <div className="h-full flex items-center justify-center p-8">
+                <div className="text-center">
+                  <div className="bg-gray-900 rounded-lg p-8 border border-gray-700">
+                    <p className="text-gray-400 text-lg">No submissions yet</p>
+                    <p className="text-gray-500 text-sm mt-2">
+                      Submit your solution to see your submission history
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              submissiondata?.map((submission: any) => (
+                <div
+                  key={submission.id}
+                  className="bg-gray-900 text-white rounded-lg p-6 border border-gray-700 shadow"
+                >
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="text-sm text-gray-400">
+                      <span className="mr-2">Submission ID:</span>
+                      <span className="text-white font-mono">
+                        {submission.id.slice(0, 8)}...
+                      </span>
+                    </div>
+                    <div
+                      className={`text-sm font-semibold ${
+                        submission.status === "Accepted"
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {submission.status}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 text-sm text-gray-300">
+                    <div>
+                      <p>
+                        <span className="font-medium text-gray-400">
+                          Language:
+                        </span>{" "}
+                        {submission.language}
+                      </p>
+                      <p>
+                        <span className="font-medium text-gray-400">Time:</span>{" "}
+                        {JSON.parse(submission.time).join(", ")} sec
+                      </p>
+                      <p>
+                        <span className="font-medium text-gray-400">
+                          Memory:
+                        </span>{" "}
+                        {JSON.parse(submission.memory).join(", ")} KB
+                      </p>
+                    </div>
+                    <div>
+                      <p>
+                        <span className="font-medium text-gray-400">
+                          Created:
+                        </span>{" "}
+                        {new Date(submission.createdAt).toLocaleString()}
+                      </p>
+                      <p>
+                        <span className="font-medium text-gray-400">
+                          Updated:
+                        </span>{" "}
+                        {new Date(submission.updatedAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="font-medium text-gray-400 mb-1">
+                      Source Code:
+                    </p>
+                    <pre className="bg-gray-800 p-3 rounded text-xs overflow-x-auto">
+                      <code>{submission.sourceCode}</code>
+                    </pre>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </TabsContent>
 
-        <TabsContent value="solution" className="flex-1 m-0 overflow-auto">
+        <TabsContent value="Editorial" className="flex-1 m-0 overflow-auto">
           <div className="h-full flex items-center justify-center p-8">
             <div className="text-center">
               <div className="bg-gray-900 rounded-lg p-8 border border-gray-700">

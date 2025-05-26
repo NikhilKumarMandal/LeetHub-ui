@@ -76,3 +76,8 @@ export const voteOnProblem = (id: string, type: "UPVOTE" | "DOWNVOTE") =>
 
 export const getAllVote = (problemId: string) =>
   api.get(`/vote/get-voted-problem/${problemId}`);
+
+// Submission Service
+
+export const getsubmissionDetails = (problemId: string) =>
+  api.get(`/submission/get-submission/${problemId}`);
