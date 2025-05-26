@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
 import { self } from "@/http/api";
 import { useAuthStore } from "@/store/store";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -46,7 +44,6 @@ function Root() {
 
   return (
     <>
-      <Navbar />
       <Outlet />
     </>
   );

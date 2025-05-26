@@ -47,8 +47,8 @@ export interface ProblemData {
   difficulty: "EASY" | "MEDIUM" | "HARD";
   topic?: string[];
   examples?: string;
-  constraints?: string;
-  hints?: string;
+  constraints?: string[];
+  hints?: string[];
   editorial?: string;
   testcases?: string;
   codeSnippets?: string;
@@ -91,4 +91,52 @@ export interface SubmissionData {
   time: string[];
   testcase: TestCase[];
   createdAt: string;
+}
+
+export interface ProblemDataHandle {
+  id: string;
+  title: string;
+  problemNumber: number;
+  description: string;
+  difficulty: "EASY" | "MEDIUM" | "HARD"; // You can adjust this union type as needed
+  topic: string[];
+  companyName: string[];
+  userId: string;
+  ytLink: string | null;
+  examples: {
+    [language: string]: {
+      input: string;
+      output: string;
+      explanation: string;
+    };
+  };
+  constraints: string[];
+  hints: string;
+  editorial: string;
+  starterFunction: string | null;
+  codeSnippets: {
+    [language: string]: string;
+  };
+  referenceSolutions: {
+    [language: string]: string;
+  };
+  isPremium: boolean;
+  image: string | null;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+  testcases: TestCaseShow[];
+}
+
+interface TestCaseShow {
+  id: string;
+  input: string;
+  output: string;
+  isPublic: boolean;
+  problemId: string;
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
+}
+
+export interface ProblemDescriptionProps {
+  problem: ProblemDataHandle;
 }

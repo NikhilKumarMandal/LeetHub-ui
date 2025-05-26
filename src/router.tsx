@@ -13,6 +13,8 @@ import HomePage1 from "./Pages/HomePage1";
 import PlaylistPage from "./Pages/PlaylistPage";
 import FavoritesPage from "./Pages/FavoritesPage";
 import Workspace from "./components/Workspace/Workspace";
+import ResizableLayout from "./components/New/ResizableLayout";
+import Index from "./components/New/Index";
 
 export const router = createBrowserRouter([
   {
@@ -67,7 +69,8 @@ export const router = createBrowserRouter([
           },
           {
             path: "problems/:problemId",
-            element: <Workspace />,
+            // element: <Workspace />,
+            element: <Index />,
           },
         ],
       },

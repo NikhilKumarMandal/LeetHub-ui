@@ -1,122 +1,234 @@
-import { CheckCircle, Star } from "lucide-react";
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { useState } from "react";
+import { CheckCircle, Star, ThumbsUp, ThumbsDown } from "lucide-react";
 
 const ProblemDescription = ({ problem }: any) => {
+  const [activeTab, setActiveTab] = useState("description");
+
   return (
-    <div className="bg-gray">
-      {/* TAB */}
-      <div className="flex h-11 w-full items-center pt-2 bg-gray-400 text-white overflow-x-hidden">
-        <div
-          className={
-            "bg-gray-400 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer"
-          }
-        >
-          Description
-        </div>
-        <div
-          className={
-            "bg-gray-400 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer"
-          }
-        >
-          Description
-        </div>
+    <div className="bg-gray-900 min-h-screen text-white flex flex-col">
+      {/* Tabs */}
+      <div className="flex border-b border-gray-700">
+        {["Description", "Solutions"].map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            onClick={() => setActiveTab(tab.toLowerCase())}
+            className={`px-6 py-3 text-xs font-semibold rounded-t-md transition-colors
+        ${
+          activeTab === tab.toLowerCase()
+            ? "bg-gray-800 text-green-400"
+            : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+        }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
-      <div className="flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto">
-        <div className="px-5">
-          {/* Problem heading */}
-          <div className="w-full">
-            <div className="flex space-x-4">
-              <div className="flex-1 mr-2 text-lg text-white font-medium">
-                {problem?.problemNumber} {problem?.title}
-              </div>
-            </div>
-            <div className="flex items-center mt-3">
-              <div
-                className={`text-olive bg-olive inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize `}
+      {/* Content area: flexible and scrollable */}
+      <div className="p-6 overflow-auto flex-grow max-h-[calc(100vh-100px)]">
+        {activeTab === "description" && (
+          <>
+            <h2 className="text-2xl font-semibold mb-3">
+              {problem?.problemNumber}. {problem?.title}
+            </h2>
+
+            <div className="flex items-center space-x-4 mb-6">
+              <span
+                className={`inline-block rounded-full px-3 py-1 text-xs font-medium capitalize 
+                ${
+                  problem?.difficulty === "easy"
+                    ? "bg-green-700 text-green-300"
+                    : problem?.difficulty === "medium"
+                      ? "bg-yellow-700 text-yellow-300"
+                      : "bg-red-700 text-red-300"
+                }`}
               >
                 {problem?.difficulty}
-              </div>
-              <div className="rounded p-[3px] ml-4 text-lg transition-colors duration-200 text-green-s text-dark-green-s">
-                <CheckCircle />
-              </div>
-              <div className="flex items-center cursor-pointer hover:bg-dark-fill-3 space-x-1 rounded p-[3px]  ml-4 text-lg transition-colors duration-200 text-dark-gray-6">
-                <ThumbsUp />
+              </span>
+
+              <CheckCircle className="text-green-400" size={20} />
+
+              <button
+                type="button"
+                className="flex items-center space-x-1 text-gray-400 hover:text-green-400 transition-colors"
+                aria-label="Upvote"
+              >
+                <ThumbsUp size={18} />
                 <span className="text-xs">120</span>
-              </div>
-              <div className="flex items-center cursor-pointer hover:bg-dark-fill-3 space-x-1 rounded p-[3px]  ml-4 text-lg transition-colors duration-200 text-green-s text-dark-gray-6">
-                <ThumbsDown />
+              </button>
+
+              <button
+                type="button"
+                className="flex items-center space-x-1 text-gray-400 hover:text-red-500 transition-colors"
+                aria-label="Downvote"
+              >
+                <ThumbsDown size={18} />
                 <span className="text-xs">2</span>
-              </div>
-              <div className="cursor-pointer hover:bg-dark-fill-3  rounded p-[3px]  ml-4 text-xl transition-colors duration-200 text-green-s text-dark-gray-6 ">
-                <Star />
-              </div>
+              </button>
+
+              <button
+                type="button"
+                className="text-yellow-400 hover:text-yellow-300 transition-colors"
+                aria-label="Star"
+              >
+                <Star size={20} />
+              </button>
             </div>
 
-            {/* Problem Statement(paragraphs) */}
-            <div className="text-white text-sm">
-              <p className="mt-3">{problem?.description}</p>
-            </div>
+            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+              {problem?.description}
+            </p>
 
-            {/* Examples */}
-            <div className="mt-4">
-              {problem?.examples &&
-                Object.entries(problem.examples).map(
-                  ([language, example], index) => {
+            {problem?.examples && (
+              <div className="mt-8">
+                <h3 className="text-lg font-semibold mb-3">Examples</h3>
+                {Object.entries(problem.examples).map(
+                  ([language, example], idx) => {
                     const typedExample = example as {
                       input: string;
                       output: string;
                       explanation: string;
                     };
-
                     return (
-                      <div key={language} className="mb-4">
-                        <p className="font-medium text-white">
-                          Example {index + 1}:
+                      <div
+                        key={language}
+                        className="mb-6 bg-gray-800 rounded-md p-4 shadow-sm"
+                      >
+                        <p className="font-medium mb-2 text-green-300">
+                          Example {idx + 1} ({language})
                         </p>
-                        <div className="example-card">
-                          <pre>
-                            <strong className="text-white">Input:</strong>{" "}
-                            {typedExample.input}
-                            <br />
-                            <strong className="text-white">Output:</strong>{" "}
-                            {typedExample.output}
-                            <br />
-                            <strong className="text-white">
-                              Explanation:
-                            </strong>{" "}
-                            {typedExample.explanation}
-                          </pre>
-                        </div>
+                        <pre className="text-sm leading-snug whitespace-pre-wrap">
+                          <strong>Input:</strong> {typedExample.input}
+                          <br />
+                          <strong>Output:</strong> {typedExample.output}
+                          <br />
+                          <strong>Explanation:</strong>{" "}
+                          {typedExample.explanation}
+                        </pre>
                       </div>
                     );
                   }
                 )}
-            </div>
+              </div>
+            )}
 
-            {/* Constraints */}
-            <div className="my-5">
-              <div className="text-white text-sm font-medium">Constraints:</div>
-              <ul className="text-white ml-5 list-disc">
-                <li className="mt-2">
-                  <code>2 ≤ nums.length ≤ 10</code>
+            <div className="mt-10">
+              <h3 className="text-lg font-semibold mb-3">Constraints</h3>
+              <ul className="list-disc list-inside space-y-2 text-sm text-gray-300">
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    2 ≤ nums.length ≤ 10
+                  </code>
                 </li>
-
-                <li className="mt-2">
-                  <code>-10 ≤ nums[i] ≤ 10</code>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ nums[i] ≤ 10
+                  </code>
                 </li>
-                <li className="mt-2">
-                  <code>-10 ≤ target ≤ 10</code>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ target ≤ 10
+                  </code>
                 </li>
-                <li className="mt-2 text-sm">
+                <li>
                   <strong>Only one valid answer exists.</strong>
                 </li>
               </ul>
             </div>
+
+            <div className="mt-10">
+              <h3 className="text-lg font-semibold mb-3">Constraints</h3>
+              <ul className="list-disc list-inside space-y-2 text-sm text-gray-300">
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    2 ≤ nums.length ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ nums[i] ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ target ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <strong>Only one valid answer exists.</strong>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-lg font-semibold mb-3">Constraints</h3>
+              <ul className="list-disc list-inside space-y-2 text-sm text-gray-300">
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    2 ≤ nums.length ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ nums[i] ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ target ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <strong>Only one valid answer exists.</strong>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-lg font-semibold mb-3">Constraints</h3>
+              <ul className="list-disc list-inside space-y-2 text-sm text-gray-300">
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    2 ≤ nums.length ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ nums[i] ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <code className="bg-gray-700 px-1 rounded">
+                    -10 ≤ target ≤ 10
+                  </code>
+                </li>
+                <li>
+                  <strong>Only one valid answer exists.</strong>
+                </li>
+              </ul>
+            </div>
+          </>
+        )}
+
+        {activeTab === "solutions" && (
+          <div className="text-gray-400">
+            {problem?.solutions && problem.solutions.length > 0 ? (
+              problem.solutions.map((solution: any, idx: number) => (
+                <div key={idx} className="mb-4 p-4 bg-gray-800 rounded">
+                  <pre className="whitespace-pre-wrap text-sm">
+                    {solution.code}
+                  </pre>
+                </div>
+              ))
+            ) : (
+              <p>Solutions content coming soon...</p>
+            )}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
+
 export default ProblemDescription;

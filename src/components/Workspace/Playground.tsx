@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Split from "react-split";
 import CodeMirror from "@uiw/react-codemirror";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
@@ -23,15 +22,15 @@ const execute = async (executeCodeData: Execute) => {
   return data;
 };
 
-function Playground({ problem }: any) {
-  const availableLanguages = Object.keys(problem?.codeSnippets ?? {});
-  const defaultLanguage =
-    availableLanguages.length > 0 ? availableLanguages[0] : "JAVASCRIPT";
+function Playground({ problem }: { problem: any }) {
+  const availableLanguages = useMemo(
+    () => Object.keys(problem?.codeSnippets ?? {}),
+    [problem]
+  );
+  const defaultLanguage = availableLanguages[0] ?? "JAVASCRIPT";
 
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
-  const [code, setCode] = useState(
-    problem?.codeSnippets?.[defaultLanguage] || ""
-  );
+  const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [executionMode, setExecutionMode] = useState<"run" | "submit" | null>(
     null
@@ -39,12 +38,31 @@ function Playground({ problem }: any) {
   const [executionResults, setExecutionResults] = useState<any[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [submissionData, setSubmissionData] = useState<any>(null);
-  const languageId = getLanguageId(selectedLanguage);
-  const extension = languageExtensions[selectedLanguage] || javascript();
+
   const resultRef = useRef<HTMLDivElement>(null);
 
-  const publicTestCases =
-    problem?.testcases?.filter((tc: any) => tc.isPublic) || [];
+  const publicTestCases = useMemo(
+    () => problem?.testcases?.filter((tc: any) => tc.isPublic) || [],
+    [problem]
+  );
+
+  const languageId = useMemo(
+    () => getLanguageId(selectedLanguage),
+    [selectedLanguage]
+  );
+  const extension = useMemo(
+    () => languageExtensions[selectedLanguage] || javascript(),
+    [selectedLanguage]
+  );
+
+  // Save and load code
+  useEffect(() => {
+    const saved = localStorage.getItem(
+      `code-${problem?.id}-${selectedLanguage}`
+    );
+    const fallback = problem?.codeSnippets?.[selectedLanguage];
+    setCode(saved ?? fallback ?? "");
+  }, [problem?.id, selectedLanguage, problem?.codeSnippets]);
 
   useEffect(() => {
     if (executionResults.length > 0 && resultRef.current) {
@@ -60,9 +78,7 @@ function Playground({ problem }: any) {
       setExecutionResults(data.data);
       setShowResults(false);
     },
-    onError: (err) => {
-      console.error("Run error:", err);
-    },
+    onError: (err) => console.error("Run error:", err),
   });
 
   const { mutate: submitCode, isPending: isSubmitting } = useMutation({
@@ -71,18 +87,18 @@ function Playground({ problem }: any) {
     onSuccess: (data) => {
       setExecutionMode("submit");
       setExecutionResults(data.data);
-      console.log("Data", data?.data);
+
       setSubmissionData({
         id: data.id || "temp-id",
         problemId: problem.id,
         sourceCode: code,
         language: selectedLanguage,
         status: data.status || "Wrong Answer",
-        memory: data?.data?.testcase.map((tc: any) => tc.memory ?? "6720"),
-        time: data?.data?.testcase.map((tc: any) => tc.time ?? "0.052"),
+        memory: data.data?.testcase?.map((tc: any) => tc.memory ?? "6720"),
+        time: data.data?.testcase?.map((tc: any) => tc.time ?? "0.052"),
         testcase:
-          data?.data?.testcase.map((tc: any, index: number) => ({
-            id: tc.id || `tc-${index}`,
+          data.data?.testcase?.map((tc: any, i: number) => ({
+            id: tc.id || `tc-${i}`,
             submissionId: data.id || "temp-id",
             testCase: tc.testCase ?? tc.input ?? "",
             expected: tc.expected_output ?? tc.expected ?? "",
@@ -94,30 +110,13 @@ function Playground({ problem }: any) {
           })) || [],
         createdAt: new Date().toISOString(),
       });
+
       setShowResults(true);
     },
-    onError: (err) => {
-      console.error("Submit error:", err);
-    },
+    onError: (err) => console.error("Submit error:", err),
   });
 
-  // const handleCloseResults = () => {
-  //   setShowResults(false);
-  //   setSubmissionData(null);
-  //   setEditorKey(prev => prev + 1);
-  // };
-
-  useEffect(() => {
-    if (problem?.codeSnippets?.[selectedLanguage]) {
-      setCode(problem.codeSnippets[selectedLanguage]);
-    } else if (problem?.codeSnippets) {
-      const fallbackLang = Object.keys(problem.codeSnippets)[0] || "JAVASCRIPT";
-      setSelectedLanguage(fallbackLang);
-      setCode(problem.codeSnippets[fallbackLang]);
-    }
-  }, [selectedLanguage, problem?.codeSnippets]);
-
-  const handleRun = () => {
+  const handleRun = useCallback(() => {
     if (!problem) return;
     setExecutionMode("run");
     setShowResults(false);
@@ -127,9 +126,9 @@ function Playground({ problem }: any) {
       problemId: problem.id,
       mode: "run",
     });
-  };
+  }, [code, languageId, problem, runCode]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (!problem) return;
     setExecutionMode("submit");
     submitCode({
@@ -138,11 +137,16 @@ function Playground({ problem }: any) {
       problemId: problem.id,
       mode: "submit",
     });
-  };
+  }, [code, languageId, problem, submitCode]);
+
+  // Save code to localStorage when it changes
+  useEffect(() => {
+    if (problem?.id && selectedLanguage) {
+      localStorage.setItem(`code-${problem.id}-${selectedLanguage}`, code);
+    }
+  }, [code, selectedLanguage, problem?.id]);
 
   if (showResults && submissionData) {
-    console.log(showResults, submissionData);
-
     return (
       <SubmissionResults
         submissionData={submissionData}
@@ -153,7 +157,7 @@ function Playground({ problem }: any) {
 
   return (
     <div className="flex flex-col bg-dark-fill-3 relative overflow-x-hidden">
-      {/* Language selection */}
+      {/* Language selector */}
       <div className="p-2 bg-gray-800 text-white">
         <label htmlFor="language" className="mr-2 text-sm font-medium">
           Language:
@@ -172,6 +176,7 @@ function Playground({ problem }: any) {
         </select>
       </div>
 
+      {/* Split Editor/Testcases */}
       <Split
         className="h-[calc(100vh-130px)]"
         direction="vertical"
@@ -183,9 +188,8 @@ function Playground({ problem }: any) {
             value={code}
             theme={vscodeDark}
             extensions={[extension]}
-            onChange={(value) => setCode(value)}
-            style={{ fontSize: 16 }}
-            height="1000px"
+            onChange={setCode}
+            style={{ fontSize: 16, height: "100%", maxHeight: "1000px" }}
           />
         </div>
 
@@ -197,59 +201,56 @@ function Playground({ problem }: any) {
               </div>
               <hr className="absolute bottom-0 w-16 h-0.5 rounded-full border-none bg-white" />
             </div>
-
             <div className="flex space-x-3">
               <button
                 onClick={handleRun}
                 disabled={isRunning}
-                className="bg-gray-600 hover:bg-gray-500 text-white px-5 py-1.5 rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+                className="bg-gray-600 hover:bg-gray-500 text-white px-5 py-1.5 rounded-md text-sm font-medium"
               >
                 {isRunning ? "Running..." : "Run"}
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="bg-primary hover:bg-primary/90 text-white px-5 py-1.5 rounded-md text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+                className="bg-primary hover:bg-primary/90 text-white px-5 py-1.5 rounded-md text-sm font-medium"
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </div>
           </div>
 
+          {/* Test Case Tabs */}
           <div className="flex mt-4 flex-wrap gap-2">
-            {publicTestCases.map((tc: any, index: number) => {
-              const isActive = activeTab === index;
-
-              return (
-                <button
-                  key={tc.id}
-                  onClick={() => setActiveTab(index)}
-                  className={`px-4 py-1 rounded-lg text-sm font-medium transition-all duration-200
-          ${isActive ? "bg-white text-black" : "bg-dark-fill-3 text-white hover:bg-dark-fill-2"}
-        `}
-                >
-                  Case {index + 1}
-                </button>
-              );
-            })}
+            {publicTestCases.map((tc: any, i: number) => (
+              <button
+                key={tc.id}
+                onClick={() => setActiveTab(i)}
+                className={`px-4 py-1 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  activeTab === i
+                    ? "bg-white text-black"
+                    : "bg-dark-fill-3 text-white hover:bg-dark-fill-2"
+                }`}
+              >
+                Case {i + 1}
+              </button>
+            ))}
           </div>
 
+          {/* Test Case Input/Output */}
           {publicTestCases[activeTab] && (
             <div className="mt-6 text-white">
-              <div className="font-semibold">
-                <p className="text-sm font-medium">Input:</p>
-                <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 mt-1">
-                  {publicTestCases[activeTab].input}
-                </div>
-
-                <p className="text-sm font-medium mt-4">Output:</p>
-                <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 mt-1">
-                  {publicTestCases[activeTab].output}
-                </div>
+              <p className="text-sm font-medium">Input:</p>
+              <div className="w-full rounded-lg border px-3 py-[10px] bg-dark-fill-3 mt-1">
+                {publicTestCases[activeTab].input}
+              </div>
+              <p className="text-sm font-medium mt-4">Output:</p>
+              <div className="w-full rounded-lg border px-3 py-[10px] bg-dark-fill-3 mt-1">
+                {publicTestCases[activeTab].output}
               </div>
             </div>
           )}
 
+          {/* Execution Results */}
           {executionResults.length > 0 && (
             <div ref={resultRef} className="mt-6 text-white">
               <h2 className="text-lg font-semibold mb-4">
@@ -258,39 +259,11 @@ function Playground({ problem }: any) {
               {executionResults.map((result, index) => (
                 <div
                   key={index}
-                  className={`mb-4 p-4 rounded-lg border ${
-                    result.passed
-                      ? "border-green-500 bg-green-900/40"
-                      : "border-red-500 bg-red-900/40"
-                  }`}
+                  className={`mb-4 p-4 rounded-lg border ${result.passed ? "border-green-500" : "border-red-500"}`}
                 >
-                  <p className="font-medium mb-2">Test Case {index + 1}</p>
-                  <p>
-                    <span className="font-semibold">Input:</span>{" "}
-                    {result.testCase}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Expected Output:</span>{" "}
-                    {result.expected_output}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Your Output:</span>{" "}
-                    {result.actual_output}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Execution Time:</span>{" "}
-                    {result.time} ms
-                  </p>
-                  <p>
-                    <span className="font-semibold">Status:</span>{" "}
-                    <span
-                      className={
-                        result.passed ? "text-green-400" : "text-red-400"
-                      }
-                    >
-                      {result.passed ? "Passed ✅" : "Failed ❌"}
-                    </span>
-                  </p>
+                  <pre className="whitespace-pre-wrap text-sm">
+                    {result.stdout || result.error}
+                  </pre>
                 </div>
               ))}
             </div>

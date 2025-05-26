@@ -27,8 +27,12 @@ const formSchema = z.object({
   topic: z.array(z.string().min(1)).min(1, "At least one topic is required"),
   companyName: z.array(z.string().min(1)).optional(),
   examples: z.any(),
-  constraints: z.string().min(1, "Constraints are required"),
-  hints: z.string().optional(),
+  constraints: z
+    .array(z.string().min(1))
+    .min(1, "At least one Constraints is required"),
+  hints: z
+    .array(z.string().min(1))
+    .min(1, "At least one Constraints is required"),
   editorial: z.string().optional(),
   testcases: z.any(),
   codeSnippets: z.any(),
@@ -111,8 +115,8 @@ const CreateProblemForm = () => {
       difficulty: "EASY",
       topic: [],
       companyName: [],
-      constraints: "",
-      hints: "",
+      constraints: [],
+      hints: [],
       editorial: "",
       examples: {},
       testcases: [],
@@ -250,7 +254,10 @@ const CreateProblemForm = () => {
             <FormItem>
               <FormLabel>Constraints</FormLabel>
               <FormControl>
-                <Textarea rows={2} {...field} />
+                <TagsInput
+                  value={field.value || []}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -264,7 +271,10 @@ const CreateProblemForm = () => {
             <FormItem>
               <FormLabel>Hints</FormLabel>
               <FormControl>
-                <Textarea rows={2} {...field} />
+                <TagsInput
+                  value={field.value || []}
+                  onChange={field.onChange}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

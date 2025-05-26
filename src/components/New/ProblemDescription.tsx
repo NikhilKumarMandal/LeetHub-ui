@@ -1,0 +1,197 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Lightbulb } from "lucide-react";
+import type { ProblemDescriptionProps } from "@/Types";
+
+const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
+  const [showHints, setShowHints] = useState(false);
+
+  return (
+    <div className="h-full flex flex-col bg-gray-800">
+      <Tabs defaultValue="description" className="h-full flex flex-col">
+        <TabsList className="grid w-full grid-cols-3 bg-gray-700 border-b border-gray-600 flex-shrink-0">
+          <TabsTrigger
+            value="description"
+            className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
+          >
+            Description
+          </TabsTrigger>
+          <TabsTrigger
+            value="submissions"
+            className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
+          >
+            Submissions
+          </TabsTrigger>
+          <TabsTrigger
+            value="solution"
+            className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
+          >
+            Solution
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="description" className="flex-1 m-0 overflow-auto">
+          <div className="p-4 sm:p-6 space-y-6">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold mb-3 text-white">
+                {problem?.title}
+              </h1>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6">
+                <Badge className="bg-green-600 hover:bg-green-700 text-white">
+                  {problem?.difficulty}
+                </Badge>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowHints(!showHints)}
+                  className="text-yellow-400 border-yellow-400 hover:bg-yellow-400/10 flex items-center gap-2"
+                >
+                  <Lightbulb className="w-4 h-4" />
+                  {showHints ? "Hide Hints" : "Show Hints"}
+                </Button>
+              </div>
+            </div>
+
+            {showHints && (
+              <div className="bg-gray-900 border border-yellow-400/30 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+                  <Lightbulb className="w-5 h-5" />
+                  Hints
+                </h3>
+                <div className="space-y-3">
+                  <div className="bg-gray-800 rounded p-3 border border-gray-700">
+                    <p className="text-gray-300 text-sm mb-2">hint</p>
+                    <div className="flex items-center gap-2"></div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="bg-gray-900 rounded-lg p-4 sm:p-5 border border-gray-700">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-white">
+                Problem Statement
+              </h2>
+              <div className="space-y-4 text-gray-300 leading-relaxed text-sm sm:text-base">
+                <p>{problem?.description}</p>
+              </div>
+            </div>
+
+            <div className="bg-yellow-900/20 border border-yellow-600/30 rounded-lg p-4">
+              <p className="text-yellow-400 text-xs sm:text-sm">
+                <strong>Note:</strong> Don't print any extra space or newline
+              </p>
+            </div>
+
+            {problem?.examples && (
+              <div className="bg-gray-900 rounded-lg p-4 sm:p-5 border border-gray-700 space-y-6">
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Examples
+                </h3>
+
+                {Object.entries(problem.examples).map(([_, example], idx) => {
+                  const typedExample = example as {
+                    input: string;
+                    output: string;
+                    explanation: string;
+                  };
+                  return (
+                    <div
+                      key={idx}
+                      className="space-y-3 border-t border-gray-700 pt-4"
+                    >
+                      {/* Example Heading */}
+                      <h4 className="text-white font-medium text-base">
+                        Example {idx + 1}
+                      </h4>
+
+                      {/* Input */}
+                      <div>
+                        <p className="text-sm text-gray-400 mb-1">Input:</p>
+                        <div className="bg-gray-800 rounded border border-gray-700">
+                          <pre className="p-3 text-green-400 text-sm font-mono whitespace-pre-wrap break-words">
+                            {typedExample.input}
+                          </pre>
+                        </div>
+                      </div>
+
+                      {/* Output */}
+                      <div>
+                        <p className="text-sm text-gray-400 mb-1">
+                          Expected Output:
+                        </p>
+                        <div className="bg-gray-800 rounded border border-gray-700">
+                          <pre className="p-3 text-blue-400 text-sm font-mono whitespace-pre-wrap break-words">
+                            {typedExample.output}
+                          </pre>
+                        </div>
+                      </div>
+
+                      {/* Explanation */}
+                      <div>
+                        <p className="text-sm text-gray-400 mb-1">
+                          Explanation:
+                        </p>
+                        <div className="bg-gray-800 rounded border border-gray-700">
+                          <pre className="p-3 text-yellow-400 text-sm font-mono whitespace-pre-wrap break-words">
+                            {typedExample.explanation}
+                          </pre>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {problem?.constraints && (
+              <div className="mt-10">
+                <h3 className="text-lg font-semibold mb-3">Constraints</h3>
+                {problem?.constraints?.map((res: any, idx) => (
+                  <ul
+                    key={idx}
+                    className="list-disc list-inside space-y-2 text-sm text-gray-300"
+                  >
+                    <li>
+                      <code className="bg-gray-700 px-1 rounded">{res}</code>
+                    </li>
+                  </ul>
+                ))}
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="submissions" className="flex-1 m-0 overflow-auto">
+          <div className="h-full flex items-center justify-center p-8">
+            <div className="text-center">
+              <div className="bg-gray-900 rounded-lg p-8 border border-gray-700">
+                <p className="text-gray-400 text-lg">No submissions yet</p>
+                <p className="text-gray-500 text-sm mt-2">
+                  Submit your solution to see your submission history
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="solution" className="flex-1 m-0 overflow-auto">
+          <div className="h-full flex items-center justify-center p-8">
+            <div className="text-center">
+              <div className="bg-gray-900 rounded-lg p-8 border border-gray-700">
+                <p className="text-gray-400 text-lg">
+                  Solution will be available after submission
+                </p>
+                <p className="text-gray-500 text-sm mt-2">
+                  Complete the problem to unlock the editorial solution
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default ProblemDescription;
