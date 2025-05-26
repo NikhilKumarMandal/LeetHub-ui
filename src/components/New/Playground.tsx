@@ -37,7 +37,10 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [executionMode, setExecutionMode] = useState<"run" | "submit" | null>(
     null
   );
-  const [executionResults, setExecutionResults] = useState<any[]>([]);
+  const [executionResults, setExecutionResults] = useState<any>([]);
+  const [executionResultsForRun, setExecutionResultsForRun] = useState<any[]>(
+    []
+  );
   const [showResults, setShowResults] = useState(false);
   const [submissionData, setSubmissionData] = useState<any>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -84,7 +87,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
     mutationFn: execute,
     onSuccess: (data) => {
       setExecutionMode("run");
-      setExecutionResults(data.data);
+      setExecutionResultsForRun(data.data);
       setShowResults(false);
       setActiveTab("result");
     },
@@ -123,12 +126,37 @@ function Playground({ problem }: ProblemDescriptionProps) {
       });
       setActiveTab("result");
       setShowResults(true);
+      setActiveTab("submission");
       queryClient.invalidateQueries({
         queryKey: ["submission"],
       });
     },
     onError: (err) => console.error("Submit error:", err),
   });
+
+  console.log(executionResults, "executionResults");
+
+  const passedTests =
+    executionResults?.testcase?.filter((tc: any) => tc.passed)?.length || 0;
+  const totalTests = executionResults?.testcase?.length || 0;
+  const passRate = totalTests > 0 ? (passedTests / totalTests) * 100 : 0;
+
+  const timeArray = executionResults?.time
+    ? JSON.parse(executionResults.time)
+    : [];
+  const memoryArray = executionResults?.memory
+    ? JSON.parse(executionResults.memory)
+    : [];
+  // Safe number conversion
+  const totalTime = timeArray
+    .map((t: any) => parseFloat(t))
+    .reduce((sum: number, t: number) => sum + t, 0);
+  const avgTime = totalTests > 0 ? totalTime / totalTests : 0;
+
+  const maxMemory =
+    memoryArray.length > 0
+      ? Math.max(...memoryArray.map((m: any) => parseInt(m)))
+      : 0;
 
   const handleRun = useCallback(() => {
     if (!problem) return;
@@ -169,16 +197,13 @@ function Playground({ problem }: ProblemDescriptionProps) {
       setIsFullScreen(false);
     }
   };
-
   return (
     <ResizablePanelGroup
       direction="vertical"
       className="w-full h-full bg-black"
     >
-      {/* Code Editor Panel */}
       <ResizablePanel defaultSize={50} minSize={30}>
         <div className="flex flex-col h-full bg-gray-900 overflow-hidden">
-          {/* Language Selector */}
           <div className="p-2 bg-gray-800 text-white flex items-center gap-3">
             <select
               id="language"
@@ -192,8 +217,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 </option>
               ))}
             </select>
-
-            {/* Fullscreen toggle button */}
             <button
               onClick={toggleFullScreen}
               className="p-1 hover:bg-gray-700 rounded"
@@ -201,8 +224,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
               {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
             </button>
           </div>
-
-          {/* CodeMirror Editor */}
           <div className="flex-1 relative overflow-hidden">
             <CodeMirror
               value={code}
@@ -215,36 +236,27 @@ function Playground({ problem }: ProblemDescriptionProps) {
           </div>
         </div>
       </ResizablePanel>
-
-      {/* Handle between Editor and TestCase */}
       <ResizableHandle withHandle />
-
-      {/* Test Case / Result Panel */}
       <ResizablePanel defaultSize={50} minSize={20}>
         <div className="flex flex-col h-full bg-gray-800 overflow-hidden">
-          {/* Tabs & Buttons */}
           <div className="flex items-center justify-between border-b border-gray-700 px-4 py-2">
-            <div className="flex items-center">
-              <button
-                onClick={() => setActiveTab("testcase")}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "testcase"
-                    ? "border-green-500 text-green-400"
-                    : "border-transparent text-gray-400 hover:text-gray-300"
-                }`}
-              >
-                Testcase
-              </button>
-              <button
-                onClick={() => setActiveTab("result")}
-                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "result"
-                    ? "border-green-500 text-green-400"
-                    : "border-transparent text-gray-400 hover:text-gray-300"
-                }`}
-              >
-                Test Result
-              </button>
+            <div className="flex items-center gap-1">
+              {["testcase", "result", "submission", "leto"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-3 py-2 text-sm font-medium border-b-2 transition-colors capitalize ${
+                    activeTab === tab
+                      ? "border-green-500 text-green-400"
+                      : "border-transparent text-gray-400 hover:text-gray-300"
+                  }`}
+                >
+                  {tab === "testcase" && "Testcase"}
+                  {tab === "result" && "Test Result"}
+                  {tab === "submission" && "Submit Result"}
+                  {tab === "leto" && "Ask LETO"}
+                </button>
+              ))}
             </div>
 
             <div className="flex items-center gap-2">
@@ -270,30 +282,32 @@ function Playground({ problem }: ProblemDescriptionProps) {
             </div>
           </div>
 
-          {/* Test Case Content */}
+          {/* Body */}
           <div className="flex-1 flex min-h-0 overflow-hidden">
-            {/* Test Case List */}
-            <div className="w-32 border-r border-gray-700 p-2 overflow-y-auto">
-              <div className="space-y-1">
-                {testCases?.map((testCase, idx) => (
-                  <button
-                    key={testCase.id}
-                    onClick={() => setSelectedTestCaseId(testCase.id)}
-                    className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                      selectedTestCaseId === testCase.id
-                        ? "bg-gray-700 text-white border border-gray-600"
-                        : "text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
-                    }`}
-                  >
-                    <span>Case {idx + 1}</span>
-                  </button>
-                ))}
+            {/* Left Sidebar: Test Case List */}
+            {activeTab === "testcase" && (
+              <div className="w-32 border-r border-gray-700 p-2 overflow-y-auto">
+                <div className="space-y-1">
+                  {testCases?.map((testCase, idx) => (
+                    <button
+                      key={testCase.id}
+                      onClick={() => setSelectedTestCaseId(testCase.id)}
+                      className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                        selectedTestCaseId === testCase.id
+                          ? "bg-gray-700 text-white border border-gray-600"
+                          : "text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
+                      }`}
+                    >
+                      <span>Case {idx + 1}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Right Content */}
-            {/* Right Content */}
             <div className="flex-1 p-4 overflow-y-auto text-white">
+              {/* Test Case Tab Content */}
               {activeTab === "testcase" && selectedTestCase && (
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Input</h3>
@@ -310,10 +324,11 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 </div>
               )}
 
-              {activeTab === "result" && executionResults?.length > 0 && (
+              {/* Test Result Tab Content */}
+              {activeTab === "result" && executionResultsForRun?.length > 0 && (
                 <div className="space-y-4">
                   <div className="p-4 space-y-3 overflow-y-auto">
-                    {executionResults?.map((result, index) => (
+                    {executionResultsForRun.map((result, index) => (
                       <div
                         key={index}
                         className={`p-3 rounded border ${
@@ -349,6 +364,98 @@ function Playground({ problem }: ProblemDescriptionProps) {
                   </div>
                 </div>
               )}
+
+              {/* Submission Result Tab */}
+              {activeTab === "submission" && (
+                <div className="bg-[#1e1e2f] p-6 rounded-xl shadow-lg border border-gray-700 text-sm text-gray-200 space-y-4">
+                  <h3 className="text-xl font-bold text-white">
+                    📦 Submission Result
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-[#2c2c3e] p-4 rounded-lg">
+                      <p className="text-gray-400">🧪 Test Cases Passed</p>
+                      <p className="text-green-400 font-semibold text-lg">
+                        {passedTests} / {totalTests}
+                      </p>
+                    </div>
+                    <div className="bg-[#2c2c3e] p-4 rounded-lg">
+                      <p className="text-gray-400">✅ Pass Rate</p>
+                      <p className="text-yellow-400 font-semibold text-lg">
+                        {passRate.toFixed(1)}%
+                      </p>
+                    </div>
+                    <div className="bg-[#2c2c3e] p-4 rounded-lg">
+                      <p className="text-gray-400">⏱️ Avg Execution Time</p>
+                      <p className="text-blue-400 font-semibold text-lg">
+                        {avgTime.toFixed(3)} s
+                      </p>
+                    </div>
+                    <div className="bg-[#2c2c3e] p-4 rounded-lg">
+                      <p className="text-gray-400">🧠 Max Memory Usage</p>
+                      <p className="text-purple-400 font-semibold text-lg">
+                        {maxMemory} KB
+                      </p>
+                    </div>
+                  </div>
+
+                  {executionResults?.testcase?.some(
+                    (tc: any) => !tc.passed
+                  ) && (
+                    <div className="mt-6">
+                      <h4 className="text-md font-semibold text-red-400 mb-2">
+                        ❌ Failed Test Cases
+                      </h4>
+                      <div className="space-y-3">
+                        {executionResults.testcase.map(
+                          (tc: any, idx: number) =>
+                            !tc.passed ? (
+                              <div
+                                key={idx}
+                                className="bg-[#2b2b3d] border border-red-500/30 p-4 rounded-lg"
+                              >
+                                <p className="text-sm text-gray-400 mb-1">
+                                  Case{" "}
+                                  <span className="font-semibold">
+                                    #{idx + 1}
+                                  </span>
+                                </p>
+                                <p>
+                                  <span className="text-gray-400">
+                                    Expected:
+                                  </span>{" "}
+                                  <code className="text-green-400">
+                                    {tc.expected}
+                                  </code>
+                                </p>
+                                <p>
+                                  <span className="text-gray-400">Output:</span>{" "}
+                                  <code className="text-red-400">
+                                    {tc.stdout}
+                                  </code>
+                                </p>
+                              </div>
+                            ) : null
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Ask LETO Tab */}
+              {activeTab === "leto" && (
+                <div className="text-sm text-gray-300">
+                  <h3 className="text-lg font-semibold mb-2">
+                    🧠 Ask Better Approach
+                  </h3>
+                  <p>
+                    Want to improve your solution? Ask LETO for a better
+                    approach based on test results.
+                  </p>
+                  {/* Optional: Add a textarea + button to "Ask LETO" here */}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -358,24 +465,3 @@ function Playground({ problem }: ProblemDescriptionProps) {
 }
 
 export default Playground;
-
-//     <div className="p-4 space-y-3 overflow-y-auto">
-//       {executionResults?.map((result, index) => (
-//         <div
-//           key={index}
-//           className={`p-3 rounded border ${
-//             result.passed ? "border-green-500 bg-green-800/20" : "border-red-500 bg-red-800/20"
-//           }`}
-//         >
-//           <div className="font-medium">
-//             Test Case {index + 1} — {result.passed ? "✅ Passed" : "❌ Failed"}
-//           </div>
-//           <div className="text-sm text-gray-300 mt-1">
-//             <div><strong>Input:</strong> {result.testCase}</div>
-//             <div><strong>Expected:</strong> {result.expected}</div>
-//             <div><strong>Output:</strong> {result.stdout}</div>
-//           </div>
-//         </div>
-//       ))}
-//     </div>
-//   ) : (
