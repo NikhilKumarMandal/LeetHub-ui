@@ -95,3 +95,6 @@ export const createDiscussion = (data: DiscussionData) =>
 
 export const getProblemDiscussion = (problemId: string) =>
   api.get(`/discussion/${problemId}`);
+
+export const deleteProblemDiscussion = (id: string) =>
+  api.delete(`/discussion/${id}`);
