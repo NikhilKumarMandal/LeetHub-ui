@@ -142,3 +142,9 @@ interface TestCaseShow {
 export interface ProblemDescriptionProps {
   problem: ProblemDataHandle;
 }
+
+export interface DiscussionData {
+  content: string;
+  problemId: string;
+  parentId?: string;
+}

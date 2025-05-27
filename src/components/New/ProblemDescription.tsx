@@ -3,10 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Lightbulb, ArrowBigUp, ArrowBigDown } from "lucide-react";
-import type { ProblemDescriptionProps } from "@/Types";
+import type { DiscussionData, ProblemDescriptionProps } from "@/Types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllVote, getsubmissionDetails, voteOnProblem } from "@/http/api";
+import {
+  createDiscussion,
+  getAllVote,
+  getsubmissionDetails,
+  voteOnProblem,
+} from "@/http/api";
 import { toast } from "sonner";
+import CommentCard from "../CommentCard";
 
 const vote = async ({
   problemId,
@@ -16,6 +22,11 @@ const vote = async ({
   type: "UPVOTE" | "DOWNVOTE";
 }) => {
   const { data } = await voteOnProblem(problemId, type);
+  return data;
+};
+
+const discussion = async (discussionData: DiscussionData) => {
+  const { data } = await createDiscussion(discussionData);
   return data;
 };
 
@@ -32,6 +43,8 @@ const getSubmissionOfProblem = async (problemId: string) => {
 const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
   const [showHints, setShowHints] = useState(false);
   const queryClient = useQueryClient();
+  const [parentId, setParentId] = useState<string | null>(null);
+  const [content, setContent] = useState("");
   const { mutate: toggleVoteMutate } = useMutation({
     mutationKey: ["toggleVote"],
     mutationFn: vote,
@@ -64,7 +77,34 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     },
   });
 
-  console.log(submissiondata, "submissiondata");
+  const { mutate: discussionMutate, isPending } = useMutation({
+    mutationKey: ["discussion"],
+    mutationFn: discussion,
+  });
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    if (!content.trim()) return;
+
+    discussionMutate(
+      {
+        problemId: problem?.id,
+        content,
+        ...(parentId && { parentId }),
+      },
+      {
+        onSuccess: () => {
+          toast.success("Discussion added");
+          setContent("");
+          setParentId(null);
+        },
+        onError: (error) => {
+          console.error("Failed to submit comment", error);
+        },
+      }
+    );
+  };
 
   return (
     <div className="h-full flex flex-col bg-gray-800">
@@ -83,10 +123,16 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
             Submissions
           </TabsTrigger>
           <TabsTrigger
-            value="solution"
+            value="Editorial"
             className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
           >
             Editorial
+          </TabsTrigger>
+          <TabsTrigger
+            value="discussion"
+            className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
+          >
+            Discussion
           </TabsTrigger>
         </TabsList>
 
@@ -362,6 +408,36 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                   Complete the problem to unlock the editorial solution
                 </p>
               </div>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="discussion" className="flex-1 m-0 overflow-auto">
+          <div className="p-4 space-y-6">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-gray-900 p-4 rounded-lg border border-gray-700"
+            >
+              <textarea
+                placeholder="Write a comment..."
+                className="w-full p-3 text-sm text-white bg-gray-800 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                rows={3}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+              <div className="mt-2 flex justify-end">
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="bg-blue-600 text-white px-4 py-2 text-sm rounded hover:bg-blue-700"
+                >
+                  Post Comment
+                </button>
+              </div>
+            </form>
+            <div className="space-y-6">
+              {[...Array(3)].map((_, index) => (
+                <CommentCard key={index} />
+              ))}
             </div>
           </div>
         </TabsContent>

@@ -1,4 +1,10 @@
-import type { Execute, FilterData, PlaylistData, ProblemData } from "@/Types";
+import type {
+  DiscussionData,
+  Execute,
+  FilterData,
+  PlaylistData,
+  ProblemData,
+} from "@/Types";
 import { api } from "./client";
 
 // Auth Service
@@ -81,3 +87,8 @@ export const getAllVote = (problemId: string) =>
 
 export const getsubmissionDetails = (problemId: string) =>
   api.get(`/submission/get-submission/${problemId}`);
+
+// Discussion Service
+
+export const createDiscussion = (data: DiscussionData) =>
+  api.post("/discussion/create-discussion", data);
