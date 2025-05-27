@@ -15,7 +15,7 @@ function Root() {
   const queryClient = useQueryClient();
   const fetchCount = useRef(0);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["self"],
     queryFn: async () => {
       if (fetchCount.current < 2) {
@@ -44,7 +44,13 @@ function Root() {
 
   return (
     <>
-      <Outlet />
+      {isLoading ? (
+        <div className="flex justify-center items-center h-screen">
+          <span className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></span>
+        </div>
+      ) : (
+        <Outlet />
+      )}
     </>
   );
 }

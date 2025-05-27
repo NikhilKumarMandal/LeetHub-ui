@@ -5,7 +5,7 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
-import { Play, Upload } from "lucide-react";
+import { Play, Settings, Upload } from "lucide-react";
 import type { Execute, ProblemDescriptionProps } from "@/Types";
 import {
   ResizablePanelGroup,
@@ -17,6 +17,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { executeCode } from "@/http/api";
 import { Maximize, Minimize } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
+import { dracula } from "@uiw/codemirror-theme-dracula";
+import { monokai } from "@uiw/codemirror-theme-monokai";
 
 const languageExtensions: Record<string, any> = {
   JAVASCRIPT: javascript(),
@@ -29,7 +32,17 @@ const execute = async (executeCodeData: Execute) => {
   return data;
 };
 
+const themeMap: Record<string, any> = {
+  vscodeDark: vscodeDark,
+  dracula: dracula,
+  monokai: monokai,
+  light: githubLight,
+  dark: vscodeDark,
+  githubDark: githubDark,
+};
+
 function Playground({ problem }: ProblemDescriptionProps) {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("testcase");
   const [selectedTestCaseId, setSelectedTestCaseId] = useState<string | null>(
     null
@@ -41,6 +54,9 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [executionResultsForRun, setExecutionResultsForRun] = useState<any[]>(
     []
   );
+  const [fontSize, setFontSize] = useState(18);
+  const [theme, setTheme] = useState("vscodeDark");
+  const [showSettings, setShowSettings] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [submissionData, setSubmissionData] = useState<any>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -94,7 +110,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
     onError: (err) => console.error("Run error:", err),
   });
 
-  const queryClient = useQueryClient();
   const { mutate: submitCode, isPending: isSubmitting } = useMutation({
     mutationKey: ["execute", "submit"],
     mutationFn: execute,
@@ -134,8 +149,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
     onError: (err) => console.error("Submit error:", err),
   });
 
-  console.log(executionResults, "executionResults");
-
   const passedTests =
     executionResults?.testcase?.filter((tc: any) => tc.passed)?.length || 0;
   const totalTests = executionResults?.testcase?.length || 0;
@@ -147,7 +160,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const memoryArray = executionResults?.memory
     ? JSON.parse(executionResults.memory)
     : [];
-  // Safe number conversion
   const totalTime = timeArray
     .map((t: any) => parseFloat(t))
     .reduce((sum: number, t: number) => sum + t, 0);
@@ -217,27 +229,100 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 </option>
               ))}
             </select>
+
+            {/* Fullscreen Button */}
             <button
               onClick={toggleFullScreen}
               className="p-1 hover:bg-gray-700 rounded"
             >
               {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
             </button>
+
+            {/* Settings Button */}
+            <button
+              onClick={() => setShowSettings(true)}
+              className="p-1 hover:bg-gray-700 rounded"
+            >
+              <Settings size={20} />
+            </button>
           </div>
+
+          {/* Settings Modal */}
+          {showSettings && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+                <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
+                  Editor Settings
+                </h2>
+
+                {/* Font Size */}
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Font Size
+                  </label>
+                  <select
+                    value={fontSize}
+                    onChange={(e) => setFontSize(Number(e.target.value))}
+                    className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white"
+                  >
+                    {[12, 14, 16, 18, 20, 24].map((size) => (
+                      <option key={size} value={size}>
+                        {size}px
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Theme */}
+                <div className="mb-4">
+                  <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Theme
+                  </label>
+                  <select
+                    value={theme}
+                    onChange={(e) => setTheme(e.target.value)}
+                    className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white"
+                  >
+                    {[
+                      "light",
+                      "dark",
+                      "monokai",
+                      "github",
+                      "dracula",
+                      "githubDark",
+                    ].map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowSettings(false)}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="flex-1 relative overflow-hidden">
             <CodeMirror
               value={code}
-              theme={vscodeDark}
+              theme={themeMap[theme]}
               extensions={[extension]}
               onChange={(value: string) => setCode(value)}
-              style={{ fontSize: 16, height: "100%" }}
+              style={{ fontSize: `${fontSize}px`, height: "100%" }}
               height="750px"
             />
           </div>
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={50} minSize={20}>
+      <ResizablePanel defaultSize={35} minSize={15}>
         <div className="flex flex-col h-full bg-gray-800 overflow-hidden">
           <div className="flex items-center justify-between border-b border-gray-700 px-4 py-2">
             <div className="flex items-center gap-1">
