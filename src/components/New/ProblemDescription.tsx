@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createDiscussion,
   getAllVote,
+  getProblemDiscussion,
   getsubmissionDetails,
   voteOnProblem,
 } from "@/http/api";
@@ -37,6 +38,11 @@ const getAllVoteOfProblems = async (problemId: string) => {
 
 const getSubmissionOfProblem = async (problemId: string) => {
   const { data } = await getsubmissionDetails(problemId);
+  return data;
+};
+
+const getAllDiscussionRelatedToProblem = async (problemId: string) => {
+  const { data } = await getProblemDiscussion(problemId);
   return data;
 };
 
@@ -80,6 +86,15 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
   const { mutate: discussionMutate, isPending } = useMutation({
     mutationKey: ["discussion"],
     mutationFn: discussion,
+    onSuccess: (res) => {
+      toast.success(res?.message);
+      queryClient.invalidateQueries({
+        queryKey: ["problem"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["discussion"],
+      });
+    },
   });
 
   const handleSubmit = (e: any) => {
@@ -95,7 +110,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
       },
       {
         onSuccess: () => {
-          toast.success("Discussion added");
           setContent("");
           setParentId(null);
         },
@@ -105,6 +119,16 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
       }
     );
   };
+
+  const { data: problemDiscussion } = useQuery({
+    queryKey: ["discussion", problemId],
+    queryFn: () => {
+      return getAllDiscussionRelatedToProblem(problemId);
+    },
+    enabled: !!problemId,
+  });
+
+  console.log(problemDiscussion, "problemDiscussion");
 
   return (
     <div className="h-full flex flex-col bg-gray-800">
@@ -419,7 +443,7 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
             >
               <textarea
                 placeholder="Write a comment..."
-                className="w-full p-3 text-sm text-white bg-gray-800 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full p-3 text-sm text-white bg-gray-800 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
                 rows={3}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -428,15 +452,22 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="bg-blue-600 text-white px-4 py-2 text-sm rounded hover:bg-blue-700"
+                  className="bg-primary text-white px-4 py-2 text-sm rounded hover:bg-primary/70"
                 >
                   Post Comment
                 </button>
               </div>
             </form>
             <div className="space-y-6">
-              {[...Array(3)].map((_, index) => (
-                <CommentCard key={index} />
+              {problemDiscussion?.data?.map((data: any) => (
+                <CommentCard
+                  name={data?.user?.name}
+                  comment={data?.content}
+                  key={data?.id}
+                  problemId={data?.problemId}
+                  parentId={data?.id}
+                  replies={data?.replies}
+                />
               ))}
             </div>
           </div>

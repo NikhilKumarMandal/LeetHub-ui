@@ -92,3 +92,6 @@ export const getsubmissionDetails = (problemId: string) =>
 
 export const createDiscussion = (data: DiscussionData) =>
   api.post("/discussion/create-discussion", data);
+
+export const getProblemDiscussion = (problemId: string) =>
+  api.get(`/discussion/${problemId}`);
