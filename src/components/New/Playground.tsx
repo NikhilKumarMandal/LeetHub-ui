@@ -65,13 +65,13 @@ function Playground({ problem }: ProblemDescriptionProps) {
     (tc) => tc.id === selectedTestCaseId
   );
 
-  const availableLanguages = Object.keys(problem?.codeSnippets ?? {});
+  const availableLanguages = Object.keys(problem?.starterFunction ?? {});
   const defaultLanguage =
     availableLanguages.length > 0 ? availableLanguages[0] : "JAVASCRIPT";
 
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
   const [code, setCode] = useState(
-    problem?.codeSnippets?.[defaultLanguage] || ""
+    problem?.starterFunction?.[defaultLanguage as any] || ""
   );
 
   const location = useLocation();
@@ -83,14 +83,14 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const extension = languageExtensions[selectedLanguage] || javascript();
 
   useEffect(() => {
-    if (problem?.codeSnippets?.[selectedLanguage]) {
-      setCode(problem.codeSnippets[selectedLanguage]);
-    } else if (problem?.codeSnippets) {
-      const fallbackLang = Object.keys(problem.codeSnippets)[0];
+    if (problem?.starterFunction?.[selectedLanguage as any]) {
+      setCode(problem.starterFunction[selectedLanguage as any]);
+    } else if (problem?.starterFunction) {
+      const fallbackLang = Object.keys(problem.starterFunction)[0];
       setSelectedLanguage(fallbackLang);
-      setCode(problem.codeSnippets[fallbackLang]);
+      setCode(problem.starterFunction[fallbackLang as any]);
     }
-  }, [selectedLanguage, problem?.codeSnippets]);
+  }, [selectedLanguage, problem?.starterFunction]);
 
   useEffect(() => {
     if (problem?.id && selectedLanguage) {
@@ -316,7 +316,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
               extensions={[extension]}
               onChange={(value: string) => setCode(value)}
               style={{ fontSize: `${fontSize}px`, height: "100%" }}
-              height="750px"
+              height="550px"
             />
           </div>
         </div>

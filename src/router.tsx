@@ -12,6 +12,7 @@ import UpdateProblemForm from "./Pages/UpdateProblemForm";
 import HomePage1 from "./Pages/HomePage1";
 import PlaylistPage from "./Pages/PlaylistPage";
 import FavoritesPage from "./Pages/FavoritesPage";
+import ProfilePage from "./Pages/ProfilePage";
 import Index from "./components/New/Index";
 
 export const router = createBrowserRouter([
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
             path: "problems/:problemId",
             // element: <Workspace />,
             element: <Index />,
+          },
+          {
+            path: "profile",
+            element: <ProfilePage />,
           },
         ],
       },

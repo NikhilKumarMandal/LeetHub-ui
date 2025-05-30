@@ -38,7 +38,7 @@ function Root() {
 
   useEffect(() => {
     if (data) {
-      setUser(data);
+      setUser(data?.data);
     }
   }, [data, setUser]);
 

@@ -12,6 +12,9 @@ export const login = (token: string) => api.post("/auth/oauth2", { token });
 
 export const self = () => api.get("/auth/self");
 
+export const update = () => api.patch("/auth/update-profile");
+
+// Vote Service
 export const toggleFavorite = (problemId: string) =>
   api.post(`/auth/${problemId}/favorite`);
 

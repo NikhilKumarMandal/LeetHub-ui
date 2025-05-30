@@ -1,27 +1,15 @@
-import { submissionActivity } from "@/http/api";
-import { useQuery } from "@tanstack/react-query";
 import ReactCalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
-import { Tooltip } from "react-tooltip";
-import "react-tooltip/dist/react-tooltip.css";
-
+import Tooltip from "react-tooltip";
 type Submission = {
   date: string;
   count: number;
 };
 
-const SubmissionHeatmap: React.FC = () => {
-  const { data: submissionData } = useQuery({
-    queryKey: ["totalSubmission"],
-    queryFn: async () => {
-      const { data } = await submissionActivity();
-      return data.map((item: { data: string; count: number }) => ({
-        date: item.data,
-        count: item.count,
-      })) as Submission[];
-    },
-  });
-
+type SubmissionHeatmapProps = {
+  data: Submission[];
+};
+const SubmissionHeatmap: React.FC<SubmissionHeatmapProps> = ({ data }) => {
   const today = new Date();
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(today.getFullYear() - 1);
@@ -33,7 +21,7 @@ const SubmissionHeatmap: React.FC = () => {
       <ReactCalendarHeatmap
         startDate={oneYearAgo}
         endDate={today}
-        values={submissionData || []}
+        values={data || []}
         classForValue={(value) => {
           if (!value || !value.count) return "color-empty";
           if (value.count >= 5) return "color-scale-4";
@@ -48,7 +36,6 @@ const SubmissionHeatmap: React.FC = () => {
         }
         showWeekdayLabels
       />
-
       <Tooltip />
     </div>
   );

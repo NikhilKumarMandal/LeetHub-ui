@@ -241,3 +241,24 @@ code {
   color: white;
   font-size: 1rem;
 }
+
+/* Example heatmap color scale: orange theme */
+.color-empty {
+  fill: #ebedf0; /* light gray */
+}
+
+.color-scale-1 {
+  fill: #ffe0b2; /* light orange */
+}
+
+.color-scale-2 {
+  fill: #ffb74d; /* medium orange */
+}
+
+.color-scale-3 {
+  fill: #ff9800; /* deep orange */
+}
+
+.color-scale-4 {
+  fill: #ef6c00; /* darker orange */
+}

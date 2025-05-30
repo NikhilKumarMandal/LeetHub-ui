@@ -39,7 +39,7 @@ const LoginPage = () => {
     mutationFn: loginUser,
     onSuccess: async () => {
       const selfDataPromise = await refetch();
-      setUser(selfDataPromise.data);
+      setUser(selfDataPromise?.data?.data);
       navigate("auth/homepage");
     },
   });

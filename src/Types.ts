@@ -125,7 +125,7 @@ export interface ProblemDataHandle {
   image: string | null;
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
-  testcases: TestCaseShow[];
+  testcases: string[];
   vote?: string;
 }
 
