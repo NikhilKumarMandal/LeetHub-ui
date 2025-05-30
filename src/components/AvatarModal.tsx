@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState, useRef } from "react";
-import { X, Camera } from "lucide-react";
+import { Camera } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/http/client";
 
@@ -63,7 +63,6 @@ export function AvatarModal({
     },
     onError: (error: any) => {
       console.error("Failed to update avatar", error);
-      alert("Avatar update failed");
     },
   });
 
@@ -77,11 +76,6 @@ export function AvatarModal({
     setPreviewUrl(null);
     setSelectedFile(null);
     onClose();
-  };
-
-  const handleRemoveAvatar = () => {
-    setPreviewUrl("/placeholder.svg?height=64&width=64");
-    setSelectedFile(null);
   };
 
   return (

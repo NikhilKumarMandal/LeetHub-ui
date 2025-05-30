@@ -13,6 +13,7 @@ import HomePage1 from "./Pages/HomePage1";
 import PlaylistPage from "./Pages/PlaylistPage";
 import FavoritesPage from "./Pages/FavoritesPage";
 import ProfilePage from "./Pages/ProfilePage";
+import SubmissionPage from "./Pages/SubmissionPage";
 import Index from "./components/New/Index";
 
 export const router = createBrowserRouter([
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfilePage />,
+          },
+          {
+            path: "submissions",
+            element: <SubmissionPage />,
           },
         ],
       },

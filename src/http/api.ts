@@ -23,6 +23,9 @@ export const favoriteProblems = () => api.get("/auth/favorite-problems");
 // Submission Service
 export const submissionActivity = () => api.get("/submission/activity");
 
+export const submissionData = (page: number) =>
+  api.get(`/submission/submission-data?page=${page}`);
+
 // Problem Service
 export const createProblem = (problemData: ProblemData) =>
   api.post("/problem/create-problem", problemData);
