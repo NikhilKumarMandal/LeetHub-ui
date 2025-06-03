@@ -26,6 +26,9 @@ export const submissionActivity = () => api.get("/submission/activity");
 export const submissionData = (page: number) =>
   api.get(`/submission/submission-data?page=${page}`);
 
+export const submissionHistory = (page: number) =>
+  api.get(`submission/submission-history?page=${page}`);
+
 // Problem Service
 export const createProblem = (problemData: ProblemData) =>
   api.post("/problem/create-problem", problemData);

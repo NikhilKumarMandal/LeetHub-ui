@@ -5,6 +5,7 @@ import { useState } from "react";
 import { LIMIT } from "@/constants";
 import { useQuery } from "@tanstack/react-query";
 import { submissionData } from "@/http/api";
+import { Link } from "react-router-dom";
 
 export default function SubmissionPage() {
   const [queryParams, setQueryParams] = useState({
@@ -100,12 +101,12 @@ export default function SubmissionPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <a
-                          href="#"
+                        <Link
+                          to={`/auth/problems/${submission?.problemId}`}
                           className="text-sm font-semibold text-blue-400 hover:text-blue-300 hover:underline transition-colors duration-200"
                         >
                           {submission?.title}
-                        </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4">
                         {submission?.status === "Accepted" ? (

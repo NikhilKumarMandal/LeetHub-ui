@@ -15,6 +15,8 @@ import FavoritesPage from "./Pages/FavoritesPage";
 import ProfilePage from "./Pages/ProfilePage";
 import SubmissionPage from "./Pages/SubmissionPage";
 import Index from "./components/New/Index";
+import JoinRoom from "./Pages/JoinRoom";
+import EditorPage from "./Pages/Editorpage";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,14 @@ export const router = createBrowserRouter([
           {
             path: "submissions",
             element: <SubmissionPage />,
+          },
+          {
+            path: "create-room",
+            element: <JoinRoom />,
+          },
+          {
+            path: "editor/:roomId",
+            element: <EditorPage />,
           },
         ],
       },

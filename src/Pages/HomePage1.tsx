@@ -10,10 +10,12 @@ import { Link } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
 import { ProblemsTable } from "@/components/ProblemTable";
 import CategoryList from "@/components/CategoryList";
+import Topbar from "@/components/Topbar";
 
 export default function HomePage1() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black">
+    <div className="min-h-screen bg-gradient-to-b bg-[#1a1a1a]">
+      <Topbar />
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="py-8">
