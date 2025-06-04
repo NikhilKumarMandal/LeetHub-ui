@@ -1,14 +1,13 @@
-// src/pages/EditorPage.jsx
 import { useEffect, useState, useRef } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
-// import { socket } from "../lib/socket";
+import { useParams, useNavigate } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import { useAuthStore } from "@/store/store";
 import { io } from "socket.io-client";
+
 const socket = io("http://localhost:8080");
+
 const EditorPage = () => {
   const { roomId } = useParams<string>();
-  const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
@@ -21,11 +20,7 @@ const EditorPage = () => {
   const [copySuccess, setCopySuccess] = useState("");
   const [version, setVersion] = useState("*");
 
-  // Ref for typing debounce
-  //   const typingTimeoutRef = useRef(null);
-
   useEffect(() => {
-    // Wait for user state to load before redirecting
     if (user === undefined) return;
     if (!userName) {
       navigate("/");
@@ -92,7 +87,7 @@ const EditorPage = () => {
 
   const leaveRoom = () => {
     socket.emit("leaveRoom");
-    navigate("/");
+    navigate("/auth/hello");
   };
 
   return (
@@ -156,7 +151,6 @@ const EditorPage = () => {
         </button>
       </div>
 
-      {/* Editor + Output */}
       <div className="flex-1 flex flex-col bg-gray-100">
         <div className="flex-1">
           <Editor

@@ -70,7 +70,7 @@ export function ProblemsTable() {
   const difficulty = searchParams.get("difficulty") || "";
   const status = searchParams.get("status") || "";
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["problems", queryParams, q, difficulty, status],
     queryFn: () => {
       const filteredParams = Object.fromEntries(
@@ -144,6 +144,14 @@ export function ProblemsTable() {
     setSelectedProblemId(problemId);
     setOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

@@ -1,4 +1,4 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import Timer from "./Timer";
 import { ChevronLeft, ChevronRight, List, Menu } from "lucide-react";
 import { useAuthStore } from "@/store/store";
@@ -89,9 +89,10 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
   }, []);
 
   const navLinks = [
-    { name: "Home", to: "/" },
-    { name: "Favorite", to: "/favorite" },
+    { name: "Home", to: "/auth/hello" },
+    { name: "Favorite", to: "/auth/favorite" },
     { name: "Article", to: "/article" },
+    { name: "Create Room", to: "/auth/create-room" },
   ];
 
   const isActiveLink = (to: string) => location.pathname === to;
@@ -101,7 +102,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
       <div
         className={`flex w-full items-center max-w-[1200px] mx-auto justify-between`}
       >
-        {/* Left: Logo + Nav */}
         <div
           className={`flex items-center space-x-3 md:space-x-6 flex-1 transition-all duration-300`}
           style={{ marginLeft: user ? undefined : "-20px" }}
@@ -112,31 +112,29 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
               alt="Logo"
               className="h-8 w-8 object-contain"
             /> */}
-            {/* Hide app name on small screens */}
             <span className="hidden sm:inline font-semibold text-lg text-gray-800 dark:text-white select-none">
               LEETHUB
             </span>
           </Link>
 
-          {/* Desktop nav links */}
           <div className="hidden md:flex space-x-6">
             {navLinks.map((link) => (
-              <Link
+              <NavLink
                 key={link.to}
                 to={link.to}
-                className={`text-sm font-medium cursor-pointer transition-colors duration-200 ${
-                  isActiveLink(link.to)
-                    ? "text-brand-orange border-b-2 border-brand-orange"
-                    : "text-gray-600 hover:text-brand-orange dark:text-gray-300 dark:hover:text-brand-orange"
-                }`}
+                end={link.to === "/"} // ✅ Only apply `end` on Home
+                className={({ isActive }) =>
+                  `block py-2 pr-4 pl-3 duration-200 ${
+                    isActive ? "text-orange-700 font-semibold" : "text-white"
+                  } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                }
               >
                 {link.name}
-              </Link>
+              </NavLink>
             ))}
           </div>
         </div>
 
-        {/* Center problem controls */}
         {problemPage && (
           <div className="hidden md:flex items-center gap-4 flex-1 justify-center min-w-[220px]">
             <button
@@ -162,20 +160,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
             </button>
           </div>
         )}
-
-        {/* Right side */}
         <div className="flex items-center space-x-3 md:space-x-4 flex-1 justify-end min-w-[130px]">
-          {/* PREMIUM button: only visible md and up */}
-          <a
-            href="https://www.buymeacoffee.com/burakorkmezz"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden md:inline-block bg-dark-fill-3 py-1.5 px-3 rounded text-brand-orange hover:bg-dark-fill-2 whitespace-nowrap"
-          >
-            Premium
-          </a>
-
-          {/* Sign In: visible md and up and when no user */}
           {!user && (
             <Link
               to="/loginPage"
@@ -187,10 +172,8 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
             </Link>
           )}
 
-          {/* Show Timer if user and on problem page */}
           {user && problemPage && <Timer />}
 
-          {/* User avatar dropdown */}
           {user && (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -222,7 +205,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 </svg>
               </button>
 
-              {/* Dropdown menu */}
               <div
                 className={`absolute right-0 mt-2 w-40 bg-white dark:bg-dark-layer-1 rounded-md shadow-lg z-50 transform transition-all duration-200 ${
                   dropdownOpen
@@ -251,7 +233,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
             </div>
           )}
 
-          {/* Mobile hamburger menu button */}
           <div className="md:hidden flex items-center relative">
             <button
               onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -262,7 +243,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
               <Menu className="w-6 h-6 text-gray-800 dark:text-white" />
             </button>
 
-            {/* Mobile menu dropdown */}
             <div
               ref={mobileMenuRef}
               className={`absolute top-full right-0 mt-2 w-48 bg-white dark:bg-dark-layer-1 rounded-md shadow-lg z-50 transform transition-all duration-200 origin-top-right ${
@@ -286,7 +266,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 </Link>
               ))}
 
-              {/* Show login button inside mobile menu if no user */}
               {!user && (
                 <Link
                   to="/loginPage"
@@ -297,7 +276,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 </Link>
               )}
 
-              {/* If user is logged in, show Logout option here too for convenience */}
               {user && (
                 <button
                   onClick={() => {

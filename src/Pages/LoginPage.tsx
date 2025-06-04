@@ -40,7 +40,7 @@ const LoginPage = () => {
     onSuccess: async () => {
       const selfDataPromise = await refetch();
       setUser(selfDataPromise?.data?.data);
-      navigate("auth/homepage");
+      navigate("/auth/homepage");
     },
   });
   return (
