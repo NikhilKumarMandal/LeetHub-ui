@@ -65,42 +65,42 @@ export default function FavoritesPage() {
 
           <div className="flex-1 overflow-auto">
             <div className="grid gap-2 p-3 sm:p-4">
-              {problems.map((problem: any) => (
+              {problems?.map((problem: any) => (
                 <div
-                  key={problem.id}
+                  key={problem?.id}
                   className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
                 >
-                  {problem.isSolved && (
+                  {problem?.isSolved && (
                     <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
                   )}
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1 sm:gap-2">
                       <span className="font-medium text-xs sm:text-sm">
-                        {problem.problemNumber}.
+                        {problem?.problemNumber}.
                       </span>
                       <Link
-                        to={`/auth/problems/${problem.id}`}
+                        to={`/auth/problems/${problem?.id}`}
                         className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
                       >
-                        {problem.title}
+                        {problem?.title}
                       </Link>
                     </div>
                   </div>
                   {problem.ytLink && (
-                    <YoutubeDialog videoUrl={problem.ytLink} />
+                    <YoutubeDialog videoUrl={problem?.ytLink} />
                   )}
 
                   <span
                     className={`${
                       problem.difficulty === "EASY"
                         ? "text-teal-500"
-                        : problem.difficulty === "MEDIUM"
+                        : problem?.difficulty === "MEDIUM"
                           ? "text-yellow-500"
                           : "text-red-500"
                     } font-medium text-xs sm:text-sm`}
                   >
-                    {problem.difficulty}
+                    {problem?.difficulty}
                   </span>
 
                   <Button
@@ -110,10 +110,10 @@ export default function FavoritesPage() {
                     aria-label="Star problem"
                     onClick={(e) => {
                       e.preventDefault();
-                      toggleFavoriteMutate(problem.id);
+                      toggleFavoriteMutate(problem?.id);
                     }}
                   >
-                    {problem.isFavorite ? (
+                    {problem?.isFavorite ? (
                       <Star fill="yellow" className="text-yellow-400 w-4 h-4" />
                     ) : (
                       <Star className="w-4 h-4" />

@@ -6,14 +6,20 @@ import {
   CheckCircle,
   ChevronRight,
   ChevronLeft,
+  Trash2,
+  Edit2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link, useParams, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { allProblems } from "@/http/api";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { allProblems, deleteProblem, toggleFavorite } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
 import type { FilterData } from "@/Types";
@@ -25,18 +31,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import debounce from "lodash.debounce";
+import { YoutubeDialog } from "@/components/YoutubeDialog";
+import { usePermission } from "@/hooks/userPermission";
+import { toast } from "sonner";
+
+const problemdelete = async (id: string) => {
+  return await deleteProblem(id);
+};
 
 export default function ListProblems() {
   const { topic } = useParams();
+  const { isAllowed } = usePermission();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryParams, setQueryParams] = useState({
     limit: LIMIT,
     page: 1,
   });
-
   const q = searchParams.get("q") || "";
   const difficulty = searchParams.get("difficulty") || "";
   const status = searchParams.get("status") || "";
+  const navigate = useNavigate();
 
   const { data, refetch } = useQuery({
     queryKey: ["topicName", queryParams, topic, q, difficulty, status],
@@ -61,15 +76,52 @@ export default function ListProblems() {
     enabled: !!topic,
   });
 
-  console.log(data);
+  const { mutate: toggleFavoriteMutate } = useMutation({
+    mutationKey: ["favroite"],
+    mutationFn: async (problemId: string) => {
+      const res = await toggleFavorite(problemId);
+      return res;
+    },
+    onSuccess: (res) => {
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries({
+        queryKey: ["problems", queryParams, q, difficulty, status],
+      });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+    },
+  });
 
+  const deleteProblemMutation = useMutation({
+    mutationKey: ["problems"],
+    mutationFn: (id: string) => problemdelete(id),
+    onSuccess: () => {
+      toast.success("Problem deleted");
+      queryClient.invalidateQueries({ queryKey: ["problems"] });
+    },
+  });
+
+  const problems = data?.data?.problems;
   const totalPages = data?.data?.pagination.totalPages || 1;
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-zinc-950 text-zinc-100">
       <div className="w-full md:w-[350px] border-r border-zinc-800 p-4 flex flex-col overflow-auto">
-        {/* Profile Section */}
         <div className="flex flex-col items-center text-center mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="self-start mb-4 text-zinc-400 hover:text-white text-sm flex items-center"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+            Back
+          </button>
           <div className="relative mb-2">
             <Avatar className="w-20 h-20 sm:w-24 sm:h-24 bg-zinc-800">
               <AvatarImage
@@ -237,65 +289,93 @@ export default function ListProblems() {
         {/* Problem List */}
         <div className="flex-1 overflow-auto">
           <div className="grid gap-2 p-3 sm:p-4">
-            {data?.data?.problems?.map((problem: any) => (
-              <Link key={problem.number} to={""} className="block">
-                <div className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
-                  {problem.isSolved && (
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <span className="font-medium text-xs sm:text-sm">
-                        {problem.problemNumber}.
-                      </span>
-                      <span className="font-medium text-xs sm:text-sm truncate">
-                        {problem.title}
-                      </span>
-                    </div>
-                    {problem.progress !== undefined && (
-                      <div className="mt-1 flex items-center gap-2">
-                        <Progress
-                          value={problem.progress}
-                          className="h-1 sm:h-1.5 flex-1"
-                        />
-                        <span className="text-xs text-zinc-400">
-                          {problem.progress}%
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 sm:gap-4">
-                    <span
-                      className={`${
-                        problem.difficulty === "EASY"
-                          ? "text-teal-500"
-                          : problem.difficulty === "MEDIUM."
-                            ? "text-yellow-500"
-                            : "text-red-500"
-                      } font-medium text-xs sm:text-sm`}
-                    >
-                      {problem.difficulty}
+            {problems?.map((problem: any) => (
+              <div
+                key={problem?.id}
+                className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
+              >
+                {problem?.isSolved && (
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
+                )}
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="font-medium text-xs sm:text-sm">
+                      {problem?.problemNumber}.
                     </span>
-                    <div className="w-12 sm:w-16 h-1.5 sm:h-2 bg-zinc-800 rounded-full overflow-hidden hidden sm:block">
-                      <div
-                        className="h-full bg-zinc-700 rounded-full"
-                        style={{ width: "60%" }}
-                      ></div>
-                    </div>
+                    <Link
+                      to={`/auth/problems/${problem?.id}`}
+                      className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
+                    >
+                      {problem?.title}
+                    </Link>
+                  </div>
+                </div>
+                {problem.ytLink && <YoutubeDialog videoUrl={problem?.ytLink} />}
+
+                <span
+                  className={`${
+                    problem.difficulty === "EASY"
+                      ? "text-teal-500"
+                      : problem?.difficulty === "MEDIUM"
+                        ? "text-yellow-500"
+                        : "text-red-500"
+                  } font-medium text-xs sm:text-sm`}
+                >
+                  {problem?.difficulty}
+                </span>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                  aria-label="Star problem"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFavoriteMutate(problem?.id);
+                  }}
+                >
+                  {problem?.isFavorite ? (
+                    <Star fill="yellow" className="text-yellow-400 w-4 h-4" />
+                  ) : (
+                    <Star className="w-4 h-4" />
+                  )}
+                </Button>
+
+                {isAllowed && (
+                  <>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                      aria-label="Update problem"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(`/auth/problems/update/${problem?.id}`);
+                      }}
+                      className="text-blue-400 hover:text-blue-600 h-7 w-7 sm:h-8 sm:w-8"
                     >
-                      <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Button>
-                  </div>
-                </div>
-              </Link>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label="Delete problem"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteProblemMutation.mutate(problem?.id);
+                      }}
+                      className="text-red-500 hover:text-red-700 h-7 w-7 sm:h-8 sm:w-8"
+                    >
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </Button>
+                  </>
+                )}
+              </div>
             ))}
           </div>
         </div>
-        <div className="className=flex justify-center items-center gap-3 py-6 border-t border-zinc-800">
+        <div className="flex justify-center items-center gap-3 py-6 border-t border-zinc-800">
           <Button
             size="icon"
             variant="outline"
