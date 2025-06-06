@@ -1,9 +1,15 @@
-import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  NavLink,
+  Navigate,
+} from "react-router-dom";
 import Timer from "./Timer";
 import { ChevronLeft, ChevronRight, List, Menu } from "lucide-react";
 import { useAuthStore } from "@/store/store";
-import { useQuery } from "@tanstack/react-query";
-import { allProblemAvaiableInTheDatabase } from "@/http/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { allProblemAvaiableInTheDatabase, logout } from "@/http/api";
 import { useState, useRef, useEffect } from "react";
 
 type TopbarProps = {
@@ -12,7 +18,7 @@ type TopbarProps = {
 };
 
 const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
-  const { user, logout } = useAuthStore();
+  const { user, logout: logoutUserFromStore } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -28,6 +34,22 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
       return response.data.data;
     },
   });
+
+  const { mutate: logoutMutate } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: logout,
+    onSuccess: async () => {
+      logoutUserFromStore();
+      navigate("/");
+      return;
+    },
+  });
+
+  if (user === null) {
+    return (
+      <Navigate to={`/login?returnTo=${location.pathname}`} replace={true} />
+    );
+  }
 
   const problems = data?.problems ?? [];
 
@@ -279,9 +301,8 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
               {user && (
                 <button
                   onClick={() => {
-                    logout();
+                    logoutMutate();
                     setMobileMenuOpen(false);
-                    navigate("/");
                   }}
                   className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-fill-2 cursor-pointer rounded"
                 >

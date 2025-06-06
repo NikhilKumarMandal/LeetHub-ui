@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PlaylistCards from "@/components/PlaylistCard";
 import { Calendar } from "@/components/ui/calendar";
 import { ProblemsTable } from "@/components/ProblemTable";

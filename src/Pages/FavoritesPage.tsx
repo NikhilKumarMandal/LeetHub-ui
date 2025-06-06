@@ -34,7 +34,7 @@ export default function FavoritesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black">
+    <div className="min-h-screen bg-[#1e232c]">
       <div className="container mx-auto px-4">
         <div className="py-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">

@@ -9,10 +9,8 @@ import {
   Lightbulb,
   BookOpen,
   CheckCircle2,
-  Download,
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createProblem } from "@/http/api";
 import { useMutation } from "@tanstack/react-query";
@@ -84,6 +82,7 @@ function CreateProblemPage() {
       topic: [{ value: "" }],
       constraints: [{ value: "" }],
       hints: [{ value: "" }],
+      companyName: [{ value: "" }],
       examples: [
         {
           input: "",
@@ -160,6 +159,15 @@ function CreateProblemPage() {
     name: "examples",
   });
 
+  const {
+    fields: companyNameFields,
+    append: appendCompanyName,
+    remove: removeCompanyName,
+  } = useFieldArray({
+    control,
+    name: "companyName",
+  });
+
   const { mutate, isPending } = useMutation({
     mutationKey: ["problem"],
     mutationFn: problem,
@@ -180,11 +188,11 @@ function CreateProblemPage() {
       constraints: data.constraints.map(
         (constraint: { value: string }) => constraint.value
       ),
-      // companyName: data.companyName.map((companyNam: { value: string}) => companyNam.value)
+      companyName: data.companyName.map(
+        (companyNam: { value: string }) => companyNam.value
+      ),
     };
-    if (!data.companyName?.some((item: any) => item.value?.trim())) {
-      delete data.companyName;
-    }
+
     mutate(transformedData);
   };
 
@@ -354,6 +362,50 @@ function CreateProblemPage() {
                 <div className="mt-2">
                   <span className="text-error text-sm">
                     {errors.constraints.message}
+                  </span>
+                </div>
+              )}
+            </section>
+
+            <section className="card bg-base-200 p-4 md:p-6 shadow-md">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                  <BookOpen className="w-5 h-5" />
+                  CompanyName
+                </h3>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  onClick={() => appendCompanyName({ value: "" })}
+                >
+                  <Plus className="w-4 h-4 mr-1" /> Add Company
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {companyNameFields.map((field, index) => (
+                  <div key={field.id} className="flex gap-2 items-center">
+                    <input
+                      type="text"
+                      className="input input-bordered flex-1"
+                      {...register(`companyName.${index}.value` as const)}
+                      placeholder="Enter tag"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-ghost btn-square btn-sm"
+                      onClick={() => removeCompanyName(index)}
+                      disabled={companyNameFields.length === 1}
+                      aria-label="Remove tag"
+                    >
+                      <Trash2 className="w-4 h-4 text-error" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              {errors.companyName && (
+                <div className="mt-2">
+                  <span className="text-error text-sm">
+                    {errors.companyName.message}
                   </span>
                 </div>
               )}

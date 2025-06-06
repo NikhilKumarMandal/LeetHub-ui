@@ -213,10 +213,10 @@ function Playground({ problem }: ProblemDescriptionProps) {
   return (
     <ResizablePanelGroup
       direction="vertical"
-      className="w-full h-full bg-black"
+      className="w-full h-full bg-[#1e232c]"
     >
       <ResizablePanel defaultSize={50} minSize={30}>
-        <div className="flex flex-col h-full bg-gray-900 overflow-hidden">
+        <div className="flex flex-col h-full bg-[#1e232c] overflow-hidden">
           <div className="p-2 bg-gray-800 text-white flex items-center gap-3">
             <select
               id="language"
@@ -324,7 +324,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={35} minSize={15}>
-        <div className="flex flex-col h-full bg-gray-800 overflow-hidden">
+        <div className="flex flex-col h-full bg-[#1e232c] overflow-hidden">
           <div className="flex items-center justify-between border-b border-gray-700 px-4 py-2">
             <div className="flex items-center gap-1">
               {["testcase", "result", "submission", "leto"].map((tab) => (
@@ -360,7 +360,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 size="sm"
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-[#FFD369] hover:bg-[#FFD369]/60"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Submit

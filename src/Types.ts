@@ -21,7 +21,7 @@ export interface Problem {
   userId: string;
   examples: Record<string, ProblemExample>;
   constraints: string;
-  hints: string | null;
+  hints: string[];
   editorial: string | null;
   codeSnippets: Record<string, string>;
   referenceSolutions: Record<string, string>;
@@ -112,7 +112,7 @@ export interface ProblemDataHandle {
     };
   };
   constraints: string[];
-  hints: string;
+  hints?: string[];
   editorial: string;
   starterFunction: string | null;
   codeSnippets: {
@@ -127,16 +127,6 @@ export interface ProblemDataHandle {
   updatedAt: string; // ISO date string
   testcases: string[];
   vote?: string;
-}
-
-interface TestCaseShow {
-  id: string;
-  input: string;
-  output: string;
-  isPublic: boolean;
-  problemId: string;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
 }
 
 export interface ProblemDescriptionProps {

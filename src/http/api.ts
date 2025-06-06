@@ -14,6 +14,8 @@ export const self = () => api.get("/auth/self");
 
 export const update = () => api.patch("/auth/update-profile");
 
+export const logout = () => api.post("/auth/logout");
+
 // Vote Service
 export const toggleFavorite = (problemId: string) =>
   api.post(`/auth/${problemId}/favorite`);

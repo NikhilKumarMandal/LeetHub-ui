@@ -18,7 +18,6 @@ import {
   CheckCircle,
   ChevronLeft,
   ChevronRight,
-  Filter,
   Search,
   Star,
   Edit2,
@@ -199,7 +198,7 @@ export function ProblemsTable() {
                 page: 1,
               }));
             }, 1000)}
-            className="pl-9 bg-[#2d2d2d] border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-gray-500 text-sm"
+            className="pl-9 bg-[#2d2d2d] border-gray-700 text-white placeholder:text-gray-500 focus-visible:ring-[#FFD369] text-sm"
           />
         </div>
 
@@ -242,14 +241,6 @@ export function ProblemsTable() {
               <SelectItem value="unsolved">Unsolved</SelectItem>
             </SelectContent>
           </Select>
-
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-[#2d2d2d] border-gray-700 text-gray-400 hover:bg-[#3a3a3a] h-9 w-9 md:h-10 md:w-10"
-          >
-            <Filter className="h-4 w-4" />
-          </Button>
         </div>
       </div>
 

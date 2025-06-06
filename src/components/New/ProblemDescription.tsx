@@ -128,12 +128,12 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     enabled: !!problemId,
   });
 
-  console.log(problemDiscussion, "problemDiscussion");
+  console.log(problem, "problemDiscussion");
 
   return (
-    <div className="h-full flex flex-col bg-gray-800">
+    <div className="h-full flex flex-col bg-[#1e232c]">
       <Tabs defaultValue="description" className="h-full flex flex-col">
-        <TabsList className="grid w-full grid-cols-3 bg-gray-700 border-b border-gray-600 flex-shrink-0">
+        <TabsList className="grid w-full grid-cols-3 bg-[#1e232c] border-b border-gray-600 flex-shrink-0">
           <TabsTrigger
             value="description"
             className="data-[state=active]:bg-gray-600 data-[state=active]:text-blue-400 text-gray-300"
@@ -229,15 +229,21 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
 
             {showHints && (
               <div className="bg-gray-900 border border-yellow-400/30 rounded-lg p-4 mb-6">
+                {}
                 <h3 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center gap-2">
                   <Lightbulb className="w-5 h-5" />
                   Hints
                 </h3>
                 <div className="space-y-3">
-                  <div className="bg-gray-800 rounded p-3 border border-gray-700">
-                    <p className="text-gray-300 text-sm mb-2">hint</p>
-                    <div className="flex items-center gap-2"></div>
-                  </div>
+                  {problem?.hints?.map((hint: any, index: any) => (
+                    <div
+                      key={index}
+                      className="bg-gray-800 rounded p-3 border border-gray-700"
+                    >
+                      <p className="text-gray-300 text-sm mb-2">{hint}</p>
+                      <div className="flex items-center gap-2"></div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -249,12 +255,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
               <div className="space-y-4 text-gray-300 leading-relaxed text-sm sm:text-base">
                 <p>{problem?.description}</p>
               </div>
-            </div>
-
-            <div className="bg-yellow-900/20 border border-yellow-600/30 rounded-lg p-4">
-              <p className="text-yellow-400 text-xs sm:text-sm">
-                <strong>Note:</strong> Don't print any extra space or newline
-              </p>
             </div>
 
             {problem?.examples && (
@@ -425,12 +425,13 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
           <div className="h-full flex items-center justify-center p-8">
             <div className="text-center">
               <div className="bg-gray-900 rounded-lg p-8 border border-gray-700">
-                <p className="text-gray-400 text-lg">
-                  Solution will be available after submission
-                </p>
-                <p className="text-gray-500 text-sm mt-2">
-                  Complete the problem to unlock the editorial solution
-                </p>
+                {!problem?.editorial?.trim() ? (
+                  <p className="text-gray-400 text-lg">
+                    There is no editorial for this problem
+                  </p>
+                ) : (
+                  <p className="text-white text-lg">{problem.editorial}</p>
+                )}
               </div>
             </div>
           </div>
