@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, CheckCircle, Edit2, Heart, Star } from "lucide-react";
+import { ArrowLeft, CheckCircle, Heart, Star } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { favoriteProblems, toggleFavorite } from "@/http/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { usePermission } from "@/hooks/userPermission";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { YoutubeDialog } from "@/components/YoutubeDialog";
 
 export default function FavoritesPage() {
-  const { isAllowed } = usePermission();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -32,6 +31,9 @@ export default function FavoritesPage() {
       queryClient.invalidateQueries({ queryKey: ["favorite"] });
     },
   });
+
+  const problems = data?.data?.problem;
+  console.log(problems);
 
   return (
     <div className="min-h-screen bg-[#1e232c]">
@@ -61,77 +63,65 @@ export default function FavoritesPage() {
             </div>
           </div>
 
-          <div className="divide-y divide-gray-800">
-            {data?.data?.problem?.map((problem: any) => (
-              <div
-                key={problem.id}
-                className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
-              >
-                {problem.isSolved && (
-                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
-                )}
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <span className="font-medium text-xs sm:text-sm">
-                      {problem.problemNumber}.
-                    </span>
-                    <Link
-                      to={`/problems/${problem.id}`}
-                      className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
-                    >
-                      {problem.title}
-                    </Link>
-                  </div>
-                </div>
-
-                <span
-                  className={`${
-                    problem.difficulty === "EASY"
-                      ? "text-teal-500"
-                      : problem.difficulty === "MEDIUM"
-                        ? "text-yellow-500"
-                        : "text-red-500"
-                  } font-medium text-xs sm:text-sm`}
+          <div className="flex-1 overflow-auto">
+            <div className="grid gap-2 p-3 sm:p-4">
+              {problems.map((problem: any) => (
+                <div
+                  key={problem.id}
+                  className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
                 >
-                  {problem.difficulty}
-                </span>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
-                  aria-label="Star problem"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleFavoriteMutate(problem.id);
-                  }}
-                >
-                  {problem.isFavorite ? (
-                    <Star fill="yellow" className="text-yellow-400 w-4 h-4" />
-                  ) : (
-                    <Star className="w-4 h-4" />
+                  {problem.isSolved && (
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
                   )}
-                </Button>
 
-                {isAllowed && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      aria-label="Update problem"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(`/auth/problems/update/${problem.id}`);
-                      }}
-                      className="text-blue-400 hover:text-blue-600 h-7 w-7 sm:h-8 sm:w-8"
-                    >
-                      <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                    </Button>
-                  </>
-                )}
-              </div>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <span className="font-medium text-xs sm:text-sm">
+                        {problem.problemNumber}.
+                      </span>
+                      <Link
+                        to={`/auth/problems/${problem.id}`}
+                        className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
+                      >
+                        {problem.title}
+                      </Link>
+                    </div>
+                  </div>
+                  {problem.ytLink && (
+                    <YoutubeDialog videoUrl={problem.ytLink} />
+                  )}
+
+                  <span
+                    className={`${
+                      problem.difficulty === "EASY"
+                        ? "text-teal-500"
+                        : problem.difficulty === "MEDIUM"
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                    } font-medium text-xs sm:text-sm`}
+                  >
+                    {problem.difficulty}
+                  </span>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                    aria-label="Star problem"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleFavoriteMutate(problem.id);
+                    }}
+                  >
+                    {problem.isFavorite ? (
+                      <Star fill="yellow" className="text-yellow-400 w-4 h-4" />
+                    ) : (
+                      <Star className="w-4 h-4" />
+                    )}
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
