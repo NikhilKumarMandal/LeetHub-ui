@@ -2,9 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Edit2, Play, Star, Target, Trash2 } from "lucide-react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { deletePlaylist, deleteProblem, getPlaylistById } from "@/http/api";
+import {
+  deletePlaylist,
+  deleteProblem,
+  getPlaylistById,
+  getRank,
+} from "@/http/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { usePermission } from "@/hooks/userPermission";
+import UserRankingCard from "@/components/UserRankCard";
 
 const getPlaylistDetailsById = async (id: string) => {
   const { data } = await getPlaylistById(id);
@@ -17,6 +23,12 @@ const problemdelete = async (id: string) => {
 
 const deletePlaylistById = async (id: string) => {
   return await deletePlaylist(id);
+};
+
+const getUserRank = async (id: string) => {
+  const { data } = await getRank(id);
+  console.log(data, "data");
+  return data;
 };
 
 export default function PlaylistPage() {
@@ -35,7 +47,12 @@ export default function PlaylistPage() {
     enabled: !!playlistId,
   });
 
-  console.log(data);
+  const { data: rank } = useQuery({
+    queryKey: ["rank", playlistId],
+    queryFn: () => getUserRank(playlistId!),
+  });
+
+  console.log(rank, "rank");
 
   const deleteProblemMutation = useMutation({
     mutationKey: ["problems"],
@@ -219,6 +236,49 @@ export default function PlaylistPage() {
                       </li>
                     ))}
                   </ul>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-900/60 border-gray-800">
+                <CardHeader className="pb-3 border-b border-gray-800">
+                  <CardTitle className="text-white">User Rank</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  {rank?.top3?.map((user: any) => (
+                    <UserRankingCard
+                      key={user?.id}
+                      rank={user?.rank}
+                      name={user?.name}
+                      avatar={user?.avatar.url}
+                    />
+                  ))}
+                  {rank?.userRank?.rank !== undefined ? (
+                    <div className="mt-6 px-4 py-2 rounded-xl bg-zinc-800 text-zinc-100 inline-flex items-center space-x-2 shadow-md border border-zinc-700">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-yellow-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8 17l4-4 4 4m0-8l-4 4-4-4"
+                        />
+                      </svg>
+                      <span className="font-medium text-sm">
+                        Your Rank:{" "}
+                        <span className="text-yellow-400 font-semibold">
+                          #{rank.userRank.rank}
+                        </span>
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="mt-6 text-sm text-gray-400 italic">
+                      You haven't ranked yet this week.
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             </div>

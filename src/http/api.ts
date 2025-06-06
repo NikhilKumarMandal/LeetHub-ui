@@ -85,6 +85,8 @@ export const getAllPlaylist = (id: string) => api.get(`/playlist/${id}`);
 
 export const deletePlaylist = (id: string) => api.delete(`/playlist/${id}`);
 
+export const getRank = (id: string) => api.get(`/playlist/get-rank/${id}`);
+
 // Execute Code Service
 
 export const executeCode = (executeData: Execute) =>
