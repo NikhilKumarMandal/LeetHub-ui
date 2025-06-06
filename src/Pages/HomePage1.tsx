@@ -4,6 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { ProblemsTable } from "@/components/ProblemTable";
 import CategoryList from "@/components/CategoryList";
 import Topbar from "@/components/Topbar";
+import { TrendingCompanies } from "@/components/TrendingCompanies";
 
 export default function HomePage1() {
   return (
@@ -29,13 +30,17 @@ export default function HomePage1() {
             </div>
 
             <div className="space-y-6">
-              <Card className="bg-gray-900/60 border-gray-800">
+              <Card className="bg-[#1e232c] border-gray-800">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-white">Calendar</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Calendar />
                 </CardContent>
+                <CardContent>
+                  <TrendingCompanies />
+                </CardContent>
+                <CardContent>LEETHUB 2025</CardContent>
               </Card>
             </div>
           </div>

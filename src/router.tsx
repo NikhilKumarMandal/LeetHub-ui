@@ -17,6 +17,7 @@ import Index from "./components/New/Index";
 import JoinRoom from "./Pages/JoinRoom";
 import EditorPage from "./Pages/Editorpage";
 import CreateProblemPage from "./Pages/CreateProblemPage";
+import ListProblemByCompany from "./Pages/ListProblemByCompany";
 
 export const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
           {
             path: "editor/:roomId",
             element: <EditorPage />,
+          },
+          {
+            path: "problem-list/:companyName",
+            element: <ListProblemByCompany />,
           },
         ],
       },

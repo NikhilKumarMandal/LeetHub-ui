@@ -39,6 +39,7 @@ export interface FilterData {
   difficulty?: string;
   status?: string;
   topic?: string;
+  companyName?: string;
 }
 
 export interface ProblemData {
