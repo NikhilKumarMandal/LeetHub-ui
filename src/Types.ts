@@ -60,6 +60,7 @@ export interface ProblemData {
 export interface PlaylistData {
   name: string;
   description: string;
+  summary: string[];
 }
 
 export interface Execute {

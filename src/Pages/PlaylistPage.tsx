@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Edit2, Play, Star, Target, Trash2 } from "lucide-react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { deleteProblem, getPlaylistById } from "@/http/api";
+import { deletePlaylist, deleteProblem, getPlaylistById } from "@/http/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { usePermission } from "@/hooks/userPermission";
 
@@ -13,6 +13,10 @@ const getPlaylistDetailsById = async (id: string) => {
 
 const problemdelete = async (id: string) => {
   return await deleteProblem(id);
+};
+
+const deletePlaylistById = async (id: string) => {
+  return await deletePlaylist(id);
 };
 
 export default function PlaylistPage() {
@@ -38,6 +42,11 @@ export default function PlaylistPage() {
     mutationFn: (id: string) => problemdelete(id),
   });
 
+  const deletePlaylist = useMutation({
+    mutationKey: ["playlist"],
+    mutationFn: (id: string) => deletePlaylistById(id),
+  });
+
   return (
     <div className="min-h-screen bg-[#0D1117] bg-[radial-gradient(#2C333A_1px,transparent_1px)] bg-[size:24px_24px]">
       <div className="container mx-auto px-4">
@@ -47,6 +56,7 @@ export default function PlaylistPage() {
               variant="outline"
               size="sm"
               className="border-gray-700 text-gray-400 hover:text-white"
+              onClick={() => navigate(-1)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,15 +76,14 @@ export default function PlaylistPage() {
             </Button>
           </div>
 
-          {/* Study Plan Header */}
           <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
             <div className="w-40 h-40 relative flex-shrink-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 rounded-2xl flex items-center justify-center text-black font-bold text-7xl">
-                JS
+              {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 rounded-2xl flex items-center justify-center text-black font-bold text-7xl">
+                JAVA
                 <span className="absolute bottom-1 right-1 bg-amber-300 text-orange-700 text-xl font-bold rounded-full w-10 h-10 flex items-center justify-center">
                   30
                 </span>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex-1 text-center md:text-left">
@@ -88,10 +97,19 @@ export default function PlaylistPage() {
               <p className="text-gray-300 mb-6 max-w-2xl">
                 {data?.data?.description}
               </p>
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-black font-medium gap-2">
-                <Play className="h-4 w-4 fill-black" />
-                Start
-              </Button>
+              {isAllowed && (
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deletePlaylist.mutate(playlistId!);
+                    navigate("/auth/hello");
+                  }}
+                  className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-black font-medium gap-2"
+                >
+                  <Play className="h-4 w-4 fill-black" />
+                  Delete
+                </Button>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -194,10 +212,12 @@ export default function PlaylistPage() {
                 </CardHeader>
                 <CardContent className="pt-4">
                   <ul className="space-y-2">
-                    <li className="flex items-start gap-2">
-                      <div className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 flex-shrink-0"></div>
-                      <span className="text-gray-300"></span>
-                    </li>
+                    {data?.data?.summary?.map((sum: any, index: any) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <div className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 flex-shrink-0"></div>
+                        <span className="text-gray-300">{sum}</span>
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>

@@ -83,6 +83,8 @@ export const addProblemInPlaylist = (id: string, problemId: string) =>
 
 export const getAllPlaylist = (id: string) => api.get(`/playlist/${id}`);
 
+export const deletePlaylist = (id: string) => api.delete(`/playlist/${id}`);
+
 // Execute Code Service
 
 export const executeCode = (executeData: Execute) =>
