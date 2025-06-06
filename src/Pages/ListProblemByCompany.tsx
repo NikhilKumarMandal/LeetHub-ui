@@ -295,7 +295,7 @@ export default function ListProblemByCompany() {
             ))}
           </div>
         </div>
-        <div className="className=flex justify-center items-center gap-3 py-6 border-t border-zinc-800">
+        <div className="flex justify-center items-center gap-3 py-6 border-t border-zinc-800">
           <Button
             size="icon"
             variant="outline"
@@ -308,7 +308,7 @@ export default function ListProblemByCompany() {
             <ChevronLeft className="h-5 w-5" />
           </Button>
 
-          <span className="px-4 py-2 rounded-full bg-gradient-to-r from-primary to-primary/80 text-white font-medium shadow-md text-sm">
+          <span className="px-4 py-2 rounded-full bg-[#FFD369] text-black font-medium shadow-md text-sm">
             Page {queryParams.page} of {totalPages}
           </span>
 

@@ -2,6 +2,7 @@ import type {
   DiscussionData,
   Execute,
   FilterData,
+  LetoData,
   PlaylistData,
   ProblemData,
 } from "@/Types";
@@ -15,6 +16,8 @@ export const self = () => api.get("/auth/self");
 export const update = () => api.patch("/auth/update-profile");
 
 export const logout = () => api.post("/auth/logout");
+
+export const reviewCode = (data: LetoData) => api.post("/auth/review", data);
 
 // Vote Service
 export const toggleFavorite = (problemId: string) =>

@@ -5,8 +5,9 @@ import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import { sql } from "@codemirror/lang-sql";
 import { Play, Settings, Upload } from "lucide-react";
-import type { Execute, ProblemDescriptionProps } from "@/Types";
+import type { Execute, LetoData, ProblemDescriptionProps } from "@/Types";
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/resizable";
 import { getLanguageId } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { executeCode } from "@/http/api";
+import { executeCode, reviewCode } from "@/http/api";
 import { Maximize, Minimize } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
@@ -25,10 +26,17 @@ const languageExtensions: Record<string, any> = {
   JAVASCRIPT: javascript(),
   JAVA: java(),
   PYTHON: python(),
+  SQL: sql(),
 };
 
 const execute = async (executeCodeData: Execute) => {
   const { data } = await executeCode(executeCodeData);
+  return data;
+};
+
+const ask = async (letoData: LetoData) => {
+  console.log("Calling ask with:", letoData);
+  const { data } = await reviewCode(letoData);
   return data;
 };
 
@@ -40,6 +48,24 @@ const themeMap: Record<string, any> = {
   dark: vscodeDark,
   githubDark: githubDark,
 };
+
+interface OptimizedSolution {
+  description: string;
+  code: string;
+}
+
+interface LetoResponseData {
+  "✅ Is the code correct?": boolean;
+  "🛠 Improvements": string[];
+  "💡 Optimized Solution": OptimizedSolution;
+  language?: string;
+}
+
+interface LetoResponse {
+  data: LetoResponseData;
+  remaining: number;
+  fromCache: boolean;
+}
 
 function Playground({ problem }: ProblemDescriptionProps) {
   const queryClient = useQueryClient();
@@ -66,6 +92,8 @@ function Playground({ problem }: ProblemDescriptionProps) {
   );
 
   const availableLanguages = Object.keys(problem?.starterFunction ?? {});
+  console.log(availableLanguages);
+
   const defaultLanguage =
     availableLanguages.length > 0 ? availableLanguages[0] : "JAVASCRIPT";
 
@@ -73,7 +101,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [code, setCode] = useState(
     problem?.starterFunction?.[defaultLanguage as any] || ""
   );
-
+  const [letoResponse, setLetoResponse] = useState<LetoResponse | null>(null);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const playlistId =
@@ -148,6 +176,30 @@ function Playground({ problem }: ProblemDescriptionProps) {
     },
     onError: (err) => console.error("Submit error:", err),
   });
+
+  console.log("letoResponse", letoResponse);
+
+  const { mutate: mutationData } = useMutation({
+    mutationKey: ["leto"],
+    mutationFn: ask,
+    onSuccess: (res) => {
+      if (res?.data?.data) {
+        setLetoResponse(res.data.data);
+      }
+    },
+    onError: (error) => {
+      console.error("LETO request failed:", error);
+    },
+  });
+
+  const handleAsk = useCallback(() => {
+    if (!problem) return;
+    mutationData({
+      userCode: code,
+      problemId: problem.id,
+      language: selectedLanguage,
+    });
+  }, [code, problem, selectedLanguage]);
 
   const passedTests =
     executionResults?.testcase?.filter((tc: any) => tc.passed)?.length || 0;
@@ -539,7 +591,55 @@ function Playground({ problem }: ProblemDescriptionProps) {
                     Want to improve your solution? Ask LETO for a better
                     approach based on test results.
                   </p>
-                  {/* Optional: Add a textarea + button to "Ask LETO" here */}
+                  <p className="m-2">First write code then ASK LETO</p>
+
+                  <Button onClick={handleAsk}>ASK LETO</Button>
+
+                  {/* Show this only if letoResponse exists */}
+                  {letoResponse && (
+                    <div className="mt-6 space-y-4">
+                      <div>
+                        <h4 className="font-semibold text-green-400">
+                          ✅ Is the code correct?
+                        </h4>
+                        <p className="text-white">
+                          {(letoResponse as any)["✅ Is the code correct?"]
+                            ? "Yes"
+                            : "No"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-yellow-400">
+                          🛠 Improvements
+                        </h4>
+                        <ul className="list-disc list-inside space-y-1">
+                          {(letoResponse as any)["🛠 Improvements"]?.map(
+                            (imp: any, idx: number) => (
+                              <li key={idx} className="text-white">
+                                {imp}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-cyan-400">
+                          💡 Optimized Solution
+                        </h4>
+                        <p className="mb-2 text-white">
+                          {
+                            (letoResponse as any)["💡 Optimized Solution"]
+                              ?.description
+                          }
+                        </p>
+                        <pre className="bg-zinc-800 p-4 rounded text-white overflow-x-auto whitespace-pre-wrap text-xs">
+                          {(letoResponse as any)["💡 Optimized Solution"]?.code}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

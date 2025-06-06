@@ -388,7 +388,7 @@ export default function ListProblems() {
             <ChevronLeft className="h-5 w-5" />
           </Button>
 
-          <span className="px-4 py-2 rounded-full bg-gradient-to-r from-primary to-primary/80 text-white font-medium shadow-md text-sm">
+          <span className="px-4 py-2 rounded-full bg-[#FFD369] text-black font-medium shadow-md text-sm">
             Page {queryParams.page} of {totalPages}
           </span>
 

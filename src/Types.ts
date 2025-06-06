@@ -140,3 +140,9 @@ export interface DiscussionData {
   problemId: string;
   parentId?: string;
 }
+
+export interface LetoData {
+  userCode: string;
+  problemId: string;
+  language: string;
+}
