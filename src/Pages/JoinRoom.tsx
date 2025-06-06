@@ -30,7 +30,7 @@ const JoinRoom = () => {
   return (
     <>
       <Topbar />
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-slate-800 px-4">
+      <div className="flex items-center justify-center min-h-screen bg-[#1e232c] px-4">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-6">
           <h1 className="text-2xl font-bold text-center text-gray-800">
             Join Code Room

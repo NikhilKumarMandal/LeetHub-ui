@@ -17,6 +17,7 @@ import SubmissionPage from "./Pages/SubmissionPage";
 import Index from "./components/New/Index";
 import JoinRoom from "./Pages/JoinRoom";
 import EditorPage from "./Pages/Editorpage";
+import CreateProblemPage from "./Pages/CreateProblemPage";
 
 export const router = createBrowserRouter([
   {
@@ -55,7 +56,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "create-problem",
-            element: <CreateProblemForm />,
+            element: <CreateProblemPage />,
           },
           {
             path: "problems/update/:problemId",

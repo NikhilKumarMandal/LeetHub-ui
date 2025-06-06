@@ -111,16 +111,16 @@ export default function PlaylistCards() {
     <div className="relative">
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto gap-6 pb-4 no-scrollbar scroll-smooth"
+        className="flex overflow-x-auto gap-8 pb-4 no-scrollbar scroll-smooth"
       >
         {data?.data?.map((playlist: any, index: any) => {
           const colorIndex = index % colorSchemes.length;
           const colors = colorSchemes[colorIndex];
 
           return (
-            <div key={playlist.id} className="w-[300px] flex-shrink-0">
+            <div key={playlist.id} className="w-[280px] flex-shrink-0">
               <Card
-                className={`h-[320px] relative overflow-hidden border-2 ${colors.border} shadow-lg transition-all duration-300`}
+                className={`h-[300px] relative overflow-hidden border-2 ${colors.border} shadow-lg transition-all duration-300`}
                 onMouseEnter={() => setHoveredCard(playlist.id)}
                 onMouseLeave={() => setHoveredCard(null)}
               >
@@ -138,7 +138,7 @@ export default function PlaylistCards() {
                       )}
                     </div>
                     <div className="bg-white bg-opacity-20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-primary">
-                      Playlist {index}
+                      Playlist {index + 1}
                     </div>
                   </div>
 
@@ -154,7 +154,7 @@ export default function PlaylistCards() {
 
                   <Button
                     onClick={() => navigate(`/playlist/${playlist.id}`)}
-                    className={`w-full mt-auto text-black group font-medium transition-all duration-300 flex items-center justify-center`}
+                    className="w-full mt-auto text-black group font-medium transition-all duration-300 flex items-center justify-center bg-[#FFD369]"
                   >
                     Start Learning
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

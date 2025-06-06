@@ -92,13 +92,13 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
     { name: "Home", to: "/auth/hello" },
     { name: "Favorite", to: "/auth/favorite" },
     { name: "Article", to: "/article" },
-    { name: "Create Room", to: "/auth/create-room" },
+    { name: "Join Room", to: "/auth/create-room" },
   ];
 
   const isActiveLink = (to: string) => location.pathname === to;
 
   return (
-    <nav className="relative flex h-[50px] w-full items-center px-4 md:px-6 bg-gray-500 shadow-sm dark:bg-dark-layer-2 dark:shadow-none">
+    <nav className="relative flex h-[50px] w-full items-center px-4 md:px-6 bg-[#222831] shadow-sm dark:bg-dark-layer-2 dark:shadow-none">
       <div
         className={`flex w-full items-center max-w-[1200px] mx-auto justify-between`}
       >
@@ -112,7 +112,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
               alt="Logo"
               className="h-8 w-8 object-contain"
             /> */}
-            <span className="hidden sm:inline font-semibold text-lg text-gray-800 dark:text-white select-none">
+            <span className="hidden sm:inline font-semibold text-lg text-[#FFD369] dark:text-[#FFD369] select-none">
               LEETHUB
             </span>
           </Link>
@@ -125,8 +125,8 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 end={link.to === "/"} // ✅ Only apply `end` on Home
                 className={({ isActive }) =>
                   `block py-2 pr-4 pl-3 duration-200 ${
-                    isActive ? "text-orange-700 font-semibold" : "text-white"
-                  } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+                    isActive ? "text-[#FFD369] font-semibold" : "text-white"
+                  } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-[#FFD369] lg:p-0`
                 }
               >
                 {link.name}

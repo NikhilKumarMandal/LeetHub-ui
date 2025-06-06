@@ -55,6 +55,7 @@ const addProblem = async (id: string, problemId: string) => {
 export function ProblemsTable() {
   const queryClient = useQueryClient();
   const { isAllowed } = usePermission();
+  console.log(isAllowed, "isAllowed");
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryParams, setQueryParams] = useState({
@@ -371,7 +372,7 @@ export function ProblemsTable() {
           <ChevronLeft className="h-5 w-5" />
         </Button>
 
-        <span className="px-4 py-2 rounded-full bg-gradient-to-r from-primary to-primary/80 text-white font-medium shadow-md text-sm">
+        <span className="px-4 py-2 rounded-full bg-[#FFD369] text-black font-medium shadow-md text-sm">
           Page {queryParams.page} of {totalPages}
         </span>
 

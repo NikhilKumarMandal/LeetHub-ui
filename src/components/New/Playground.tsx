@@ -60,9 +60,9 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [showResults, setShowResults] = useState(false);
   const [submissionData, setSubmissionData] = useState<any>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const testCases = problem?.testcases.filter((tc) => tc.isPublic);
+  const testCases = problem?.testcases.filter((tc: any) => tc.isPublic);
   const selectedTestCase = testCases?.find(
-    (tc) => tc.id === selectedTestCaseId
+    (tc: any) => tc.id === selectedTestCaseId
   );
 
   const availableLanguages = Object.keys(problem?.starterFunction ?? {});
@@ -196,7 +196,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
 
   useEffect(() => {
     if (testCases?.length && !selectedTestCaseId) {
-      setSelectedTestCaseId(testCases[0].id);
+      setSelectedTestCaseId((testCases as any)[0].id);
     }
   }, [testCases, selectedTestCaseId]);
 
@@ -209,6 +209,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
       setIsFullScreen(false);
     }
   };
+
   return (
     <ResizablePanelGroup
       direction="vertical"
@@ -373,7 +374,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
             {activeTab === "testcase" && (
               <div className="w-32 border-r border-gray-700 p-2 overflow-y-auto">
                 <div className="space-y-1">
-                  {testCases?.map((testCase, idx) => (
+                  {testCases?.map((testCase: any, idx: any) => (
                     <button
                       key={testCase.id}
                       onClick={() => setSelectedTestCaseId(testCase.id)}
@@ -397,14 +398,14 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Input</h3>
                   <pre className="bg-gray-900 p-2 rounded text-sm">
-                    {selectedTestCase.input}
+                    {(selectedTestCase as any).input}
                   </pre>
 
                   <h3 className="text-lg font-semibold mt-4 mb-2">
                     Expected Output
                   </h3>
                   <pre className="bg-gray-900 p-2 rounded text-sm">
-                    {selectedTestCase.output}
+                    {(selectedTestCase as any).output}
                   </pre>
                 </div>
               )}
