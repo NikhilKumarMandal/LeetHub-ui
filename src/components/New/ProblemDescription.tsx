@@ -128,13 +128,12 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     enabled: !!problemId,
   });
 
-  console.log(submissiondata, "problemDiscussion");
-  function parseArray(str: string | null | undefined): number[] {
-    if (!str || str === "undefined") return [];
+  function parseMemoryOrTime(str: any) {
     try {
+      if (!str || str === "undefined") return [];
       return JSON.parse(str).map(Number);
-    } catch (error) {
-      console.error("Failed to parse:", str);
+    } catch (err) {
+      console.error("Error parsing:", str);
       return [];
     }
   }
@@ -142,15 +141,14 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
   let totalMemory = 0;
   let totalTime = 0;
 
-  for (const item of submissiondata) {
-    const memArr = parseArray(item.memory);
-    const timeArr = parseArray(item.time);
+  submissiondata?.forEach((submission: any) => {
+    const memoryArray = parseMemoryOrTime(submission?.memory);
+    const timeArray = parseMemoryOrTime(submission?.time);
 
-    totalMemory += memArr.reduce((acc, val) => acc + val, 0);
-    totalTime += timeArr.reduce((acc, val) => acc + val, 0);
-  }
-
-  console.log(totalMemory);
+    totalMemory += memoryArray.reduce((a: any, b: any) => a + b, 0);
+    totalTime += timeArray.reduce((a: any, b: any) => a + b, 0);
+  });
+  console.log(problemDiscussion?.data, "discussion");
 
   return (
     <div className="h-full flex flex-col bg-[#1e232c]">
@@ -480,6 +478,7 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                   problemId={data?.problemId}
                   parentId={data?.id}
                   replies={data?.replies}
+                  userId={data?.userId}
                 />
               ))}
             </div>

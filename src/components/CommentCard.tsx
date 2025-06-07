@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { createDiscussion, deleteProblemDiscussion } from "@/http/api";
 import { toast } from "sonner";
+import { useAuthStore } from "@/store/store";
 
 interface Comment {
   id: string;
@@ -14,6 +15,7 @@ interface Comment {
     name: string | null;
   };
   replies?: Comment[];
+  userId: string;
 }
 
 interface CommentCardProps {
@@ -23,6 +25,7 @@ interface CommentCardProps {
   problemId: string;
   replies?: Comment[];
   level?: number;
+  userId: string;
 }
 
 const deleteDiscussion = async (id: string) => {
@@ -37,12 +40,16 @@ const CommentCard = ({
   problemId,
   replies = [],
   level = 0,
+  userId,
 }: CommentCardProps) => {
   const queryClient = useQueryClient();
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [showReplies, setShowReplies] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // ✅ Accessing current user
+  const { user: currentUser } = useAuthStore();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["discussion"],
@@ -53,14 +60,13 @@ const CommentCard = ({
     onSuccess: () => {
       setReplyContent("");
       setShowReplyInput(false);
-      toast.success("discussuion added");
+      toast.success("discussion added");
       queryClient.invalidateQueries({ queryKey: ["problems"] });
       queryClient.invalidateQueries({ queryKey: ["discussion"] });
     },
   });
 
-  // Mutation to delete comment
-  const deleteProblemDiscussion = useMutation({
+  const deleteMutation = useMutation({
     mutationKey: ["discussion", parentId],
     mutationFn: (parentId: string) => deleteDiscussion(parentId!),
     onSuccess: () => {
@@ -117,13 +123,15 @@ const CommentCard = ({
               </button>
             )}
 
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="hover:text-red-500 ml-auto transition-colors"
-              title="Delete comment"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {currentUser?.id === userId && (
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="hover:text-red-500 ml-auto transition-colors"
+                title="Delete comment"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
 
           <AnimatePresence>
@@ -175,6 +183,7 @@ const CommentCard = ({
                 problemId={reply.problemId}
                 replies={reply.replies || []}
                 level={level + 1}
+                userId={reply.userId}
               />
             ))}
           </motion.div>
@@ -198,7 +207,7 @@ const CommentCard = ({
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  deleteProblemDiscussion.mutate(parentId!);
+                  deleteMutation.mutate(parentId!);
                 }}
                 className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-500 disabled:opacity-50"
               >
