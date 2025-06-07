@@ -7,10 +7,7 @@ export interface User {
   id: string;
   role: string;
   email: string;
-  avatar: {
-    url: string;
-    public_id: string;
-  };
+  avatar: string;
 }
 
 // API response wrapping User

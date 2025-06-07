@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Timer from "./Timer";
-import { ChevronLeft, ChevronRight, List, Menu } from "lucide-react";
+import { ChevronLeft, ChevronRight, List, Menu, X } from "lucide-react";
 import { useAuthStore } from "@/store/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { allProblemAvaiableInTheDatabase, logout } from "@/http/api";
@@ -115,11 +115,12 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
   const navLinks = [
     { name: "Home", to: "/auth/hello" },
     { name: "Favorite", to: "/auth/favorite" },
-    { name: "Article", to: "/article" },
     { name: "Join Room", to: "/auth/create-room" },
   ];
 
   const isActiveLink = (to: string) => location.pathname === to;
+
+  console.log("User", user);
 
   return (
     <nav className="relative flex h-[50px] w-full items-center px-4 md:px-6 bg-[#222831] shadow-sm dark:bg-dark-layer-2 dark:shadow-none">
@@ -207,7 +208,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 aria-expanded={dropdownOpen}
               >
                 <img
-                  src={user?.avatar?.url || "/default-avatar.png"}
+                  src={user?.avatar || "/default-avatar.png"}
                   alt="User Avatar"
                   className="h-8 w-8 rounded-full object-cover border-2 border-brand-orange"
                 />
@@ -230,18 +231,25 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
               </button>
 
               <div
-                className={`absolute right-0 mt-2 w-40 bg-white dark:bg-dark-layer-1 rounded-md shadow-lg z-50 transform transition-all duration-200 ${
+                className={`absolute right-0 mt-2 w-40 bg-[#1e232c] rounded-md shadow-lg z-50 duration-200 ${
                   dropdownOpen
                     ? "opacity-100 scale-100 pointer-events-auto"
                     : "opacity-0 scale-95 pointer-events-none"
                 }`}
               >
                 <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-fill-2 rounded-t-md"
+                  to="/auth/profile"
+                  className="block px-4 py-2 text-white rounded-t-md"
                   onClick={() => setDropdownOpen(false)}
                 >
                   Profile
+                </Link>
+                <Link
+                  to="/auth/submissions"
+                  className="block px-4 py-2 text-white rounded-t-md"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Submission
                 </Link>
                 <button
                   onClick={() => {
@@ -249,7 +257,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                     setDropdownOpen(false);
                     navigate("/");
                   }}
-                  className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-fill-2 rounded-b-md"
+                  className="w-full text-left px-4 py-2 text-white rounded-b-md cursor-pointer"
                 >
                   Logout
                 </button>
@@ -260,12 +268,16 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
 
           <div className="md:hidden flex items-center relative">
             <button
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
               aria-label="Toggle Menu"
               aria-expanded={mobileMenuOpen}
               className="p-2 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-orange"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
             >
-              <Menu className="w-6 h-6 text-gray-800 dark:text-white" />
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6 text-gray-800 dark:text-white" />
+              ) : (
+                <Menu className="w-6 h-6 text-gray-800 dark:text-white" />
+              )}
             </button>
 
             <div
