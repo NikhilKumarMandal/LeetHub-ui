@@ -128,7 +128,29 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     enabled: !!problemId,
   });
 
-  console.log(problem, "problemDiscussion");
+  console.log(submissiondata, "problemDiscussion");
+  function parseArray(str: string | null | undefined): number[] {
+    if (!str || str === "undefined") return [];
+    try {
+      return JSON.parse(str).map(Number);
+    } catch (error) {
+      console.error("Failed to parse:", str);
+      return [];
+    }
+  }
+
+  let totalMemory = 0;
+  let totalTime = 0;
+
+  for (const item of submissiondata) {
+    const memArr = parseArray(item.memory);
+    const timeArr = parseArray(item.time);
+
+    totalMemory += memArr.reduce((acc, val) => acc + val, 0);
+    totalTime += timeArr.reduce((acc, val) => acc + val, 0);
+  }
+
+  console.log(totalMemory);
 
   return (
     <div className="h-full flex flex-col bg-[#1e232c]">
@@ -284,7 +306,7 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                         <p className="text-sm text-gray-400 mb-1">Input:</p>
                         <div className="bg-gray-800 rounded border border-gray-700">
                           <pre className="p-3 text-green-400 text-sm font-mono whitespace-pre-wrap break-words">
-                            {typedExample.input}
+                            {typedExample?.input}
                           </pre>
                         </div>
                       </div>
@@ -355,12 +377,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                   className="bg-gray-900 text-white rounded-lg p-6 border border-gray-700 shadow"
                 >
                   <div className="flex justify-between items-center mb-2">
-                    <div className="text-sm text-gray-400">
-                      <span className="mr-2">Submission ID:</span>
-                      <span className="text-white font-mono">
-                        {submission.id.slice(0, 8)}...
-                      </span>
-                    </div>
                     <div
                       className={`text-sm font-semibold ${
                         submission.status === "Accepted"
@@ -381,14 +397,16 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                         {submission.language}
                       </p>
                       <p>
-                        <span className="font-medium text-gray-400">Time:</span>{" "}
-                        {JSON.parse(submission.time).join(", ")} sec
+                        <span className="font-medium text-gray-400">
+                          Avg Time:
+                        </span>{" "}
+                        {totalTime.toFixed(2)} sec
                       </p>
                       <p>
                         <span className="font-medium text-gray-400">
-                          Memory:
+                          Avg Memory:
                         </span>{" "}
-                        {JSON.parse(submission.memory).join(", ")} KB
+                        {totalMemory} KB
                       </p>
                     </div>
                     <div>
@@ -398,12 +416,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                         </span>{" "}
                         {new Date(submission.createdAt).toLocaleString()}
                       </p>
-                      <p>
-                        <span className="font-medium text-gray-400">
-                          Updated:
-                        </span>{" "}
-                        {new Date(submission.updatedAt).toLocaleString()}
-                      </p>
                     </div>
                   </div>
 
@@ -412,7 +424,7 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
                       Source Code:
                     </p>
                     <pre className="bg-gray-800 p-3 rounded text-xs overflow-x-auto">
-                      <code>{submission.sourceCode}</code>
+                      {submission.sourceCode}
                     </pre>
                   </div>
                 </div>
