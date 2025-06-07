@@ -73,7 +73,6 @@ function CreateProblemPage() {
     register,
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(problemSchema),
@@ -114,7 +113,6 @@ function CreateProblemPage() {
     fields: testcaseField,
     append: appendTestCase,
     remove: removeTestCase,
-    replace: replacetestcases,
   } = useFieldArray({
     control,
     name: "testcases",
@@ -124,7 +122,6 @@ function CreateProblemPage() {
     fields: topicFields,
     append: appendTopic,
     remove: removeTopic,
-    replace: replaceTags,
   } = useFieldArray({
     control,
     name: "topic",
@@ -134,7 +131,6 @@ function CreateProblemPage() {
     fields: constraintsFields,
     append: appendConstraints,
     remove: removeConstraints,
-    replace: replaceConstraints,
   } = useFieldArray({
     control,
     name: "constraints",
@@ -144,7 +140,6 @@ function CreateProblemPage() {
     fields: hintsFields,
     append: appendHints,
     remove: removeHints,
-    replace: replaceHints,
   } = useFieldArray({
     control,
     name: "hints",
@@ -173,7 +168,7 @@ function CreateProblemPage() {
     mutationFn: problem,
     onSuccess: () => {
       toast.success("Problem created successfully");
-      navigation("/auth/problen");
+      navigation("/auth/hello");
     },
     onError: (error: any) => {
       toast.error(error?.message || "Something went wrong");

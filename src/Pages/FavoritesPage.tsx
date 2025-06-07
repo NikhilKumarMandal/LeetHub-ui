@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { YoutubeDialog } from "@/components/YoutubeDialog";
+import Topbar from "@/components/Topbar";
 
 export default function FavoritesPage() {
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="min-h-screen bg-[#1e232c]">
+      <Topbar />
       <div className="container mx-auto px-4">
         <div className="py-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">

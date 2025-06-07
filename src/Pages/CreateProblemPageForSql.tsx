@@ -61,7 +61,7 @@ const problem = async (payload: any) => {
   return data;
 };
 
-function CreateProblemPage() {
+function CreateProblemPageForSQL() {
   const navigation = useNavigate();
   const {
     register,
@@ -791,4 +791,4 @@ function CreateProblemPage() {
   );
 }
 
-export default CreateProblemPage;
+export default CreateProblemPageForSQL;

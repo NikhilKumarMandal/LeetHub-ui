@@ -18,6 +18,7 @@ import JoinRoom from "./Pages/JoinRoom";
 import EditorPage from "./Pages/Editorpage";
 import CreateProblemPage from "./Pages/CreateProblemPage";
 import ListProblemByCompany from "./Pages/ListProblemByCompany";
+import CreateProblemPageForSQL from "./Pages/CreateProblemPageForSql";
 
 export const router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ export const router = createBrowserRouter([
           {
             path: "problem-list/:companyName",
             element: <ListProblemByCompany />,
+          },
+          {
+            path: "create-sql",
+            element: <CreateProblemPageForSQL />,
           },
         ],
       },

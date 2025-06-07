@@ -588,6 +588,8 @@ function Playground({ problem }: ProblemDescriptionProps) {
                   </p>
                   <p className="m-2">First write code then ASK LETO</p>
 
+                  <p className="m-2">You have only 3 call in a day</p>
+
                   <Button onClick={handleAsk}>ASK LETO</Button>
 
                   {/* Show this only if letoResponse exists */}

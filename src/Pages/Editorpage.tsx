@@ -4,7 +4,7 @@ import Editor from "@monaco-editor/react";
 import { useAuthStore } from "@/store/store";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:8080");
+const socket = io("https://leethub-r8l6m.ondigitalocean.app/");
 
 const EditorPage = () => {
   const { roomId } = useParams<string>();
