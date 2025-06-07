@@ -9,11 +9,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Link, useParams, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { allProblems } from "@/http/api";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { allProblems, toggleFavorite } from "@/http/api";
 import { useState } from "react";
 import { LIMIT } from "@/constants";
 import type { FilterData } from "@/Types";
@@ -25,6 +29,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import debounce from "lodash.debounce";
+import { YoutubeDialog } from "@/components/YoutubeDialog";
+import { toast } from "sonner";
 
 export default function ListProblemByCompany() {
   const { companyName } = useParams();
@@ -33,7 +39,8 @@ export default function ListProblemByCompany() {
     limit: LIMIT,
     page: 1,
   });
-
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const q = searchParams.get("q") || "";
   const difficulty = searchParams.get("difficulty") || "";
   const status = searchParams.get("status") || "";
@@ -61,8 +68,23 @@ export default function ListProblemByCompany() {
     enabled: !!companyName,
   });
 
-  console.log(data);
+  const { mutate: toggleFavoriteMutate } = useMutation({
+    mutationKey: ["favroite"],
+    mutationFn: async (problemId: string) => {
+      const res = await toggleFavorite(problemId);
+      return res;
+    },
+    onSuccess: (res) => {
+      toast.success(res?.data?.message);
+      queryClient.invalidateQueries({
+        queryKey: ["problems", queryParams, q, difficulty, status],
+      });
+      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+    },
+  });
 
+  console.log(data);
+  const problems = data?.data?.problems;
   const totalPages = data?.data?.pagination.totalPages || 1;
 
   return (
@@ -113,7 +135,16 @@ export default function ListProblemByCompany() {
 
           {/* Action Buttons - Responsive grid */}
           <div className="grid grid-cols-4 gap-2 mt-4 w-full">
-            <Button className="col-span-2 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 text-xs sm:text-sm">
+            <Button
+              onClick={() => {
+                if (problems && problems.length > 0) {
+                  navigate(`/auth/problems/${problems[0].id}`);
+                } else {
+                  toast.error("No problems found to practice.");
+                }
+              }}
+              className="col-span-2 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 text-xs sm:text-sm"
+            >
               <Play className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               Practice
             </Button>
@@ -237,61 +268,59 @@ export default function ListProblemByCompany() {
         {/* Problem List */}
         <div className="flex-1 overflow-auto">
           <div className="grid gap-2 p-3 sm:p-4">
-            {data?.data?.problems?.map((problem: any) => (
-              <Link key={problem.number} to={""} className="block">
-                <div className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4">
-                  {problem.isSolved && (
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <span className="font-medium text-xs sm:text-sm">
-                        {problem.problemNumber}.
-                      </span>
-                      <span className="font-medium text-xs sm:text-sm truncate">
-                        {problem.title}
-                      </span>
-                    </div>
-                    {problem.progress !== undefined && (
-                      <div className="mt-1 flex items-center gap-2">
-                        <Progress
-                          value={problem.progress}
-                          className="h-1 sm:h-1.5 flex-1"
-                        />
-                        <span className="text-xs text-zinc-400">
-                          {problem.progress}%
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 sm:gap-4">
-                    <span
-                      className={`${
-                        problem.difficulty === "EASY"
-                          ? "text-teal-500"
-                          : problem.difficulty === "MEDIUM."
-                            ? "text-yellow-500"
-                            : "text-red-500"
-                      } font-medium text-xs sm:text-sm`}
-                    >
-                      {problem.difficulty}
+            {problems?.map((problem: any) => (
+              <div
+                key={problem?.id}
+                className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"
+              >
+                {problem?.isSolved && (
+                  <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
+                )}
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="font-medium text-xs sm:text-sm">
+                      {problem?.problemNumber}.
                     </span>
-                    <div className="w-12 sm:w-16 h-1.5 sm:h-2 bg-zinc-800 rounded-full overflow-hidden hidden sm:block">
-                      <div
-                        className="h-full bg-zinc-700 rounded-full"
-                        style={{ width: "60%" }}
-                      ></div>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                    <Link
+                      to={`/auth/problems/${problem?.id}`}
+                      className="font-medium text-xs sm:text-sm truncate text-white hover:underline"
                     >
-                      <Star className="w-3 h-3 sm:w-4 sm:h-4" />
-                    </Button>
+                      {problem?.title}
+                    </Link>
                   </div>
                 </div>
-              </Link>
+                {problem.ytLink && <YoutubeDialog videoUrl={problem.ytLink} />}
+
+                <span
+                  className={`${
+                    problem?.difficulty === "EASY"
+                      ? "text-teal-500"
+                      : problem?.difficulty === "MEDIUM"
+                        ? "text-yellow-500"
+                        : "text-red-500"
+                  } font-medium text-xs sm:text-sm`}
+                >
+                  {problem?.difficulty}
+                </span>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-zinc-400 h-7 w-7 sm:h-8 sm:w-8"
+                  aria-label="Star problem"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFavoriteMutate(problem.id);
+                  }}
+                >
+                  {problem.isFavorite ? (
+                    <Star fill="yellow" className="text-yellow-400 w-4 h-4" />
+                  ) : (
+                    <Star className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
             ))}
           </div>
         </div>

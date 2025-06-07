@@ -165,7 +165,16 @@ export default function ListProblems() {
 
           {/* Action Buttons - Responsive grid */}
           <div className="grid grid-cols-4 gap-2 mt-4 w-full">
-            <Button className="col-span-2 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 text-xs sm:text-sm">
+            <Button
+              onClick={() => {
+                if (problems && problems.length > 0) {
+                  navigate(`/auth/problems/${problems[0].id}`);
+                } else {
+                  toast.error("No problems found to practice.");
+                }
+              }}
+              className="col-span-2 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 text-xs sm:text-sm"
+            >
               <Play className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               Practice
             </Button>

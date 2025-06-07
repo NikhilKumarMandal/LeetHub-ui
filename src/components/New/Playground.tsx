@@ -283,7 +283,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
               ))}
             </select>
 
-            {/* Fullscreen Button */}
             <button
               onClick={toggleFullScreen}
               className="p-1 hover:bg-gray-700 rounded"
@@ -291,7 +290,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
               {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
             </button>
 
-            {/* Settings Button */}
             <button
               onClick={() => setShowSettings(true)}
               className="p-1 hover:bg-gray-700 rounded"
@@ -300,7 +298,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
             </button>
           </div>
 
-          {/* Settings Modal */}
           {showSettings && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] max-w-md">
@@ -308,7 +305,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
                   Editor Settings
                 </h2>
 
-                {/* Font Size */}
                 <div className="mb-4">
                   <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Font Size
@@ -326,7 +322,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
                   </select>
                 </div>
 
-                {/* Theme */}
                 <div className="mb-4">
                   <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
                     Theme
@@ -369,7 +364,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
               extensions={[extension]}
               onChange={(value: string) => setCode(value)}
               style={{ fontSize: `${fontSize}px`, height: "100%" }}
-              height="550px"
+              height="650px"
             />
           </div>
         </div>
@@ -385,7 +380,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                   onClick={() => setActiveTab(tab)}
                   className={`px-3 py-2 text-sm font-medium border-b-2 transition-colors capitalize ${
                     activeTab === tab
-                      ? "border-green-500 text-green-400"
+                      ? "border-[#FFD369] text-[#FFD369]/90"
                       : "border-transparent text-gray-400 hover:text-gray-300"
                   }`}
                 >
