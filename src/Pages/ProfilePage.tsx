@@ -13,7 +13,7 @@ export default function ProfilePage() {
   const { user } = useAuthStore();
   console.log(user);
 
-  const avatar = user?.avatar?.url as string;
+  const avatar = user?.avatar  as string;
   const [avatarUrl, setAvatarUrl] = useState(avatar);
 
   const handleAvatarClick = () => {

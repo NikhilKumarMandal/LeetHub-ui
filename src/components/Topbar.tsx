@@ -113,7 +113,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
   }, []);
 
   const navLinks = [
-    { name: "Home", to: "/auth/hello" },
+    { name: "Home", to: "/auth/home" },
     { name: "Favorite", to: "/auth/favorite" },
     { name: "Join Room", to: "/auth/create-room" },
   ];

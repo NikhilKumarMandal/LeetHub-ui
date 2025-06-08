@@ -87,7 +87,7 @@ const EditorPage = () => {
 
   const leaveRoom = () => {
     socket.emit("leaveRoom");
-    navigate("/auth/hello");
+    navigate("/auth/home");
   };
 
   return (

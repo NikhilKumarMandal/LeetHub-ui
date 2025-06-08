@@ -168,7 +168,7 @@ function CreateProblemPage() {
     mutationFn: problem,
     onSuccess: () => {
       toast.success("Problem created successfully");
-      navigation("/auth/hello");
+      navigation("/auth/hemo");
     },
     onError: (error: any) => {
       toast.error(error?.message || "Something went wrong");

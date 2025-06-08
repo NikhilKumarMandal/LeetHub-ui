@@ -76,6 +76,8 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [executionMode, setExecutionMode] = useState<"run" | "submit" | null>(
     null
   );
+  console.log(executionMode);
+  
   const [executionResults, setExecutionResults] = useState<any>([]);
   const [executionResultsForRun, setExecutionResultsForRun] = useState<any[]>(
     []
@@ -90,6 +92,10 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const selectedTestCase = testCases?.find(
     (tc: any) => tc.id === selectedTestCaseId
   );
+
+  console.log(showResults);
+  console.log(submissionData);
+  
 
   const availableLanguages = Object.keys(problem?.starterFunction ?? {});
   console.log(availableLanguages);

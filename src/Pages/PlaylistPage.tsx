@@ -119,7 +119,7 @@ export default function PlaylistPage() {
                   onClick={(e) => {
                     e.preventDefault();
                     deletePlaylist.mutate(playlistId!);
-                    navigate("/auth/hello");
+                    navigate("/auth/home");
                   }}
                   className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-black font-medium gap-2"
                 >
