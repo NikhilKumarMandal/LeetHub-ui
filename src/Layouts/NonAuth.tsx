@@ -5,7 +5,7 @@ function NonAuth() {
   const { user } = useAuthStore();
   if (user !== null) {
     const returnTo =
-      new URLSearchParams(location.search).get("returnTo") || "/auth/home";
+    new URLSearchParams(window.location.search).get("returnTo") || "/auth/home";
     return <Navigate to={returnTo} replace={true} />;
   }
   return (
