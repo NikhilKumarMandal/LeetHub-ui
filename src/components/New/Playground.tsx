@@ -21,6 +21,7 @@ import { useLocation } from "react-router-dom";
 import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 import { monokai } from "@uiw/codemirror-theme-monokai";
+import { toast } from "sonner";
 
 const languageExtensions: Record<string, any> = {
   JAVASCRIPT: javascript(),
@@ -182,9 +183,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
     onError: (err) => console.error("Submit error:", err),
   });
 
-  console.log("letoResponse", letoResponse);
-
-  const { mutate: mutationData } = useMutation({
+  const { mutate: mutationData, isPending } = useMutation({
     mutationKey: ["leto"],
     mutationFn: ask,
     onSuccess: (res) => {
@@ -193,7 +192,9 @@ function Playground({ problem }: ProblemDescriptionProps) {
       }
     },
     onError: (error) => {
-      console.error("LETO request failed:", error);
+      toast.error("Daily question limit reached. Try again tomorrow.");
+      console.log(error);
+      
     },
   });
 
@@ -595,7 +596,9 @@ function Playground({ problem }: ProblemDescriptionProps) {
 
                   <p className="m-2">You have only 3 call in a day</p>
 
-                  <Button onClick={handleAsk}>ASK LETO</Button>
+                  <Button onClick={handleAsk} disabled={isPending}>
+                    {isPending ? "Thinking 💡" : "ASK LETO"}{" "}
+                  </Button>
 
                   {/* Show this only if letoResponse exists */}
                   {letoResponse && (
