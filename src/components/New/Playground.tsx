@@ -406,7 +406,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white"
               >
                 <Play className="w-4 h-4 mr-2" />
-                Run
+                {isRunning ? "running": "RUN"}
               </Button>
               <Button
                 onClick={handleSubmit}
@@ -415,6 +415,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 className="bg-[#FFD369] hover:bg-[#FFD369]/60"
               >
                 <Upload className="w-4 h-4 mr-2" />
+                {isSubmitting ? "submiting": "Submit"}
                 Submit
               </Button>
             </div>

@@ -281,7 +281,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
 
             <div
               ref={mobileMenuRef}
-              className={`absolute top-full right-0 mt-2 w-48 bg-white dark:bg-dark-layer-1 rounded-md shadow-lg z-50 transform transition-all duration-200 origin-top-right ${
+              className={`absolute top-full right-0 mt-2 w-48 bg-[#1e232c] dark:bg-dark-layer-1 rounded-md shadow-lg z-50 transform transition-all duration-200 origin-top-right ${
                 mobileMenuOpen
                   ? "opacity-100 scale-100 pointer-events-auto"
                   : "opacity-0 scale-95 pointer-events-none"
@@ -292,7 +292,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                   key={link.to}
                   to={link.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-fill-2 cursor-pointer ${
+                  className={`block px-4 py-2 text-gray-700 dark:text-gray-200 dark:hover:bg-dark-fill-2 cursor-pointer ${
                     isActiveLink(link.to)
                       ? "text-brand-orange font-semibold"
                       : ""
@@ -318,7 +318,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                     logoutMutate();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-fill-2 cursor-pointer rounded"
+                  className="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200  dark:hover:bg-dark-fill-2 cursor-pointer rounded"
                 >
                   Logout
                 </button>
