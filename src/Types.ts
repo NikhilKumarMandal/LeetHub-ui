@@ -55,6 +55,7 @@ export interface ProblemData {
   codeSnippets?: string;
   referenceSolutions?: string;
   companyName?: string[];
+  ytLink?: string;
 }
 
 export interface PlaylistData {

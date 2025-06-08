@@ -8,8 +8,8 @@ export interface User {
   role: string;
   email: string;
   avatar: {
-    url: string,
-    public_id: string
+    url: string;
+    public_id: string;
   };
 }
 

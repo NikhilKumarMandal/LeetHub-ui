@@ -11,8 +11,8 @@ import { useAuthStore } from "@/store/store";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { allProblemAvaiableInTheDatabase, logout } from "@/http/api";
 import { useState, useRef, useEffect } from "react";
-// import { CreatePlaylistButton } from "./CreatePlaylistButton";
-// import { usePermission } from "@/hooks/userPermission";
+//import { CreatePlaylistButton } from "./CreatePlaylistButton";
+//import { usePermission } from "@/hooks/userPermission";
 
 type TopbarProps = {
   problemPage?: boolean;
@@ -25,10 +25,10 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
   const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  // const { isAllowed } = usePermission();
+  //const { isAllowed } = usePermission();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-//                <CreatePlaylistButton isAdmin={isAllowed} />
+
   const { data } = useQuery({
     queryKey: ["problemList"],
     queryFn: async () => {
@@ -251,6 +251,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 >
                   Submission
                 </Link>
+                {/* <CreatePlaylistButton isAdmin={isAllowed} /> */}
                 <button
                   onClick={() => {
                     logoutMutate();

@@ -77,7 +77,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
     null
   );
   console.log(executionMode);
-  
+
   const [executionResults, setExecutionResults] = useState<any>([]);
   const [executionResultsForRun, setExecutionResultsForRun] = useState<any[]>(
     []
@@ -95,7 +95,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
 
   console.log(showResults);
   console.log(submissionData);
-  
 
   const availableLanguages = Object.keys(problem?.starterFunction ?? {});
   console.log(availableLanguages);

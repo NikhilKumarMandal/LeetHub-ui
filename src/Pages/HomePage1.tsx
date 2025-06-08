@@ -5,6 +5,8 @@ import { ProblemsTable } from "@/components/ProblemTable";
 import CategoryList from "@/components/CategoryList";
 import Topbar from "@/components/Topbar";
 import { TrendingCompanies } from "@/components/TrendingCompanies";
+import { Github, Linkedin } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function HomePage1() {
   return (
@@ -40,7 +42,33 @@ export default function HomePage1() {
                 <CardContent>
                   <TrendingCompanies />
                 </CardContent>
-                <CardContent>LEETHUB 2025</CardContent>
+                <CardContent>
+                  <p className="text-[#FFD369] mb-4">
+                    <strong>LeetCode 2025 </strong>
+                    <br />
+                  </p>
+
+                  <div className="flex space-x-6 text-white text-sm">
+                    <Link
+                      to="https://github.com/NikhilKumarMandal"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="GitHub"
+                      className="hover:text-gray-400"
+                    >
+                      <Github />
+                    </Link>
+                    <Link
+                      to="https://www.linkedin.com/in/nikhil-kumar-364189341/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="LinkedIn"
+                      className="hover:text-gray-400"
+                    >
+                      <Linkedin />
+                    </Link>
+                  </div>
+                </CardContent>
               </Card>
             </div>
           </div>

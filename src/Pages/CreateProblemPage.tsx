@@ -18,6 +18,7 @@ import { toast } from "sonner";
 
 const problemSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
+  ytLink: z.string().optional(),
   description: z.string().min(10, "Description must be at least 10 characters"),
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
   topic: z
@@ -779,6 +780,26 @@ function CreateProblemPage() {
                     <label className="label">
                       <span className="label-text-alt text-error">
                         {errors.editorial.message}
+                      </span>
+                    </label>
+                  )}
+                </div>
+              </div>
+              <div className="space-y-6">
+                <div className="form-control">
+                  <label className="label" htmlFor="editorial">
+                    <span className="label-text font-medium">YT LINK</span>
+                  </label>
+                  <input
+                    id="editorial"
+                    className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                    {...register("ytLink")}
+                    placeholder="Enter editorial or solution explanation"
+                  />
+                  {errors.ytLink && (
+                    <label className="label">
+                      <span className="label-text-alt text-error">
+                        {errors.ytLink.message}
                       </span>
                     </label>
                   )}

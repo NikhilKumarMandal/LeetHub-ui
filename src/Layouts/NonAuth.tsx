@@ -24,4 +24,3 @@ function NonAuth() {
 }
 
 export default NonAuth;
-
