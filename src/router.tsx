@@ -4,10 +4,9 @@ import Root from "./Layouts/Root";
 import NonAuth from "./Layouts/NonAuth";
 import LoginPage from "./Pages/LoginPage";
 import Dhashboard from "./Layouts/Dhashboard";
-import HomePage from "./Pages/HomePage";
 import ListProblems from "./Pages/ListProblems";
 
-import UpdateProblemForm from "./Pages/UpdateProblemForm";
+
 import HomePage1 from "./Pages/HomePage1";
 import PlaylistPage from "./Pages/PlaylistPage";
 import FavoritesPage from "./Pages/FavoritesPage";
@@ -48,10 +47,6 @@ export const router = createBrowserRouter([
         element: <Dhashboard />,
         children: [
           {
-            path: "homepage",
-            element: <HomePage />,
-          },
-          {
             path: "list-problems/:topic",
             element: <ListProblems />,
           },
@@ -61,10 +56,10 @@ export const router = createBrowserRouter([
           },
           {
             path: "problems/update/:problemId",
-            element: <UpdateProblemForm />,
+            // element: <UpdateProblemForm />,
           },
           {
-            path: "hello",
+            path: "home",
             element: <HomePage1 />,
           },
           {

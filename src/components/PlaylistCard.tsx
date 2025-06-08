@@ -72,7 +72,8 @@ export default function PlaylistCards() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
+  console.log(hoveredCard);
+  
   const { data } = useQuery({
     queryKey: ["playlistData"],
     queryFn: () => {

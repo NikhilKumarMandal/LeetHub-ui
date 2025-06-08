@@ -18,7 +18,7 @@ const EditorPage = () => {
   const [typing, setTyping] = useState("");
   const [output, setOutput] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
-  const [version, setVersion] = useState("*");
+  const [version] = useState("*");
 
   useEffect(() => {
     if (user === undefined) return;
