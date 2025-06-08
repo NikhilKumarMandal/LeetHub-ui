@@ -416,7 +416,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
               >
                 <Upload className="w-4 h-4 mr-2" />
                 {isSubmitting ? "submiting": "Submit"}
-                Submit
               </Button>
             </div>
           </div>
