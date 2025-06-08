@@ -23,7 +23,7 @@ export default function SubmissionPage() {
   console.log(submission?.data?.totalPages, "Submission");
   const totalPages = submission?.data?.totalPages;
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-white">
+    <div className="min-h-screen bg-[#1e232c] text-white">
       <Topbar />
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">

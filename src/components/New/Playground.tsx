@@ -194,7 +194,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
     onError: (error) => {
       toast.error("Daily question limit reached. Try again tomorrow.");
       console.log(error);
-      
     },
   });
 
