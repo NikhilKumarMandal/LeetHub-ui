@@ -208,7 +208,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 aria-expanded={dropdownOpen}
               >
                 <img
-                  src={user?.avatar || "/default-avatar.png"}
+                  src={user?.avatar?.url || "/default-avatar.png"}
                   alt="User Avatar"
                   className="h-8 w-8 rounded-full object-cover border-2 border-brand-orange"
                 />
