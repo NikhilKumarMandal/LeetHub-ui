@@ -253,9 +253,8 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                 </Link>
                 <button
                   onClick={() => {
-                    logout();
-                    setDropdownOpen(false);
-                    navigate("/");
+                    logoutMutate();
+                    setMobileMenuOpen(false);
                   }}
                   className="w-full text-left px-4 py-2 text-white rounded-b-md cursor-pointer"
                 >
