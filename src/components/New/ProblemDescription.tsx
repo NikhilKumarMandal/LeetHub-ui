@@ -148,7 +148,7 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     totalMemory += memoryArray.reduce((a: any, b: any) => a + b, 0);
     totalTime += timeArray.reduce((a: any, b: any) => a + b, 0);
   });
-  console.log(problemDiscussion?.data, "discussion");
+
 
   return (
     <div className="h-full flex flex-col bg-[#1e232c]">

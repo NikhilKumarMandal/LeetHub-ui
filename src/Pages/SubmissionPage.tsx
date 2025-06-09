@@ -20,7 +20,6 @@ export default function SubmissionPage() {
     },
   });
 
-  console.log(submission?.data?.totalPages, "Submission");
   const totalPages = submission?.data?.totalPages;
   return (
     <div className="min-h-screen bg-[#1e232c] text-white">

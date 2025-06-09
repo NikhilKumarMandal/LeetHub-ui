@@ -83,7 +83,6 @@ export default function ListProblemByCompany() {
     },
   });
 
-  console.log(data);
   const problems = data?.data?.problems;
   const totalPages = data?.data?.pagination.totalPages || 1;
 

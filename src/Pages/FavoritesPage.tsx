@@ -34,7 +34,6 @@ export default function FavoritesPage() {
   });
 
   const problems = data?.data?.problem;
-  console.log(problems);
 
   return (
     <div className="min-h-screen bg-[#1e232c]">

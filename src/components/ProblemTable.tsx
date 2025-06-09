@@ -54,7 +54,6 @@ const addProblem = async (id: string, problemId: string) => {
 export function ProblemsTable() {
   const queryClient = useQueryClient();
   const { isAllowed } = usePermission();
-  console.log(isAllowed, "isAllowed");
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [queryParams, setQueryParams] = useState({
@@ -92,8 +91,6 @@ export function ProblemsTable() {
     },
     placeholderData: keepPreviousData,
   });
-
-  console.log("Data", data);
 
   const { data: playlist } = useQuery({
     queryKey: ["playlist"],

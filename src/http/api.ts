@@ -54,7 +54,6 @@ export const allProblems = (filters: FilterData) => {
     qp.forEach((value, key) => {
       if (value) params.append(key, value);
     });
-    console.log("qp", qp);
   }
 
   if (filters.companyName) params.append("companyName", filters.companyName);

@@ -120,7 +120,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
 
   const isActiveLink = (to: string) => location.pathname === to;
 
-  console.log("User", user);
 
   return (
     <nav className="relative flex h-[50px] w-full items-center px-4 md:px-6 bg-[#222831] shadow-sm dark:bg-dark-layer-2 dark:shadow-none">

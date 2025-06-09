@@ -44,7 +44,7 @@ export default function HomePage1() {
                 </CardContent>
                 <CardContent>
                   <p className="text-[#FFD369] mb-4">
-                    <strong>LeetCode 2025 </strong>
+                    <strong>LeetHub 2025 </strong>
                     <br />
                   </p>
 

@@ -11,7 +11,6 @@ import { useAuthStore } from "@/store/store";
 export default function ProfilePage() {
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const { user } = useAuthStore();
-  console.log(user);
 
   const avatar = user?.avatar?.url as string;
   const [avatarUrl, setAvatarUrl] = useState(avatar);

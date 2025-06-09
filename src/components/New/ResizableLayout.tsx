@@ -24,7 +24,6 @@ const ResizableLayout = () => {
     },
     enabled: !!problemId,
   });
-  console.log("Problem fetched:", problem);
   const problemData: ProblemDataHandle = problem?.data;
   return (
     <ResizablePanelGroup direction="horizontal" className="min-h-0 flex-1">

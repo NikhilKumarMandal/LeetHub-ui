@@ -27,7 +27,6 @@ const deletePlaylistById = async (id: string) => {
 
 const getUserRank = async (id: string) => {
   const { data } = await getRank(id);
-  console.log(data, "data");
   return data;
 };
 
@@ -52,7 +51,7 @@ export default function PlaylistPage() {
     queryFn: () => getUserRank(playlistId!),
   });
 
-  console.log(rank, "rank");
+
 
   const deleteProblemMutation = useMutation({
     mutationKey: ["problems"],

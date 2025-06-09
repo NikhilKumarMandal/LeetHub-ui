@@ -36,7 +36,6 @@ const execute = async (executeCodeData: Execute) => {
 };
 
 const ask = async (letoData: LetoData) => {
-  console.log("Calling ask with:", letoData);
   const { data } = await reviewCode(letoData);
   return data;
 };
@@ -77,7 +76,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
   const [executionMode, setExecutionMode] = useState<"run" | "submit" | null>(
     null
   );
-  console.log(executionMode);
 
   const [executionResults, setExecutionResults] = useState<any>([]);
   const [executionResultsForRun, setExecutionResultsForRun] = useState<any[]>(
@@ -94,11 +92,8 @@ function Playground({ problem }: ProblemDescriptionProps) {
     (tc: any) => tc.id === selectedTestCaseId
   );
 
-  console.log(showResults);
-  console.log(submissionData);
 
   const availableLanguages = Object.keys(problem?.starterFunction ?? {});
-  console.log(availableLanguages);
 
   const defaultLanguage =
     availableLanguages.length > 0 ? availableLanguages[0] : "JAVASCRIPT";
