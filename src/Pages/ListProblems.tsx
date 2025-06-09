@@ -104,7 +104,7 @@ export default function ListProblems() {
   const totalPages = data?.data?.pagination.totalPages || 1;
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#1e232c] text-zinc-100">
+    <div className="flex flex-col md:flex-row min-h-screen bg-zinc-950 text-zinc-100">
       <div className="w-full md:w-[350px] border-r border-zinc-800 p-4 flex flex-col overflow-auto">
         <div className="flex flex-col items-center text-center mb-6">
           <button
