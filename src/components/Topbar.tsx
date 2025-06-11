@@ -130,11 +130,6 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
           style={{ marginLeft: user ? undefined : "-20px" }}
         >
           <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
-            {/* <img
-              src="/logo192.png"
-              alt="Logo"
-              className="h-8 w-8 object-contain"
-            /> */}
             <span className="hidden sm:inline font-semibold text-lg text-[#FFD369] dark:text-[#FFD369] select-none">
               LEETHUB
             </span>
@@ -145,7 +140,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
               <NavLink
                 key={link.to}
                 to={link.to}
-                end={link.to === "/"} // ✅ Only apply `end` on Home
+                end={link.to === "/"}
                 className={({ isActive }) =>
                   `block py-2 pr-4 pl-3 duration-200 ${
                     isActive ? "text-[#FFD369] font-semibold" : "text-white"
@@ -241,6 +236,13 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                   onClick={() => setDropdownOpen(false)}
                 >
                   Profile
+                </Link>
+                <Link
+                  to="/auth/create-interview"
+                  className="block px-4 py-2 text-white rounded-t-md"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Create-interview
                 </Link>
                 <Link
                   to="/auth/submissions"

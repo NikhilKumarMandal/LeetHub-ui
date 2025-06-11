@@ -45,7 +45,7 @@ export default function ListProblemByCompany() {
   const difficulty = searchParams.get("difficulty") || "";
   const status = searchParams.get("status") || "";
 
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ["companyName", queryParams, companyName, q, difficulty, status],
     queryFn: () => {
       const filteredParams = Object.fromEntries(
@@ -85,6 +85,14 @@ export default function ListProblemByCompany() {
 
   const problems = data?.data?.problems;
   const totalPages = data?.data?.pagination.totalPages || 1;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-zinc-950 text-zinc-100">

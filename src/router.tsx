@@ -20,6 +20,7 @@ import CreateProblemPageForSQL from "./Pages/CreateProblemPageForSql";
 import CreateInterview from "./Pages/CreateInterview";
 import Interview from "./components/Interview/Interview";
 import StartInterview from "./components/Interview/StartInterview";
+import NotFoundPage from "./Pages/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ export const router = createBrowserRouter([
             element: <StartInterview />,
           },
         ],
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },

@@ -4,8 +4,8 @@ import Editor from "@monaco-editor/react";
 import { useAuthStore } from "@/store/store";
 import { io } from "socket.io-client";
 
-const socket = io("https://leethub-r8l6m.ondigitalocean.app/");
-
+// const socket = io("https://leethub-r8l6m.ondigitalocean.app/");
+const socket = io("http://localhost:8080");
 const EditorPage = () => {
   const { roomId } = useParams<string>();
   const navigate = useNavigate();
@@ -19,6 +19,8 @@ const EditorPage = () => {
   const [output, setOutput] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
   const [version] = useState("*");
+  const [fontSize, setFontSize] = useState(14);
+  const [editorTheme, setEditorTheme] = useState("vs-dark");
 
   useEffect(() => {
     if (user === undefined) return;
@@ -96,7 +98,7 @@ const EditorPage = () => {
       <div className="w-64 bg-gray-900 text-white p-4 flex flex-col justify-between">
         <div>
           <div className="mb-4">
-            <h2 className="text-lg font-semibold break-words">
+            <h2 className="text-sm font-semibold break-words">
               Room: {roomId}
             </h2>
             <button
@@ -125,6 +127,7 @@ const EditorPage = () => {
 
           {typing && <p className="text-yellow-400 text-sm mb-4">{typing}</p>}
 
+          {/* Language Selector */}
           <div className="mb-4">
             <label htmlFor="language" className="block mb-1 text-sm">
               Language:
@@ -133,12 +136,47 @@ const EditorPage = () => {
               id="language"
               value={language}
               onChange={handleLanguageChange}
-              className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1 text-sm focus:outline-none"
             >
               <option value="javascript">JavaScript</option>
               <option value="python">Python</option>
               <option value="java">Java</option>
               <option value="cpp">C++</option>
+            </select>
+          </div>
+
+          {/* Font Size Controls */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm">Font Size:</label>
+            <div className="flex gap-2 items-center">
+              <button
+                onClick={() => setFontSize((prev) => Math.max(prev - 1, 10))}
+                className="bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-xs"
+              >
+                A-
+              </button>
+              <button
+                onClick={() => setFontSize((prev) => Math.min(prev + 1, 32))}
+                className="bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-xs"
+              >
+                A+
+              </button>
+              <span className="text-sm">{fontSize}px</span>
+            </div>
+          </div>
+
+          {/* Theme Selector */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm">Editor Theme:</label>
+            <select
+              value={editorTheme}
+              onChange={(e) => setEditorTheme(e.target.value)}
+              className="w-full bg-gray-800 border border-gray-700 rounded px-2 py-1 text-sm"
+            >
+              <option value="vs-dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="hc-black">High Contrast</option>
+              <option value="vs">VS Classic</option>
             </select>
           </div>
         </div>
@@ -151,6 +189,7 @@ const EditorPage = () => {
         </button>
       </div>
 
+      {/* Editor Section */}
       <div className="flex-1 flex flex-col bg-gray-100">
         <div className="flex-1">
           <Editor
@@ -158,25 +197,25 @@ const EditorPage = () => {
             language={language}
             value={code}
             onChange={handleCodeChange}
-            theme="vs-dark"
+            theme={editorTheme}
             options={{
               minimap: { enabled: false },
-              fontSize: 14,
+              fontSize: fontSize,
               automaticLayout: true,
             }}
           />
         </div>
 
-        <div className="p-4 border-t border-gray-300 bg-white">
+        <div className="p-4 border-t bg-[#1a1a1a]">
           <button
             onClick={runCode}
             className="mb-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm"
           >
-            Execute
+            Run Code
           </button>
 
           <textarea
-            className="w-full h-32 bg-gray-100 border border-gray-300 rounded p-2 text-sm resize-none mt-2 text-black"
+            className="w-full h-32 bg-[#1a1a1a] rounded p-2 text-sm resize-none mt-2 text-white"
             value={output}
             readOnly
             placeholder="Output will appear here"

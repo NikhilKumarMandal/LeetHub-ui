@@ -40,7 +40,7 @@ export default function PlaylistPage() {
   const match = url.match(/\/playlist\/([a-f0-9\-]+)/i);
   const playlistId1 = match?.[1];
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["playlist", playlistId],
     queryFn: () => getPlaylistDetailsById(playlistId!),
     enabled: !!playlistId,
@@ -60,6 +60,14 @@ export default function PlaylistPage() {
     mutationKey: ["playlist"],
     mutationFn: (id: string) => deletePlaylistById(id),
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <span className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0D1117] bg-[radial-gradient(#2C333A_1px,transparent_1px)] bg-[size:24px_24px]">
@@ -91,15 +99,6 @@ export default function PlaylistPage() {
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
-            <div className="w-40 h-40 relative flex-shrink-0">
-              {/* <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-600 rounded-2xl flex items-center justify-center text-black font-bold text-7xl">
-                JAVA
-                <span className="absolute bottom-1 right-1 bg-amber-300 text-orange-700 text-xl font-bold rounded-full w-10 h-10 flex items-center justify-center">
-                  30
-                </span>
-              </div> */}
-            </div>
-
             <div className="flex-1 text-center md:text-left">
               <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
                 <Target className="h-5 w-5 text-gray-400" />
@@ -222,21 +221,6 @@ export default function PlaylistPage() {
             <div className="space-y-6">
               <Card className="bg-gray-900/60 border-gray-800">
                 <CardHeader className="pb-3 border-b border-gray-800">
-                  <CardTitle className="text-white">Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <ul className="space-y-2">
-                    {data?.data?.summary?.map((sum: any, index: any) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <div className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 flex-shrink-0"></div>
-                        <span className="text-gray-300">{sum}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-              <Card className="bg-gray-900/60 border-gray-800">
-                <CardHeader className="pb-3 border-b border-gray-800">
                   <CardTitle className="text-white">User Rank</CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4">
@@ -276,6 +260,21 @@ export default function PlaylistPage() {
                       You haven't ranked yet this week.
                     </p>
                   )}
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-900/60 border-gray-800">
+                <CardHeader className="pb-3 border-b border-gray-800">
+                  <CardTitle className="text-white">Summary</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-4">
+                  <ul className="space-y-2">
+                    {data?.data?.summary?.map((sum: any, index: any) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <div className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500 flex-shrink-0"></div>
+                        <span className="text-gray-300">{sum}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </CardContent>
               </Card>
             </div>

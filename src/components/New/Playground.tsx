@@ -188,6 +188,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
       if (res?.data?.data) {
         setLetoResponse(res.data.data);
       }
+      setActiveTab("leto");
     },
     onError: (error) => {
       toast.error("Daily question limit reached. Try again tomorrow.");
@@ -272,33 +273,41 @@ function Playground({ problem }: ProblemDescriptionProps) {
     >
       <ResizablePanel defaultSize={50} minSize={30}>
         <div className="flex flex-col h-full bg-[#1e232c] overflow-hidden">
-          <div className="p-2 bg-gray-800 text-white flex items-center gap-3">
-            <select
-              id="language"
-              value={selectedLanguage}
-              onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="bg-gray-700 text-white px-3 py-1 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {availableLanguages.map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang}
-                </option>
-              ))}
-            </select>
+          <div className="p-2 bg-gray-800 text-white flex items-center justify-between">
+            {/* Left Side: Language selector and icons */}
+            <div className="flex items-center gap-3">
+              <select
+                id="language"
+                value={selectedLanguage}
+                onChange={(e) => setSelectedLanguage(e.target.value)}
+                className="bg-gray-700 text-white px-3 py-1 rounded border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {availableLanguages.map((lang) => (
+                  <option key={lang} value={lang}>
+                    {lang}
+                  </option>
+                ))}
+              </select>
 
-            <button
-              onClick={toggleFullScreen}
-              className="p-1 hover:bg-gray-700 rounded"
-            >
-              {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
-            </button>
+              <button
+                onClick={toggleFullScreen}
+                className="p-1 hover:bg-gray-700 rounded"
+              >
+                {isFullScreen ? <Minimize size={20} /> : <Maximize size={20} />}
+              </button>
 
-            <button
-              onClick={() => setShowSettings(true)}
-              className="p-1 hover:bg-gray-700 rounded"
-            >
-              <Settings size={20} />
-            </button>
+              <button
+                onClick={() => setShowSettings(true)}
+                className="p-1 hover:bg-gray-700 rounded"
+              >
+                <Settings size={20} />
+              </button>
+            </div>
+
+            {/* Right Side: ASK LETO button */}
+            <Button onClick={handleAsk} disabled={isPending}>
+              {isPending ? "Thinking 💡" : "ASK LETO ✨"}
+            </Button>
           </div>
 
           {showSettings && (
@@ -390,7 +399,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                   {tab === "testcase" && "Testcase"}
                   {tab === "result" && "Test Result"}
                   {tab === "submission" && "Submit Result"}
-                  {tab === "leto" && "Ask LETO"}
+                  {tab === "leto" && "LETO Response"}
                 </button>
               ))}
             </div>
@@ -582,22 +591,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
               {/* Ask LETO Tab */}
               {activeTab === "leto" && (
                 <div className="text-sm text-gray-300">
-                  <h3 className="text-lg font-semibold mb-2">
-                    🧠 Ask Better Approach
-                  </h3>
-                  <p>
-                    Want to improve your solution? Ask LETO for a better
-                    approach based on test results.
-                  </p>
-                  <p className="m-2">First write code then ASK LETO</p>
-
-                  <p className="m-2">You have only 3 call in a day</p>
-
-                  <Button onClick={handleAsk} disabled={isPending}>
-                    {isPending ? "Thinking 💡" : "ASK LETO"}{" "}
-                  </Button>
-
-                  {/* Show this only if letoResponse exists */}
                   {letoResponse && (
                     <div className="mt-6 space-y-4">
                       <div>
