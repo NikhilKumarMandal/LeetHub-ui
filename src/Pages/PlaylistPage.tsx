@@ -51,8 +51,6 @@ export default function PlaylistPage() {
     queryFn: () => getUserRank(playlistId!),
   });
 
-
-
   const deleteProblemMutation = useMutation({
     mutationKey: ["problems"],
     mutationFn: (id: string) => problemdelete(id),

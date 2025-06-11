@@ -19,6 +19,12 @@ export const logout = () => api.post("/auth/logout");
 
 export const reviewCode = (data: LetoData) => api.post("/auth/review", data);
 
+export const generateProblem = (data: any) =>
+  api.post("/auth/generateProblem", data);
+
+export const getInterviewDetails = (id: string) =>
+  api.get(`/auth/interview/${id}`);
+
 // Vote Service
 export const toggleFavorite = (problemId: string) =>
   api.post(`/auth/${problemId}/favorite`);

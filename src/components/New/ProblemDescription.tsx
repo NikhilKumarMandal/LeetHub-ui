@@ -149,7 +149,6 @@ const ProblemDescription = ({ problem }: ProblemDescriptionProps) => {
     totalTime += timeArray.reduce((a: any, b: any) => a + b, 0);
   });
 
-
   return (
     <div className="h-full flex flex-col bg-[#1e232c]">
       <Tabs defaultValue="description" className="h-full flex flex-col">

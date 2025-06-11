@@ -26,7 +26,6 @@ const LoginPage = () => {
   });
 
   const handleLoginSuccess = (credentialResponse: any) => {
-
     const googleToken = credentialResponse.credential;
     if (!googleToken) {
       return toast.error("Google token not found!");

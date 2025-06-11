@@ -78,7 +78,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
   );
 
   console.log(executionMode);
-  
 
   const [executionResults, setExecutionResults] = useState<any>([]);
   const [executionResultsForRun, setExecutionResultsForRun] = useState<any[]>(
@@ -96,8 +95,6 @@ function Playground({ problem }: ProblemDescriptionProps) {
   );
   console.log(showResults);
   console.log(submissionData);
-  
-  
 
   const availableLanguages = Object.keys(problem?.starterFunction ?? {});
 
@@ -407,7 +404,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white"
               >
                 <Play className="w-4 h-4 mr-2" />
-                {isRunning ? "running": "RUN"}
+                {isRunning ? "running" : "RUN"}
               </Button>
               <Button
                 onClick={handleSubmit}
@@ -416,7 +413,7 @@ function Playground({ problem }: ProblemDescriptionProps) {
                 className="bg-[#FFD369] hover:bg-[#FFD369]/60"
               >
                 <Upload className="w-4 h-4 mr-2" />
-                {isSubmitting ? "submiting": "Submit"}
+                {isSubmitting ? "submiting" : "Submit"}
               </Button>
             </div>
           </div>

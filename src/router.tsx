@@ -17,6 +17,9 @@ import EditorPage from "./Pages/Editorpage";
 import CreateProblemPage from "./Pages/CreateProblemPage";
 import ListProblemByCompany from "./Pages/ListProblemByCompany";
 import CreateProblemPageForSQL from "./Pages/CreateProblemPageForSql";
+import CreateInterview from "./Pages/CreateInterview";
+import Interview from "./components/Interview/Interview";
+import StartInterview from "./components/Interview/StartInterview";
 
 export const router = createBrowserRouter([
   {
@@ -93,6 +96,18 @@ export const router = createBrowserRouter([
           {
             path: "create-sql",
             element: <CreateProblemPageForSQL />,
+          },
+          {
+            path: "create-interview",
+            element: <CreateInterview />,
+          },
+          {
+            path: "interview/:interviewId",
+            element: <Interview />,
+          },
+          {
+            path: "startInterview/:interviewId",
+            element: <StartInterview />,
           },
         ],
       },
