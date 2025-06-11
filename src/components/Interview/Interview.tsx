@@ -35,24 +35,41 @@ function Interview() {
   };
 
   return (
-    <div className="px-10 md:px-28 lg:px-48 xl:px-6 mt-7 ">
-      <div className="flex flex-col items-center justify-center border rouned-lg bg-white p-7 lg:px-33 xl:px-52 mb-20">
-        <p className="w-[140px]">LeetHub</p>
-        <h2 className="mt-3">AI-Powred Interview Platform</h2>
-        <img src="" alt="" className="w-[280px]my-6" />
-        <h2 className="font-bold text-xl">{data?.jobPosition}</h2>
-        <h2 className="flex gap-2 items-center text-gray-500 mt-3">
-          <Clock className="h-4 w-4" /> {data?.duration}
+    <div className="px-6 sm:px-12 md:px-24 lg:px-36 xl:px-48 py-10 bg-black min-h-screen text-white">
+      <div className="bg-zinc-900 rounded-2xl shadow-lg p-8 max-w-2xl mx-auto flex flex-col items-center space-y-6">
+        <p className="text-sm text-[#FFD369] font-medium tracking-wide">
+          LeetHub
+        </p>
+        <h2 className="text-2xl font-bold text-center">
+          AI-Powered Interview Platform
         </h2>
-        <div className="w-full">
-          <h2>UserName: {user?.name} </h2>
+
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-XT8bxBylEFoOGtNy_wsiMd7zEP0SWARL9w&s"
+          alt="Interview Illustration"
+          className="w-64 h-40 object-contain"
+        />
+
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-semibold">{data?.jobPosition}</h2>
+          <div className="flex justify-center items-center gap-2 text-gray-400">
+            <Clock className="h-4 w-4" />
+            <span>{data?.duration}</span>
+          </div>
+        </div>
+
+        <div className="w-full text-left text-gray-300">
+          <p>
+            <span className="font-medium text-white">User:</span> {user?.name}
+          </p>
         </div>
 
         <Button
-          onClick={() => onJoinInterview()}
-          className="mt-5 w-full font-bold"
+          onClick={onJoinInterview}
+          className="w-full font-semibold flex items-center gap-2 bg-[#FFD369] hover:bg-[#FFD369]/90 transition"
         >
-          <Video /> Join interview
+          <Video className="w-5 h-5" />
+          Join Interview
         </Button>
       </div>
     </div>

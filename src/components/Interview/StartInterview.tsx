@@ -1,10 +1,10 @@
 import { useAuthStore } from "@/store/store";
-import { Mic, Phone, Timer } from "lucide-react";
+import { Mic, Phone } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Vapi from "@vapi-ai/web";
 import AlertConfirmation from "./AlertConfirmation";
 import { toast } from "sonner";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getInterviewDetails } from "@/http/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -19,7 +19,7 @@ function StartInterview() {
   const [activeUser, setActiveUser] = useState(false);
   const [callStarted, setCallStarted] = useState(false);
   const { interviewId } = useParams();
-
+  const navigate = useNavigate();
   const vapi = useRef(new Vapi(import.meta.env.VITE_VAPI_PUBLIC_KEY));
 
   const { data } = useQuery({
@@ -95,51 +95,47 @@ function StartInterview() {
     vapi.current.stop();
     setCallStarted(false);
     toast("Interview ended");
+    navigate("/auth/home");
   };
 
   return (
-    <div className="p-20 lg:px-48 xl:px-56">
-      <h2 className="font-bold text-xl flex justify-between">
-        AI INTERVIEW SESSION
-        <span className="flex gap-2 items-center">
-          <Timer />
-          00:00:00
-        </span>
-      </h2>
+    <div className="px-6 md:px-12 lg:px-36 py-10 bg-black text-white min-h-screen">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">AI INTERVIEW SESSION</h2>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mt-5">
-        <div className="bg-white h-[400px] rounded-lg border flex flex-col gap-3 items-center justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+        {/* AI Recruiter */}
+        <div className="bg-zinc-800 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative">
           {!activeUser && (
             <span className="absolute w-16 h-16 bg-blue-500 rounded-full opacity-75 animate-ping" />
           )}
           <img
-            src=""
-            alt=""
-            width={100}
-            height={100}
-            className="w-[60px] h-[60px] rounded-full object-cover"
+            src="https://w0.peakpx.com/wallpaper/142/80/HD-wallpaper-cowgirl-dani-daniels-model-cowboy-hat-cowgirl-brunette.jpg"
+            alt="AI Recruiter"
+            className="w-20 h-20 rounded-full object-cover border-2 border-white mb-3"
           />
-          <h2>AI Recruiter</h2>
+          <h3 className="text-lg font-semibold">AI Recruiter</h3>
         </div>
-        <div className="bg-white h-[400px] rounded-lg border flex flex-col gap-3 items-center justify-center">
-          {!activeUser && (
-            <span className="absolute w-16 h-16 bg-blue-500 rounded-full opacity-75 animate-ping" />
+
+        {/* User */}
+        <div className="bg-zinc-800 rounded-xl shadow-lg p-6 flex flex-col items-center justify-center relative">
+          {activeUser && (
+            <span className="absolute w-16 h-16 bg-green-500 rounded-full opacity-75 animate-ping" />
           )}
           <img
-            src={user?.avatar?.url}
-            alt="avatar"
-            width={100}
-            height={100}
-            className="w-[60px] h-[60px] rounded-full object-cover"
+            src={user?.avatar?.url || "/user-avatar.png"}
+            alt="User Avatar"
+            className="w-20 h-20 rounded-full object-cover border-2 border-white mb-3"
           />
-          <h2>{user?.name}</h2>
+          <h3 className="text-lg font-semibold">{user?.name}</h3>
         </div>
       </div>
 
-      <div className="flex items-center gap-5 justify-center mt-7">
-        <Mic className="h-12 w-12 p-3 bg-gray-500 text-white rounded-full" />
+      <div className="flex items-center justify-center gap-6 mt-12">
+        <Mic className="h-12 w-12 p-3 bg-gray-600 hover:bg-gray-500 text-white rounded-full transition" />
         <AlertConfirmation stopInterview={stopInterview}>
-          <Phone className="h-12 w-12 p-3 bg-red-500 text-white rounded-full" />
+          <Phone className="h-12 w-12 p-3 bg-red-600 hover:bg-red-700 text-white rounded-full transition" />
         </AlertConfirmation>
       </div>
     </div>

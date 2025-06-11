@@ -81,8 +81,8 @@ function FromContainer({
           {InterviewType.map((type, index) => (
             <div
               key={index}
-              className={`flex items-center cursor-pointer gap-2 p-1 px-2 bg-blue-50 rounded-2xl border-gray-300 hover:bg-secondary
-                      ${interviewType.includes(type.title) && "bg-blue-50 text-primary"}
+              className={`flex items-center cursor-pointer gap-2 p-1 px-2  rounded-2xl border-gray-300 hover:bg-secondary
+                      ${interviewType.includes(type.title) && "text-[#FFD369]"}
                       `}
               onClick={() => AddInterviewType(type.title)}
             >
