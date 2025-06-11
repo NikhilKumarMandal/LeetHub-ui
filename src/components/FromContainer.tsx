@@ -70,7 +70,7 @@ function FromContainer({
           </SelectTrigger>{" "}
           <SelectContent>
             <SelectItem value="2 min">2 min</SelectItem>
-            <SelectItem value="5 min">5 min</SelectItem>
+            <SelectItem value="3 min">3 min</SelectItem>
           </SelectContent>
         </Select>
       </div>
