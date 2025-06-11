@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/store";
-import { Mic, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Vapi from "@vapi-ai/web";
 import AlertConfirmation from "./AlertConfirmation";
@@ -133,7 +133,6 @@ function StartInterview() {
       </div>
 
       <div className="flex items-center justify-center gap-6 mt-12">
-        <Mic className="h-12 w-12 p-3 bg-gray-600 hover:bg-gray-500 text-white rounded-full transition" />
         <AlertConfirmation stopInterview={stopInterview}>
           <Phone className="h-12 w-12 p-3 bg-red-600 hover:bg-red-700 text-white rounded-full transition" />
         </AlertConfirmation>
