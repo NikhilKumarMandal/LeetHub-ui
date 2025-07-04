@@ -97,7 +97,7 @@ export default function ListProblemByCompany() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-zinc-950 text-zinc-100">
       <div className="w-full md:w-[350px] border-r border-zinc-800 p-4 flex flex-col overflow-auto">
-        {/* Profile Section */}
+        
         <div className="flex flex-col items-center text-center mb-6">
           <div className="relative mb-2">
             <Avatar className="w-20 h-20 sm:w-24 sm:h-24 bg-zinc-800">
