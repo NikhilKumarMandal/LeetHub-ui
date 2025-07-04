@@ -92,6 +92,9 @@ export function ProblemsTable() {
     placeholderData: keepPreviousData,
   });
 
+  console.log(data);
+  
+
   const { data: playlist } = useQuery({
     queryKey: ["playlist"],
     queryFn: () => {
