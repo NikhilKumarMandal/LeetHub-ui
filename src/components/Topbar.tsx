@@ -136,7 +136,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
           </Link>
 
           <div className="hidden md:flex space-x-6">
-            {navLinks.map((link) => (
+            {navLinks?.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
@@ -287,7 +287,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, problemId }) => {
                   : "opacity-0 scale-95 pointer-events-none"
               }`}
             >
-              {navLinks.map((link) => (
+              {navLinks?.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}

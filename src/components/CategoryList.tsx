@@ -34,7 +34,7 @@ const CategoryList: React.FC = () => {
   return (
     <div className="flex flex-col">
       <div className="flex overflow-x-auto scrollbar-hide py-2 -mx-4 px-4 md:mx-0 md:px-0 md:flex-wrap md:gap-4">
-        {visibleCategories.map((topic: string, index: number) => (
+        {visibleCategories?.map((topic: string, index: number) => (
           <button
             key={index}
             className={`flex items-center gap-2 whitespace-nowrap mr-4 md:mr-0 px-2 py-1 rounded-md transition-colors ${

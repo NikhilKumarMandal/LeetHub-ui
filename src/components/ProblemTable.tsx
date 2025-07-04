@@ -163,7 +163,7 @@ export function ProblemsTable() {
           </DialogHeader>
 
           <div className="grid gap-2">
-            {playlist?.data.map((pl: any) => (
+            {playlist?.data?.map((pl: any) => (
               <Button
                 key={pl.id}
                 variant="outline"
@@ -244,7 +244,7 @@ export function ProblemsTable() {
       {/* Problem list */}
       <div className="flex-1 overflow-auto">
         <div className="grid gap-2 p-3 sm:p-4">
-          {problems.map((problem) => (
+          {problems?.map((problem) => (
             <div
               key={problem.id}
               className="bg-zinc-900 hover:bg-zinc-800 transition-colors rounded-lg p-3 sm:p-4 flex items-center gap-2 sm:gap-4"

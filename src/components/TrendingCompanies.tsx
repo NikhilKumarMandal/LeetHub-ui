@@ -28,7 +28,7 @@ export function TrendingCompanies() {
           <h3 className="text-white font-semibold">Trending Companies</h3>
         </div>
         <div className="grid grid-cols-2 gap-2">
-          {companies.map((company: string) => (
+          {companies?.map((company: string) => (
             <Badge
               key={company}
               variant="secondary"
